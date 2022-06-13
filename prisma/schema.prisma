@@ -11,9 +11,10 @@ datasource db {
 model User {
   id        Int     @default(autoincrement()) @id
   email     String  @unique
-  name      String
+  username  String
   password  String
-  avatar    String
+  avatar    String?
+  bio       String?
   posts     Post[]
 }
 
