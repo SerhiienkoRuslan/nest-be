@@ -19,9 +19,6 @@ async function bootstrap() {
 
   const port: number = parseInt(`${process.env.PORT}`) || 3000;
 
-  await app.listen(port, () => {
-    console.log(`Port: ${port}`);
-    console.log('%c Server running', 'color: green');
-  });
+  await app.listen(port);
 }
 bootstrap();
