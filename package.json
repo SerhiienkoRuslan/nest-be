@@ -77,7 +77,6 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": "16.x",
-    "yarn": "1.17.3"
+    "node": "16.x"
   }
 }
