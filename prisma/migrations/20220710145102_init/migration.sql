@@ -21,6 +21,19 @@ CREATE TABLE "Post" (
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Message" (
+    "id" SERIAL NOT NULL,
+    "createdDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "from" TEXT NOT NULL,
+    "to" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "seen" BOOLEAN NOT NULL DEFAULT false,
+    "delivered" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 

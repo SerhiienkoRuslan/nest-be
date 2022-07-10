@@ -26,3 +26,13 @@ model Post {
   authorId  Int?
   author    User?    @relation(fields: [authorId], references: [id])
 }
+
+model Message {
+  id          Int       @id @default(autoincrement())
+  createdDate DateTime  @default(now())
+  from        String
+  to          String
+  message     String
+  seen        Boolean   @default(false)
+  delivered   Boolean   @default(false)
+}
