@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 
-import { AuthMiddleware } from './auth.middleware';
+import { AuthMiddleware } from '../middleware/auth.middleware';
 import { PrismaService } from '../prisma.service';
 
 import { UserController } from './user.controller';
@@ -24,6 +24,7 @@ export class UserModule implements NestModule {
         { path: 'user', method: RequestMethod.GET },
         { path: 'users', method: RequestMethod.GET },
         { path: 'user', method: RequestMethod.PUT },
+        { path: 'user', method: RequestMethod.DELETE },
       );
   }
 }
