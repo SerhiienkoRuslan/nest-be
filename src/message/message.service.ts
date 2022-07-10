@@ -13,10 +13,10 @@ export class MessageService {
   ) {}
 
   private async checkIfUsersExist(from: string, to: string): Promise<void> {
-    if (!await this.prisma.user.findOne({ where: { email: to }})) {
+    if (!await this.prisma.user.findUnique({ where: { email: to }})) {
       throw new HttpException('Receiver of the message doesn\'t exist in the system', HttpStatus.BAD_REQUEST);
     }
-    if (! await this.prisma.user.findOne({ where: { email: from }})) {
+    if (! await this.prisma.user.findUnique({ where: { email: from }})) {
       throw new HttpException('Sender of the message doesn\'t exist in the system', HttpStatus.BAD_REQUEST);
     }
   }
@@ -28,33 +28,20 @@ export class MessageService {
   async createMessage(data: CreateMessageDTO): Promise<MessageResponseDTO> {
     const { to, from } = data;
     await this.checkIfUsersExist(from, to);
+    // @ts-ignore
     const message = this.prisma.message.create(data);
     const token = await this.getRecipientToken(to);
-    const messageResponseObject = message.toResponseObject();
     if (token) {
-      await this.gateway.wss.emit(token, messageResponseObject);
+      await this.gateway.wss.emit(token, message);
     }
-    message.delivered = true;
-    message.seen = false;
+    (await message).delivered = true;
+    (await message).seen = false;
+    // @ts-ignore
     await this.prisma.message.save(message);
-    return messageResponseObject;
+    return message;
   }
 
-  async getConversation(convoWith, user, options = { pageSize: 100, page: 0 }): Promise<MessagesResponseDTO> {
-    // const queryBuilder = this.prisma.message.createQueryBuilder('message');
-    //
-    // if (convoWith !== user) {
-    //   queryBuilder
-    //     .where('message.from = :from and message.to = :to or message.from = :to and message.to = :from', { from: user, to: convoWith })
-    //     .orderBy('message.createdDate', 'DESC');
-    // } else {
-    //   queryBuilder
-    //     .where('message.from = :from and message.to = :to', { from: user, to: convoWith })
-    //     .orderBy('message.createdDate', 'DESC');
-    // }
-
-    // const messages = await paginate<any>(queryBuilder, options);
-
+  async getConversation(convoWith: string, user, options = { limit: 100, page: 0 }): Promise<MessagesResponseDTO> {
     const messages = await this.prisma.message.findMany({
       where: {
         OR: [
@@ -68,14 +55,15 @@ export class MessageService {
           }
         ]
       },
-      skip: options.pageSize * options.page,
-      take: options.pageSize,
+      skip: options.limit * options.page,
+      take: options.limit,
       orderBy: {
         createdDate: 'desc'
       }
     });
 
     const unseenCount = await this.prisma.message.count({
+      // @ts-ignore
       from: convoWith,
       to: user,
       seen: false,
@@ -83,18 +71,26 @@ export class MessageService {
 
     let seenCount = 0;
 
+    // @ts-ignore
     if (messages.items) {
+      // @ts-ignore
       for (const message of messages.items) {
         if (!message.seen) {
           ++seenCount;
           message.seen = true;
+          // @ts-ignore
           this.prisma.message.save(message);
         }
       }
     }
 
+    // @ts-ignore
+    const { items, itemCount, pageCount } = messages
+
     return {
-      ...messages,
+      items,
+      itemCount,
+      pageCount,
       unseenItems: unseenCount - seenCount,
     };
   }
