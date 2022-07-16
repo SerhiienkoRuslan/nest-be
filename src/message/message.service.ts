@@ -1,10 +1,4 @@
-import {
-  CACHE_MANAGER,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma.service';
 import {
@@ -12,7 +6,6 @@ import {
   MessageResponseDTO,
   MessagesResponseDTO,
 } from './dto';
-import { AppGateway } from '../app.gateway';
 
 const select = {
   from: true,
@@ -22,11 +15,7 @@ const select = {
 
 @Injectable()
 export class MessageService {
-  constructor(
-    @Inject(CACHE_MANAGER) private cacheManager,
-    private prisma: PrismaService,
-    private gateway: AppGateway,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   private async checkIfUsersExist(from: string, to: string): Promise<void> {
     if (!(await this.prisma.user.findUnique({ where: { email: to } }))) {
@@ -43,24 +32,13 @@ export class MessageService {
     }
   }
 
-  private async getRecipientToken(email: string): Promise<boolean> {
-    return this.cacheManager.get(email);
-  }
-
   async createMessage(data: CreateMessageDTO): Promise<MessageResponseDTO> {
     const { to, from } = data;
     await this.checkIfUsersExist(from, to);
-    const message = this.prisma.message.create({
+    return this.prisma.message.create({
       data: { ...data, delivered: true, seen: false },
       select,
     });
-    const token = await this.getRecipientToken(to);
-
-    if (token) {
-      await this.gateway.wss.emit(token, message);
-    }
-
-    return message;
   }
 
   async getConversation(
@@ -92,15 +70,15 @@ export class MessageService {
       where: {
         from: conversationWith,
         to: user.email,
-        seen: false
-      }
+        seen: false,
+      },
     });
 
     const itemCount = await this.prisma.message.count({
       where: {
         from: conversationWith,
-        to: user.email
-      }
+        to: user.email,
+      },
     });
 
     let seenCount = 0;
@@ -112,9 +90,9 @@ export class MessageService {
           message.seen = true;
           this.prisma.message.update({
             where: {
-              id: message.id
+              id: message.id,
             },
-            data: message
+            data: message,
           });
         }
       }
