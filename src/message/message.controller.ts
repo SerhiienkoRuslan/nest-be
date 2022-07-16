@@ -30,6 +30,6 @@ export class MessageController {
     @Req() req: Request
   ) {
     limit = limit > 100 ? 100 : limit;
-    return await this.messageService.getConversation(convoWith, req.body.from, { page, limit });
+    return await this.messageService.getConversation(convoWith, req.body, { page, limit });
   }
 }
