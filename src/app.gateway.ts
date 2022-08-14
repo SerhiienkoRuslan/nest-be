@@ -10,7 +10,7 @@ import { Socket, Server } from 'socket.io';
 
 import { MessageService } from './message/message.service'
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private messageService: MessageService) {}
 
