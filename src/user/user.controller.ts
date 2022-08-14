@@ -43,7 +43,7 @@ export class UserController {
   @Put('user')
   async update(
     @User('user') userId: number,
-    @Body('user') userData: UpdateUserDto,
+    @Body() userData: UpdateUserDto,
   ) {
     return await this.userService.update(userId, userData);
   }
