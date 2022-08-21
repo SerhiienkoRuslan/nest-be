@@ -20,7 +20,17 @@ export class PostService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<any[]> {
-    return await this.prisma.post.findMany({ select });
+    return await this.prisma.post.findMany({
+      where: { published: true },
+      select
+    });
+  }
+
+  async findAllCurrent(user: UserData): Promise<any[]> {
+    return await this.prisma.post.findMany({
+      where: { authorId: +user?.id },
+      select
+    });
   }
 
   async create(dto: CreatePostDto): Promise<PostRO> {

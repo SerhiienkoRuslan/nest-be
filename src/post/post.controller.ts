@@ -30,6 +30,11 @@ export class PostController {
     return await this.postService.findAll();
   }
 
+  @Get('my-posts')
+  async findAllCurrent(@User() user: UserData): Promise<PostRO[]> {
+    return await this.postService.findAllCurrent(user);
+  }
+
   @Get('post/:id')
   async findPost(@Param() params): Promise<PostRO> {
     return await this.postService.findById(+params.id);
