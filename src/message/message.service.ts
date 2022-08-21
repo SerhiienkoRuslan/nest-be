@@ -69,7 +69,7 @@ export class MessageService {
     const unseenCount = await this.prisma.message.count({
       where: {
         from: conversationWith,
-        to: user.id,
+        to: `${user.id}`,
         seen: false,
       },
     });
@@ -77,7 +77,7 @@ export class MessageService {
     const itemCount = await this.prisma.message.count({
       where: {
         from: conversationWith,
-        to: user.id,
+        to: `${user.id}`,
       },
     });
 

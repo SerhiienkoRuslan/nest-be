@@ -5,12 +5,12 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
-  Query,
-  Req,
+  Query
 } from '@nestjs/common';
-import { Request } from 'express';
 import { MessageService } from './message.service';
 import { CreateMessageDTO, MessageResponseDTO } from './dto';
+import { User } from "../user/user.decorator";
+import { UserData } from "../user/user.interface";
 
 @Controller()
 export class MessageController {
@@ -27,9 +27,9 @@ export class MessageController {
     @Query('with') convoWith: string,
     @Query('page') page: number = 0,
     @Query('limit') limit: number = 10,
-    @Req() req: Request
+    @User() user: UserData
   ) {
     limit = limit > 100 ? 100 : limit;
-    return await this.messageService.getConversation(convoWith, req.body, { page, limit });
+    return await this.messageService.getConversation(convoWith, user, { page, limit });
   }
 }
