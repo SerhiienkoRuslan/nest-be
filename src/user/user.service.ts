@@ -3,16 +3,18 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 const jwt = require('jsonwebtoken');
 import * as argon2 from 'argon2';
 
+import { hasPermission } from 'src/shared/pipes/userUtils'
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 import { SECRET } from '../config';
-import { UserRO } from './user.interface';
+import { UserData, UserRO } from "./user.interface";
 
 const select = {
   email: true,
   username: true,
   bio: true,
-  avatar: true
+  avatar: true,
+  id: true
 };
 
 @Injectable()
@@ -69,15 +71,23 @@ export class UserService {
     return { user };
   }
 
-  async update(id: number, data: UpdateUserDto): Promise<any> {
-    const where = { id };
-    const user = await this.prisma.user.update({ where, data, select });
+  async update(userData: UserData, data: UpdateUserDto): Promise<any> {
+    if (hasPermission(userData?.id, data)) {
+      const where = { id: userData?.id };
+      const user = await this.prisma.user.update({ where, data, select });
 
-    return {user};
+      return { user };
+    } else {
+      throw new HttpException({ error: 'No Permission' }, 403);
+    }
   }
 
-  async delete(email: string): Promise<any> {
-    return await this.prisma.user.delete({ where: { email }, select });
+  async delete(id: number, user: any): Promise<any> {
+    if (hasPermission(id, user)) {
+      return await this.prisma.user.delete({ where: { id }, select });
+    } else {
+      throw new HttpException({ error: 'No Permission' }, 403);
+    }
   }
 
   async findById(id: number): Promise<any>{

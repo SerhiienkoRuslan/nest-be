@@ -3,6 +3,7 @@ export interface UserData {
   email: string;
   token?: string;
   avatar?: string;
+  id: number;
 }
 
 export interface UserRO {

@@ -14,7 +14,7 @@ import { ValidationPipe } from '../shared/pipes/validation.pipe';
 import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
 
 import { UserService } from './user.service';
-import { UserRO } from './user.interface';
+import { UserData, UserRO } from "./user.interface";
 import { User } from './user.decorator';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -40,12 +40,13 @@ export class UserController {
     return await this.userService.findById(id);
   }
 
-  @Put('user')
+  @Put('user/:id')
   async update(
-    @User('user') userId: number,
+    @User() user: UserData,
     @Body() userData: UpdateUserDto,
+    @Param() params
   ) {
-    return await this.userService.update(userId, userData);
+    return await this.userService.update(user, { ...userData, id: +params.id });
   }
 
   @UsePipes(new ValidationPipe())
@@ -55,8 +56,11 @@ export class UserController {
   }
 
   @Delete('user/:id')
-  async delete(@Param() params) {
-    return await this.userService.delete(params.id);
+  async delete(
+    @User() user: UserData,
+    @Param() params
+  ) {
+    return await this.userService.delete(+params.id, user);
   }
 
   @UsePipes(new ValidationPipe())
