@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsString } from "class-validator";
 
 /**
  * @class
@@ -6,11 +6,11 @@ import { IsNotEmpty, IsEmail } from 'class-validator';
  */
 export class CreateMessageDTO {
   @IsNotEmpty()
-  @IsEmail()
+  @IsString()
   from: string;
 
   @IsNotEmpty()
-  @IsEmail()
+  @IsString()
   to: string;
 
   @IsNotEmpty()
