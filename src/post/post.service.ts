@@ -12,7 +12,15 @@ const select = {
   content: true,
   published: true,
   authorId: true,
-  author: true
+  author: {
+    select: {
+      id: true,
+      email:  true,
+      username:  true,
+      avatar:  true,
+      bio:  true
+    }
+  }
 };
 
 @Injectable()
