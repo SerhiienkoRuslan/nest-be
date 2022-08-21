@@ -50,12 +50,12 @@ export class MessageService {
       where: {
         OR: [
           {
-            from: user.email,
+            from: `${user.id}`,
             to: conversationWith,
           },
           {
             from: conversationWith,
-            to: user.email,
+            to: `${user.id}`,
           },
         ],
       },
