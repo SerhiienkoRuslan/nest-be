@@ -14,7 +14,13 @@ const select = {
   username: true,
   bio: true,
   avatar: true,
-  id: true
+  id: true,
+  posts: {
+    select: {
+      id: true,
+      title: true
+    }
+  }
 };
 
 @Injectable()
