@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { PostRO } from './post.interface';
+import { UserData } from "../user/user.interface";
+import { HttpException } from "@nestjs/common/exceptions/http.exception";
 
 const select = {
   id: true,
@@ -22,28 +24,38 @@ export class PostService {
   }
 
   async create(dto: CreatePostDto): Promise<PostRO> {
-    // TODO: Check if creator is valid
-    // const { title, content, published, authorId } = dto;
-
     const data = { ...dto };
     const post = await this.prisma.post.create({ data, select });
 
     return { post };
   }
 
-  async update(id: string, data: UpdatePostDto): Promise<any> {
+  async update(id: string, data: UpdatePostDto, user: UserData): Promise<any> {
     const where = { id: +id };
-    const post = await this.prisma.post.update({ where, data, select });
 
-    return { post };
-  }
-
-  async delete(id: string): Promise<any> {
-    return await this.prisma.post.delete({ where: { id: +id }, select });
-  }
-
-  async findById(id: string): Promise<any>{
     const post = await this.prisma.post.findUnique({ where: { id: +id }, select: { id: true, ...select } });
+
+    if (+post?.author?.id !== +user?.id) {
+      throw new HttpException({ error: 'No Permission' }, 403);
+    }
+
+    const updatedPost = await this.prisma.post.update({ where, data, select });
+
+    return { post: updatedPost };
+  }
+
+  async delete(id: number, user: UserData): Promise<any> {
+    const post = await this.prisma.post.findUnique({ where: { id }, select: { id: true, ...select } });
+
+    if (+post?.author?.id !== +user?.id) {
+      throw new HttpException({ error: 'No Permission' }, 403);
+    }
+
+    return await this.prisma.post.delete({ where: { id }, select });
+  }
+
+  async findById(id: number): Promise<any>{
+    const post = await this.prisma.post.findUnique({ where: { id }, select: { id: true, ...select } });
     return { post };
   }
 }
