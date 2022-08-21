@@ -18,13 +18,13 @@ export class MessageService {
   constructor(private prisma: PrismaService) {}
 
   private async checkIfUsersExist(from: string, to: string): Promise<void> {
-    if (!(await this.prisma.user.findUnique({ where: { email: to } }))) {
+    if (!(await this.prisma.user.findUnique({ where: { id: +to } }))) {
       throw new HttpException(
         "Receiver of the message doesn't exist in the system",
         HttpStatus.BAD_REQUEST,
       );
     }
-    if (!(await this.prisma.user.findUnique({ where: { email: from } }))) {
+    if (!(await this.prisma.user.findUnique({ where: { id: +from } }))) {
       throw new HttpException(
         "Sender of the message doesn't exist in the system",
         HttpStatus.BAD_REQUEST,
