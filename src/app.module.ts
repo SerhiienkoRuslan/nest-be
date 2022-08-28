@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 /** Admin */
-import AdminModule from './admin.module';
+import AdminModule from './admin/admin.module';
 /** APP */
 import { AppController } from './app.controller';
 import { AppGateway } from './app.gateway';
