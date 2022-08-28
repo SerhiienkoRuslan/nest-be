@@ -25,7 +25,10 @@ export default AdminModule.createAdminAsync({
             resource: { model: dmmf.modelMap.Post, client: prisma },
             options: {}
           }
-        ]
+        ],
+        dashboard: {
+          component: AdminJS.bundle('./pages/dashboard')
+        }
       }
     }
   }
