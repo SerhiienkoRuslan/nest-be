@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+/** Admin */
+import AdminModule from './admin.module';
 /** APP */
 import { AppController } from './app.controller';
 import { AppGateway } from './app.gateway';
@@ -14,7 +16,7 @@ import { PostModule } from './post/post.module';
 import { PrismaService } from "./prisma.service";
 
 @Module({
-  imports: [UserModule, MessageModule, PostModule],
+  imports: [UserModule, MessageModule, PostModule, AdminModule],
   controllers: [AppController],
   providers: [AppGateway, MessageService, PrismaService],
 })
