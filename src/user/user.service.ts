@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 import * as argon2 from 'argon2';
 
 import { hasPermission } from 'src/shared/pipes/userUtils'
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 import { SECRET } from '../config';
 import { UserData, UserRO } from "./user.interface";

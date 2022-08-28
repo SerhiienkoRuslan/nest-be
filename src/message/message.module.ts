@@ -9,7 +9,7 @@ import { MessageController } from './message.controller';
 import { MessageService } from './message.service';
 import { AppGateway } from '../app.gateway';
 import { AuthMiddleware } from '../middleware/auth.middleware';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 
 @Module({

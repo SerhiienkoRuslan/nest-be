@@ -13,7 +13,7 @@ import { MessageService } from './message/message.service';
 /** POST */
 import { PostModule } from './post/post.module';
 /** PRISMA */
-import { PrismaService } from "./prisma.service";
+import { PrismaService } from "./prisma/prisma.service";
 
 @Module({
   imports: [UserModule, MessageModule, PostModule, AdminModule],

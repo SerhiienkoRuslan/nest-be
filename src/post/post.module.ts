@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 
 import { AuthMiddleware } from '../middleware/auth.middleware';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
 import { UserService } from "../user/user.service";
