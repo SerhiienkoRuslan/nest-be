@@ -5,6 +5,7 @@ import { Database, Resource } from '@adminjs/prisma';
 import { DMMFClass } from '@prisma/client/runtime';
 import { PrismaService } from "../prisma/prisma.service";
 import { PrismaModule } from "../prisma/prisma.module";
+import * as argon2 from "argon2";
 
 AdminJS.registerAdapter({ Database, Resource });
 
@@ -29,6 +30,20 @@ export default AdminModule.createAdminAsync({
         dashboard: {
           component: AdminJS.bundle('./pages/dashboard')
         }
+      },
+      auth: {
+        authenticate: async (email, password) => {
+          const user = await dmmf.modelMap.User.findOne({ email })
+          if (user) {
+            const authenticated = await argon2.verify(user.password, password);
+            if (authenticated) {
+              return user
+            }
+          }
+          return false
+        },
+        cookiePassword: 'some-secret-password-used-to-secure-cookie',
+        cookieName: 'nest-be-pass'
       }
     }
   }
