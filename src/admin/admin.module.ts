@@ -33,14 +33,17 @@ export default AdminModule.createAdminAsync({
       },
       auth: {
         authenticate: async (email, password) => {
-          const user = await dmmf.modelMap.User.findOne({ email })
+          const user = await prisma.user.findUnique({ where: { email } });
+
           if (user) {
+            const { email, id } = user;
             const authenticated = await argon2.verify(user.password, password);
             if (authenticated) {
-              return user
+              return { email, id: `${id}` }
             }
           }
-          return false
+
+          return null
         },
         cookiePassword: 'some-secret-password-used-to-secure-cookie',
         cookieName: 'nest-be-pass'
