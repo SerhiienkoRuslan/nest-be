@@ -8,14 +8,21 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  username String
-  password String
-  avatar   String?
-  bio      String?
-  posts    Post[]
+  id           Int     @id @default(autoincrement())
+  email        String  @unique
+  username     String
+  password     String
+  avatar       String?
+  bio          String?
+  role         Role    @default(USER)
+  posts        Post[]  @relation("WrittenPosts")
+  postLikes    Post[]  @relation("LikedPosts", references: [id])
 }
 
 model Post {
@@ -24,7 +31,8 @@ model Post {
   content   String?
   published Boolean? @default(false)
   authorId  Int?
-  author    User?    @relation(fields: [authorId], references: [id])
+  author    User?    @relation("WrittenPosts", fields: [authorId], references: [id])
+  likedBy   User[]   @relation("LikedPosts", references: [id])
 }
 
 model Message {

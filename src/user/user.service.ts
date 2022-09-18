@@ -15,6 +15,7 @@ const select = {
   bio: true,
   avatar: true,
   id: true,
+  role: true,
   posts: {
     select: {
       id: true,
