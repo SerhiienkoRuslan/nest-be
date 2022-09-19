@@ -21,8 +21,7 @@ model User {
   avatar       String?
   bio          String?
   role         Role    @default(USER)
-  posts        Post[]  @relation("WrittenPosts")
-  postLikes    Post[]  @relation("LikedPosts", references: [id])
+  posts        Post[]
 }
 
 model Post {
@@ -31,8 +30,7 @@ model Post {
   content   String?
   published Boolean? @default(false)
   authorId  Int?
-  author    User?    @relation("WrittenPosts", fields: [authorId], references: [id])
-  likedBy   User[]   @relation("LikedPosts", references: [id])
+  author    User?    @relation(fields: [authorId], references: [id])
 }
 
 model Message {
