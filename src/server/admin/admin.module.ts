@@ -1,5 +1,6 @@
 import AdminJS from 'adminjs';
 import '@adminjs/express';
+import passwordsFeature from '@adminjs/passwords'
 import { AdminModule } from '@adminjs/nestjs';
 import { Database, Resource } from '@adminjs/prisma';
 import { DMMFClass } from '@prisma/client/runtime';
@@ -20,16 +21,20 @@ export default AdminModule.createAdminAsync({
         resources: [
           {
             resource: { model: dmmf.modelMap.User, client: prisma },
-            options: {}
+            options: {},
+            features: [passwordsFeature({
+              properties: { encryptedPassword: 'password' },
+              hash: argon2.hash,
+            })]
           },
           {
             resource: { model: dmmf.modelMap.Post, client: prisma },
             options: {}
           }
         ],
-        dashboard: {
-          component: AdminJS.bundle('./pages/dashboard')
-        }
+        // dashboard: {
+        //   component: AdminJS.bundle('./pages/dashboard')
+        // }
       },
       auth: {
         authenticate: async (email, password) => {
@@ -38,7 +43,8 @@ export default AdminModule.createAdminAsync({
           if (user) {
             const { email, id } = user;
             const authenticated = await argon2.verify(user.password, password);
-            if (authenticated) {
+
+            if (authenticated && user.role === 'ADMIN') {
               return { email, id: `${id}` }
             }
           }

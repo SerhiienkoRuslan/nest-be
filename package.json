@@ -27,6 +27,7 @@
   "dependencies": {
     "@adminjs/express": "^5.0.0",
     "@adminjs/nestjs": "^5.0.1",
+    "@adminjs/passwords": "^3.0.0",
     "@adminjs/prisma": "^3.0.1",
     "@nestjs/common": "^9.0.1",
     "@nestjs/config": "^2.2.0",
