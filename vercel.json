@@ -1,6 +1,6 @@
 {
   "version": 2,
   "name": "nest-be",
-  "builds": [{ "src": "app.js", "use": "@vercel/node" }],
+  "builds": [{ "src": "src/server/main.ts", "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest": "src/server/main.ts", "methods": ["GET", "POST", "PUT", "DELETE"] }]
 }
