@@ -19,6 +19,8 @@ Nestbe - it is a 'pet' project, was created for improving skills.
     <a href="https://miro.com/app/board/uXjVPd6ahb8=/" target="_blank">UI Prototype</a>
 </p>
 
+
+
 [//]: # (### Frontend links)
 
 [//]: # ()
