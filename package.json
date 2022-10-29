@@ -8,7 +8,7 @@
   "scripts": {
     "next": "cd src/client && next",
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest build && next build --path ./src/client/tsconfig.json",
     "build:next": "next build",
     "build:nest": "nest build --path ./tsconfig.server.json",
     "format": "prettier --write \\\"src/**/*.ts\\\" \\\"test/**/*.ts\\\"",
