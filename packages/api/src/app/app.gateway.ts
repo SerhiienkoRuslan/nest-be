@@ -25,11 +25,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleConnection(client: { emit: (arg0: string, arg1: string) => void; }) {
-    this.logger.log('New client connected');
+    this.logger.log('New client connected!');
     client.emit('connection', 'Successfully connected to server');
   }
 
   handleDisconnect(client: any) {
-    this.logger.log('Client disconnected');
+    this.logger.log('Client disconnected!');
   }
 }
