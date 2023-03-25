@@ -32,8 +32,9 @@ export default AdminModule.createAdminAsync({
             options: {}
           }
         ],
+        // TODO: Uncomment Dashboard component
         // dashboard: {
-        //   component: AdminJS.bundle('./pages/dashboard')
+        //   component: AdminJS.bundle('./pages/dashboard.tsx')
         // }
       },
       auth: {
@@ -44,7 +45,8 @@ export default AdminModule.createAdminAsync({
             const { email, id } = user;
             const authenticated = await argon2.verify(user.password, password);
 
-            if (authenticated && user.role === 'ADMIN') {
+            // TODO: if (authenticated && user.role === 'ADMIN') {
+            if (authenticated && user.role) {
               return { email, id: `${id}` }
             }
           }
