@@ -5,12 +5,7 @@ const StyledPage = styled.div`
   }
 `;
 
-export function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.styled-components file.
-   */
+const HomePage = () => {
   return (
     <StyledPage>
       <div className="wrapper">
@@ -417,4 +412,4 @@ export function Index() {
   );
 }
 
-export default Index;
+export default HomePage;
