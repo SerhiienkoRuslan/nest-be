@@ -4,9 +4,14 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ServerModule } from './server.module';
 
 async function bootstrap() {
-  const appOptions = { cors: true };
-  const app = await NestFactory.create(ServerModule, appOptions);
+  const app = await NestFactory.create(ServerModule);
   app.setGlobalPrefix('api');
+
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: '*',
+    credentials: true,
+  });
 
   const options = new DocumentBuilder()
     .setTitle('Nestbe')
