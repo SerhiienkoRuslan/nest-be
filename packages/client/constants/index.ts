@@ -1,3 +1,4 @@
-import { urls } from './urls'
+import { urls } from './urls';
+import { drawerWidth, appDrawerWidth, gridSpacing } from './sizes';
 
-export { urls }
+export { urls, drawerWidth, appDrawerWidth, gridSpacing };

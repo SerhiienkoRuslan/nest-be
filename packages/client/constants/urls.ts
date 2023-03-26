@@ -6,4 +6,5 @@ export const urls = {
   blog: 'blog',
   messager: 'messager',
   profile: 'profile',
-}
+  dashboard: 'dashboard',
+};

@@ -1,7 +1,13 @@
 'use client';
+import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import './global.css';
-import { darkTheme } from '@/utils/muiTheme';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+
+import theme from '@/theme';
+import { GlobalProvider } from '@/context/global';
+
+import NavBar from '@/components/Layout/NavBar';
+import Sidebar from '@/components/Layout/Sidebar';
+import Main from '@/components/Layout/Main';
 
 const Layout = ({ children }) => {
   return (
@@ -11,12 +17,18 @@ const Layout = ({ children }) => {
         <meta name="description" content="Ruslan Serhiienko" />
       </head>
 
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <body>
-          <main>{children}</main>
-        </body>
-      </ThemeProvider>
+      <GlobalProvider>
+        <ThemeProvider theme={theme()}>
+          <CssBaseline />
+          <body>
+            <Box sx={{ display: 'flex' }}>
+              <NavBar />
+              <Sidebar />
+              <Main>{children}</Main>
+            </Box>
+          </body>
+        </ThemeProvider>
+      </GlobalProvider>
     </html>
   );
 };
