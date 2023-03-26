@@ -1,23 +1,24 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, useMediaQuery } from '@mui/material';
-
-// third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { BrowserView, MobileView } from 'react-device-detect';
 
-// project imports
+import { drawerWidth } from '@/constants';
+import { GlobalContext } from '@/context/global';
 import LogoSection from '@/components/LogoSection';
 
 import MenuList from './MenuList';
 import MenuCard from './MenuCard';
-import { drawerWidth } from '@/constants';
 
-const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
+const Sidebar = () => {
   const theme = useTheme();
+  const { setNavigationOpen, isNavigationOpen } = useContext(GlobalContext);
+  const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+  const drawerOpen = !matchDownMd ? isNavigationOpen : !isNavigationOpen;
 
   const drawer = (
     <>
@@ -62,7 +63,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         variant={matchUpMd ? 'persistent' : 'temporary'}
         anchor="left"
         open={drawerOpen}
-        onClose={drawerToggle}
+        onClose={setNavigationOpen}
         sx={{
           '& .MuiDrawer-paper': {
             width: drawerWidth,

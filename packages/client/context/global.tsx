@@ -11,7 +11,7 @@ export const GlobalContext = createContext<ContextType>();
 const { Provider } = GlobalContext;
 
 export const GlobalProvider = ({ children }) => {
-  const [isNavigationOpen, setNavigationOpen] = useState(false);
+  const [isNavigationOpen, setNavigationOpen] = useState(true);
 
   const providerValue = {
     isNavigationOpen,

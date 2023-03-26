@@ -7,9 +7,11 @@ import { GlobalContext } from '@/context/global';
 // import Breadcrumbs from '@/components/Breadcrumbs';
 // import navigation from 'menu-items';
 
+// @ts-ignore
 const MainComponent = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
+  // @ts-ignore
   ...theme.typography.mainContent,
   ...(!open && {
     borderBottomLeftRadius: 0,
@@ -57,6 +59,7 @@ const Main = ({ children }) => {
   const { isNavigationOpen } = useContext(GlobalContext);
 
   return (
+    // @ts-ignore
     <MainComponent theme={theme} open={isNavigationOpen}>
       {/*<Breadcrumbs*/}
       {/*  navigation={navigation}*/}
