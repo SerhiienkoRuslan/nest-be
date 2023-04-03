@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import PropTypes from 'prop-types';
 
 import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, useMediaQuery } from '@mui/material';
@@ -11,7 +10,6 @@ import { GlobalContext } from '@/context/global';
 import LogoSection from '@/components/LogoSection';
 
 import MenuList from './MenuList';
-import MenuCard from './MenuCard';
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -22,11 +20,14 @@ const Sidebar = () => {
 
   const drawer = (
     <>
+      {/* Logo section */}
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
         <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
           <LogoSection />
         </Box>
       </Box>
+
+      {/* Browser Nav section */}
       <BrowserView>
         <PerfectScrollbar
           component="div"
@@ -37,29 +38,25 @@ const Sidebar = () => {
           }}
         >
           <MenuList />
-          <MenuCard />
         </PerfectScrollbar>
       </BrowserView>
+
+      {/* Mob Nav section */}
       <MobileView>
         <Box sx={{ px: 2 }}>
           <MenuList />
-          <MenuCard />
         </Box>
       </MobileView>
     </>
   );
 
-  const container =
-    window !== undefined ? () => window.document.body : undefined;
-
   return (
     <Box
       component="nav"
       sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : 'auto' }}
-      aria-label="mailbox folders"
+      aria-label="nav"
     >
       <Drawer
-        container={container}
         variant={matchUpMd ? 'persistent' : 'temporary'}
         anchor="left"
         open={drawerOpen}
@@ -82,12 +79,6 @@ const Sidebar = () => {
       </Drawer>
     </Box>
   );
-};
-
-Sidebar.propTypes = {
-  drawerOpen: PropTypes.bool,
-  drawerToggle: PropTypes.func,
-  window: PropTypes.object,
 };
 
 export default Sidebar;

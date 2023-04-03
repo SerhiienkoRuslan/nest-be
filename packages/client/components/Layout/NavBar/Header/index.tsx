@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, ButtonBase } from '@mui/material';
-// import { IconMenu2 } from '@tabler/icons';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { GlobalContext } from '@/context/global';
 
@@ -18,7 +18,7 @@ const Header = () => {
 
   return (
     <>
-      {/* logo & toggler button */}
+      {/* Logo & Toggler button */}
       <Box
         sx={{
           width: 228,
@@ -51,18 +51,20 @@ const Header = () => {
             onClick={handleLeftDrawerToggle}
             color="inherit"
           >
-            {/*<IconMenu2 stroke={1.5} size="1.3rem" />*/}
+            <MenuIcon />
           </Avatar>
         </ButtonBase>
       </Box>
 
-      {/* header search */}
+      {/* Search */}
       <SearchSection />
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
 
-      {/* notification & profile */}
+      {/* Notification */}
       <NotificationSection />
+
+      {/* Profile */}
       <ProfileSection />
     </>
   );

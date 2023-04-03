@@ -1,10 +1,11 @@
 'use client';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
-// material-ui
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
 import { useTheme } from '@mui/material/styles';
 import {
   Collapse,
@@ -15,21 +16,17 @@ import {
   Typography,
 } from '@mui/material';
 
-// project imports
 import NavItem from '../NavItem';
 
-// assets
-// import { IconChevronDown, IconChevronUp } from '@tabler/icons';
-
-const NavCollapse = ({ menu, level }) => {
+const NavCollapse = ({ menu, level }: { menu: any; level: number }) => {
   const theme = useTheme();
-  const { pathname } = useRouter();
+  const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
   const handleClick = () => {
-    setOpen(!open);
+    setOpen((prev) => !prev);
     setSelected(!selected ? menu.id : null);
   };
 
@@ -42,10 +39,11 @@ const NavCollapse = ({ menu, level }) => {
     });
   };
 
-  // menu collapse for sub-levels
+  // Menu collapse for sub-levels
   useEffect(() => {
     setOpen(false);
     setSelected(null);
+
     if (menu.children) {
       menu.children.forEach((item) => {
         if (item.children?.length) {
@@ -61,7 +59,7 @@ const NavCollapse = ({ menu, level }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, menu.children]);
 
-  // menu collapse & item
+  // Menu collapse & item
   const menus = menu.children?.map((item) => {
     switch (item.type) {
       case 'collapse':
@@ -77,6 +75,7 @@ const NavCollapse = ({ menu, level }) => {
     }
   });
 
+  // Menu icon
   const Icon = menu.icon;
   const menuIcon = menu.icon ? (
     <Icon
@@ -111,6 +110,7 @@ const NavCollapse = ({ menu, level }) => {
         <ListItemIcon sx={{ my: 'auto', minWidth: !menu.icon ? 18 : 36 }}>
           {menuIcon}
         </ListItemIcon>
+
         <ListItemText
           primary={
             <Typography
@@ -134,22 +134,9 @@ const NavCollapse = ({ menu, level }) => {
             )
           }
         />
-        {
-          open
-            ? 'open'
-            : // <IconChevronUp
-              //   stroke={1.5}
-              //   size="1rem"
-              //   style={{ marginTop: 'auto', marginBottom: 'auto' }}
-              // />
-              'closed'
-          // <IconChevronDown
-          //   stroke={1.5}
-          //   size="1rem"
-          //   style={{ marginTop: 'auto', marginBottom: 'auto' }}
-          // />
-        }
+        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </ListItemButton>
+
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List
           component="div"
@@ -173,11 +160,6 @@ const NavCollapse = ({ menu, level }) => {
       </Collapse>
     </>
   );
-};
-
-NavCollapse.propTypes = {
-  menu: PropTypes.object,
-  level: PropTypes.number,
 };
 
 export default NavCollapse;

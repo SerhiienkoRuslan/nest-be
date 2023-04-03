@@ -1,14 +1,10 @@
-import PropTypes from 'prop-types';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, List, Typography } from '@mui/material';
 
-// project imports
 import NavItem from '../NavItem';
 import NavCollapse from '../NavCollapse';
 
-const NavGroup = ({ item }) => {
+const NavGroup = ({ item }: { item: any }) => {
   const theme = useTheme();
 
   // menu list collapse & items
@@ -56,14 +52,9 @@ const NavGroup = ({ item }) => {
         {items}
       </List>
 
-      {/* group divider */}
       <Divider sx={{ mt: 0.25, mb: 1.25 }} />
     </>
   );
-};
-
-NavGroup.propTypes = {
-  item: PropTypes.object,
 };
 
 export default NavGroup;

@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
 import { forwardRef, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
@@ -11,36 +10,35 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery,
 } from '@mui/material';
-
-// assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-const NavItem = ({ item, level }) => {
+const NavItem = ({ item, level }: { menu: any; level: number }) => {
   const theme = useTheme();
-  // const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
+  const pathname = usePathname();
+  const isOpen = item.url.includes(pathname);
 
+  // Link icon
   const Icon = item.icon;
   const itemIcon = item?.icon ? (
     <Icon stroke={1.5} size="1.3rem" />
   ) : (
     <FiberManualRecordIcon
       sx={{
-        width: 8,
-        // TODO:customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
-        height: 8,
-        // TODO:customization.isOpen.findIndex((id) => id === item?.id) > -1 ? 8 : 6,
+        width: isOpen ? 8 : 6,
+        height: isOpen ? 8 : 6,
       }}
       fontSize={level > 0 ? 'inherit' : 'medium'}
     />
   );
 
+  // Link target
   let itemTarget = '_self';
   if (item.target) {
     itemTarget = '_blank';
   }
 
+  // Link component
   let listItemProps = {
     component: forwardRef((props, ref) => (
       <Link ref={ref} {...props} href={item.url} target={itemTarget} />
@@ -80,22 +78,16 @@ const NavItem = ({ item, level }) => {
         py: level > 1 ? 1 : 1.25,
         pl: `${level * 24}px`,
       }}
-      //  TODO: selected={customization.isOpen.findIndex((id) => id === item.id) > -1}
-      selected={false}
+      selected={isOpen}
       onClick={() => itemHandler(item.id)}
     >
       <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>
         {itemIcon}
       </ListItemIcon>
+
       <ListItemText
         primary={
-          <Typography
-            variant={
-              // TODO: customization.isOpen.findIndex((id) => id === item.id) > -1
-              'TODO' ? 'h5' : 'body1'
-            }
-            color="inherit"
-          >
+          <Typography variant={isOpen ? 'h5' : 'body1'} color="inherit">
             {item.title}
           </Typography>
         }
@@ -112,6 +104,7 @@ const NavItem = ({ item, level }) => {
           )
         }
       />
+
       {item.chip && (
         <Chip
           color={item.chip.color}
@@ -123,11 +116,6 @@ const NavItem = ({ item, level }) => {
       )}
     </ListItemButton>
   );
-};
-
-NavItem.propTypes = {
-  item: PropTypes.object,
-  level: PropTypes.number,
 };
 
 export default NavItem;
