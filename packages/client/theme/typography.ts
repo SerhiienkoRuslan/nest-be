@@ -1,6 +1,6 @@
 export default function themeTypography(theme) {
   return {
-    fontFamily: theme?.customization?.fontFamily,
+    fontFamily: theme.fontFamily,
     h6: {
       fontWeight: 500,
       color: theme.heading,
@@ -89,7 +89,7 @@ export default function themeTypography(theme) {
       padding: '20px',
       marginTop: '88px',
       marginRight: '20px',
-      borderRadius: `${theme?.customization?.borderRadius}px`,
+      borderRadius: `${theme.borderRadius}px`,
     },
     menuCaption: {
       fontSize: '0.875rem',

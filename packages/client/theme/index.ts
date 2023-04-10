@@ -1,9 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
-// assets
 import colors from '@/assets/scss/_themes-vars.module.scss';
 
-// project imports
 import componentStyleOverrides from './compStyleOverride';
 import themePalette from './palette';
 import themeTypography from './typography';
@@ -23,6 +21,8 @@ export const theme = () => {
     menuSelected: color.secondaryDark,
     menuSelectedBack: color.secondaryLight,
     divider: color.grey200,
+    fontFamily: `'Roboto', sans-serif`,
+    borderRadius: 12,
   };
 
   const themeOptions = {

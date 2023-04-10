@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import { forwardRef } from 'react';
+import { forwardRef, ReactElement, FC } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -16,9 +15,21 @@ const headerSX = {
   '& .MuiCardHeader-action': { mr: 0 },
 };
 
-// ==============================|| CUSTOM MAIN CARD ||============================== //
+type Props = {
+  border?: boolean;
+  boxShadow?: boolean;
+  children: ReactElement;
+  content?: boolean;
+  contentClass?: string;
+  contentSX?: any;
+  darkTitle?: boolean;
+  secondary?: any;
+  shadow?: string;
+  sx?: any;
+  title?: any;
+};
 
-const MainCard = forwardRef(
+const MainCard: FC<Props> = forwardRef(
   (
     {
       border = true,
@@ -40,6 +51,7 @@ const MainCard = forwardRef(
 
     return (
       <Card
+        // @ts-ignore
         ref={ref}
         {...others}
         sx={{
@@ -55,17 +67,22 @@ const MainCard = forwardRef(
       >
         {/* card header and action */}
         {title && (
-          <CardHeader
-            sx={headerSX}
-            title={
-              darkTitle ? <Typography variant="h3">{title}</Typography> : title
-            }
-            action={secondary}
-          />
-        )}
+          <>
+            <CardHeader
+              sx={headerSX}
+              title={
+                darkTitle ? (
+                  <Typography variant="h3">{title}</Typography>
+                ) : (
+                  title
+                )
+              }
+              action={secondary}
+            />
 
-        {/* content & header divider */}
-        {title && <Divider />}
+            <Divider />
+          </>
+        )}
 
         {/* card content */}
         {content && (
@@ -73,32 +90,11 @@ const MainCard = forwardRef(
             {children}
           </CardContent>
         )}
+
         {!content && children}
       </Card>
     );
   },
 );
-
-MainCard.propTypes = {
-  border: PropTypes.bool,
-  boxShadow: PropTypes.bool,
-  children: PropTypes.node,
-  content: PropTypes.bool,
-  contentClass: PropTypes.string,
-  contentSX: PropTypes.object,
-  darkTitle: PropTypes.bool,
-  secondary: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  shadow: PropTypes.string,
-  sx: PropTypes.object,
-  title: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-};
 
 export default MainCard;

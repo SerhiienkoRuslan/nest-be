@@ -1,13 +1,32 @@
 import PropTypes from 'prop-types';
-import { forwardRef } from 'react';
+import { forwardRef, FC, ReactElement } from 'react';
 
-// material-ui
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
 
-// ==============================|| TRANSITIONS ||============================== //
+type Props = {
+  children: ReactElement;
+  type?: 'grow' | 'fade' | 'collapse' | 'slide' | 'zoom';
+  position?:
+    | 'top-left'
+    | 'top-right'
+    | 'top'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'bottom';
+  direction?: 'up' | 'down' | 'left' | 'right';
+};
 
-const Transitions = forwardRef(
-  ({ children, position, type, direction, ...others }, ref) => {
+const Transition: FC<Props> = forwardRef(
+  (
+    {
+      children,
+      position = 'top-left',
+      type = 'grow',
+      direction = 'up',
+      ...others
+    },
+    ref,
+  ) => {
     let positionSX = {
       transformOrigin: '0 0 0',
     };
@@ -53,11 +72,13 @@ const Transitions = forwardRef(
             <Box sx={positionSX}>{children}</Box>
           </Grow>
         )}
+
         {type === 'collapse' && (
           <Collapse {...others} sx={positionSX}>
             {children}
           </Collapse>
         )}
+
         {type === 'fade' && (
           <Fade
             {...others}
@@ -70,6 +91,7 @@ const Transitions = forwardRef(
             <Box sx={positionSX}>{children}</Box>
           </Fade>
         )}
+
         {type === 'slide' && (
           <Slide
             {...others}
@@ -83,6 +105,7 @@ const Transitions = forwardRef(
             <Box sx={positionSX}>{children}</Box>
           </Slide>
         )}
+
         {type === 'zoom' && (
           <Zoom {...others}>
             <Box sx={positionSX}>{children}</Box>
@@ -93,24 +116,4 @@ const Transitions = forwardRef(
   },
 );
 
-Transitions.propTypes = {
-  children: PropTypes.node,
-  type: PropTypes.oneOf(['grow', 'fade', 'collapse', 'slide', 'zoom']),
-  position: PropTypes.oneOf([
-    'top-left',
-    'top-right',
-    'top',
-    'bottom-left',
-    'bottom-right',
-    'bottom',
-  ]),
-  direction: PropTypes.oneOf(['up', 'down', 'left', 'right']),
-};
-
-Transitions.defaultProps = {
-  type: 'grow',
-  position: 'top-left',
-  direction: 'up',
-};
-
-export default Transitions;
+export default Transition;

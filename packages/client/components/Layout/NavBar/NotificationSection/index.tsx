@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
@@ -20,35 +19,13 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
-// project imports
 import MainCard from '@/components/MainCard';
-import Transitions from '@/utils/Transitions';
+import Transitions from '@/components/Transitions';
+import { notificationStatuses } from '@/constants';
 
-// assets
-// import { IconBell } from '@tabler/icons';
-
-// notification status options
-const status = [
-  {
-    value: 'all',
-    label: 'All Notification',
-  },
-  {
-    value: 'new',
-    label: 'New',
-  },
-  {
-    value: 'unread',
-    label: 'Unread',
-  },
-  {
-    value: 'other',
-    label: 'Other',
-  },
-];
-
-// ==============================|| NOTIFICATION ||============================== //
+import NotificationList from './NotificationList';
 
 const NotificationSection = () => {
   const theme = useTheme();
@@ -56,10 +33,8 @@ const NotificationSection = () => {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
-  /**
-   * anchorRef is used on different componets and specifying one type leads to other components throwing an error
-   * */
   const anchorRef = useRef(null);
+  const prevOpen = useRef(open);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -72,7 +47,6 @@ const NotificationSection = () => {
     setOpen(false);
   };
 
-  const prevOpen = useRef(open);
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
@@ -86,6 +60,7 @@ const NotificationSection = () => {
 
   return (
     <>
+      {/* Notification button */}
       <Box
         sx={{
           ml: 2,
@@ -99,7 +74,9 @@ const NotificationSection = () => {
           <Avatar
             variant="rounded"
             sx={{
+              // @ts-ignore
               ...theme.typography.commonAvatar,
+              // @ts-ignore
               ...theme.typography.mediumAvatar,
               transition: 'all .2s ease-in-out',
               background: theme.palette.secondary.light,
@@ -115,10 +92,12 @@ const NotificationSection = () => {
             onClick={handleToggle}
             color="inherit"
           >
-            {/*<IconBell stroke={1.5} size="1.3rem" />*/}
+            <NotificationsNoneOutlinedIcon />
           </Avatar>
         </ButtonBase>
       </Box>
+
+      {/* Notification popup */}
       <Popper
         placement={matchesXs ? 'bottom' : 'bottom-end'}
         open={open}
@@ -147,80 +126,97 @@ const NotificationSection = () => {
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard
                   border={false}
-                  elevation={16}
                   content={false}
                   boxShadow
                   shadow={theme.shadows[16]}
                 >
-                  <Grid container direction="column" spacing={2}>
-                    <Grid item xs={12}>
-                      <Grid
-                        container
-                        alignItems="center"
-                        justifyContent="space-between"
-                        sx={{ pt: 2, px: 2 }}
-                      >
-                        <Grid item>
-                          <Stack direction="row" spacing={2}>
-                            <Typography variant="subtitle1">
-                              All Notification
+                  <>
+                    <Grid container direction="column" spacing={2}>
+                      {/* Head links */}
+                      <Grid item xs={12}>
+                        <Grid
+                          container
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{ pt: 2, px: 2 }}
+                        >
+                          <Grid item>
+                            <Stack direction="row" spacing={2}>
+                              <Typography variant="subtitle1">
+                                All Notification
+                              </Typography>
+                              <Chip
+                                size="small"
+                                label="01"
+                                sx={{
+                                  color: theme.palette.background.default,
+                                  bgcolor: theme.palette.warning.dark,
+                                }}
+                              />
+                            </Stack>
+                          </Grid>
+                          <Grid item>
+                            <Typography variant="subtitle2" color="primary">
+                              Mark as all read
                             </Typography>
-                            <Chip
-                              size="small"
-                              label="01"
-                              sx={{
-                                color: theme.palette.background.default,
-                                bgcolor: theme.palette.warning.dark,
-                              }}
-                            />
-                          </Stack>
-                        </Grid>
-                        <Grid item>
-                          <Typography
-                            component={Link}
-                            to="#"
-                            variant="subtitle2"
-                            color="primary"
-                          >
-                            Mark as all read
-                          </Typography>
+                          </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Grid container direction="column" spacing={2}>
-                        <Grid item xs={12}>
-                          <Box sx={{ px: 2, pt: 0.25 }}>
-                            <TextField
-                              id="outlined-select-currency-native"
-                              select
-                              fullWidth
-                              value={value}
-                              onChange={handleChange}
-                              SelectProps={{
-                                native: true,
-                              }}
-                            >
-                              {status.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
-                            </TextField>
-                          </Box>
-                        </Grid>
-                        <Grid item xs={12} p={0}>
-                          <Divider sx={{ my: 0 }} />
-                        </Grid>
+
+                      <Grid item xs={12}>
+                        <PerfectScrollbar
+                          style={{
+                            height: '100%',
+                            maxHeight: 'calc(100vh - 205px)',
+                            overflowX: 'hidden',
+                          }}
+                        >
+                          {/* Filter */}
+                          <Grid container direction="column" spacing={2}>
+                            <Grid item xs={12}>
+                              <Box sx={{ px: 2, pt: 0.25 }}>
+                                <TextField
+                                  id="outlined-select-currency-native"
+                                  select
+                                  fullWidth
+                                  value={value}
+                                  onChange={handleChange}
+                                  SelectProps={{
+                                    native: true,
+                                  }}
+                                >
+                                  {notificationStatuses.map((option) => (
+                                    <option
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </option>
+                                  ))}
+                                </TextField>
+                              </Box>
+                            </Grid>
+
+                            <Grid item xs={12} p={0}>
+                              <Divider sx={{ my: 0 }} />
+                            </Grid>
+                          </Grid>
+
+                          {/* Notification List */}
+                          <NotificationList />
+                        </PerfectScrollbar>
                       </Grid>
                     </Grid>
-                  </Grid>
-                  <Divider />
-                  <CardActions sx={{ p: 1.25, justifyContent: 'center' }}>
-                    <Button size="small" disableElevation>
-                      View All
-                    </Button>
-                  </CardActions>
+
+                    <Divider />
+
+                    {/* View all btn */}
+                    <CardActions sx={{ p: 1.25, justifyContent: 'center' }}>
+                      <Button size="small" disableElevation>
+                        View All
+                      </Button>
+                    </CardActions>
+                  </>
                 </MainCard>
               </ClickAwayListener>
             </Paper>

@@ -12,12 +12,10 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
+import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 
-import Transitions from '@/utils/Transitions';
+import Transitions from '@/components/Transitions';
 import { OutlineInputStyle, HeaderAvatarStyle, PopperStyle } from './styles';
-
-// assets
-// import { IconAdjustmentsHorizontal } from '@tabler/icons';
 
 type MobileSearchType = {
   value: string;
@@ -44,9 +42,7 @@ const MobileSearch = ({ value, setValue, popupState }: MobileSearchType) => {
         <InputAdornment position="end">
           <ButtonBase sx={{ borderRadius: '12px' }}>
             <HeaderAvatarStyle variant="rounded">
-              {/*@ts-ignore*/}
-              {/*<IconAdjustmentsHorizontal stroke={1.5} size="1.3rem" />*/}
-              <SearchIcon />
+              <TuneOutlinedIcon />
             </HeaderAvatarStyle>
           </ButtonBase>
           <Box sx={{ ml: 2 }}>
@@ -95,11 +91,11 @@ const SearchSection = () => {
                     variant="rounded"
                     {...bindToggle(popupState)}
                   >
-                    {/*@ts-ignore*/}
-                    {/*<IconSearch stroke={1.5} size="1.2rem" />*/}
+                    <SearchIcon />
                   </HeaderAvatarStyle>
                 </ButtonBase>
               </Box>
+
               <PopperStyle {...bindPopper(popupState)} transition>
                 {({ TransitionProps }) => (
                   <>
@@ -141,6 +137,7 @@ const SearchSection = () => {
           )}
         </PopupState>
       </Box>
+
       <Box sx={{ display: { xs: 'none', md: 'block' } }}>
         <OutlineInputStyle
           id="input-search-header"
@@ -156,7 +153,7 @@ const SearchSection = () => {
             <InputAdornment position="end">
               <ButtonBase sx={{ borderRadius: '12px' }}>
                 <HeaderAvatarStyle variant="rounded">
-                  {/*<IconAdjustmentsHorizontal stroke={1.5} size="1.3rem" />*/}
+                  <TuneOutlinedIcon />
                 </HeaderAvatarStyle>
               </ButtonBase>
             </InputAdornment>
