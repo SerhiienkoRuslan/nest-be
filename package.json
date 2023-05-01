@@ -5,8 +5,10 @@
   "scripts": {
     "prepare": "npx prisma generate",
     "prebuild": "rimraf dist",
+    "seed": "prisma db seed",
     "nx": "nx",
     "start": "node dist/packages/api/main.js",
+    "start:prod": "node dist/main",
     "build": "npx nx run-many --target=build --projects=client,api --parallel=true",
     "dev": "npx nx run-many --parallel --target=serve --projects=client,api",
     "test": "nx test",
@@ -25,7 +27,21 @@
     "format:check": "nx format:check",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "docker:migrate": "docker-compose -f docker-compose.migrate.yml up -d",
+    "docker:db": "docker-compose -f docker-compose.db.yml up -d",
+    "docker:seed": "docker exec -it nest-api npm run seed",
+    "docker": "docker-compose up -d",
+    "docker:build": "docker-compose build",
+    "migrate:dev": "prisma migrate dev --preview-feature",
+    "migrate:dev:create": "prisma migrate dev --create-only --preview-feature",
+    "migrate:reset": "prisma migrate reset --preview-feature",
+    "migrate:deploy": "npx prisma migrate deploy --preview-feature",
+    "migrate:status": "npx prisma migrate status --preview-feature",
+    "migrate:resolve": "npx prisma migrate resolve --preview-feature",
+    "prisma:studio": "npx prisma studio",
+    "prisma:generate": "npx prisma generate",
+    "prisma:generate:watch": "npx prisma generate --watch"
   },
   "private": true,
   "devDependencies": {
@@ -43,7 +59,7 @@
     "@nrwl/web": "^15.8.9",
     "@testing-library/react": "13.4.0",
     "@types/jest": "28.1.1",
-    "@types/node": "18.7.1",
+    "@types/node": "^18.16.3",
     "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",
     "@types/react-is": "17.0.3",
@@ -68,7 +84,7 @@
     "prisma": "^4.11.0",
     "react-test-renderer": "18.2.0",
     "ts-jest": "28.0.5",
-    "ts-node": "10.9.1",
+    "ts-node": "^10.9.1",
     "typescript": "~4.5.2"
   },
   "workspaces": [
@@ -119,5 +135,8 @@
   },
   "engines": {
     "node": "18.x"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
