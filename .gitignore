@@ -4,6 +4,9 @@
 dist
 tmp
 /out-tsc
+docker-data
+.adminjs
+
 
 # dependencies
 node_modules
