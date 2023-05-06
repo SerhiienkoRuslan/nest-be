@@ -4,10 +4,9 @@ import './global.css';
 
 import theme from '@/theme';
 import { GlobalProvider } from '@/context/global';
+import { AuthProvider } from '@/context/AuthContext';
 
-import NavBar from '@/components/Layout/NavBar';
-import Sidebar from '@/components/Layout/Sidebar';
-import Main from '@/components/Layout/Main';
+import Wrapper from '@/components/Layout/Wrapper';
 
 const Layout = ({ children }) => {
   return (
@@ -25,18 +24,16 @@ const Layout = ({ children }) => {
         />
       </head>
 
-      <GlobalProvider>
-        <ThemeProvider theme={theme()}>
-          <CssBaseline />
-          <body>
-            <Box sx={{ display: 'flex' }}>
-              <NavBar />
-              <Sidebar />
-              <Main>{children}</Main>
-            </Box>
-          </body>
-        </ThemeProvider>
-      </GlobalProvider>
+      <AuthProvider>
+        <GlobalProvider>
+          <ThemeProvider theme={theme()}>
+            <CssBaseline />
+            <body>
+              <Wrapper>{children}</Wrapper>
+            </body>
+          </ThemeProvider>
+        </GlobalProvider>
+      </AuthProvider>
     </html>
   );
 };
