@@ -1,17 +1,21 @@
 import { PrismaClient } from '@prisma/client';
+import * as argon2 from 'argon2';
 const prisma = new PrismaClient();
 async function main() {
+  const email = 'admin@nestbe.com';
+  const password = await argon2.hash(email);
+
   const admin = await prisma.user.upsert({
-    where: { email: 'nestbe-admin@nestbe.com' },
+    where: { email },
     update: {},
     create: {
-      email: 'nestbe-admin@nestbe.com',
+      email,
       username: 'Nestbe Admin',
-      password: 'nestbe-admin@nestbe.com',
+      password,
       role: 'ADMIN',
     },
   });
-  console.log('Admin created', { admin });
+  console.log('Admin created -', { admin });
 }
 main()
   .then(async () => {
