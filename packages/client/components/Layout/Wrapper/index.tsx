@@ -11,7 +11,7 @@ const Wrapper = ({ children }) => {
   const { isAuth } = useContext(AuthContext);
 
   if (!isAuth) {
-    return <Box sx={{ display: 'flex' }}>{children}</Box>;
+    return children;
   }
 
   return (
