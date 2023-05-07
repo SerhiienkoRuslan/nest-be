@@ -15,7 +15,7 @@ export default function LoginPage() {
         text: 'Don`t have an account?',
       }}
     >
-      <div>s</div>
+      <div>Login</div>
     </AuthContent>
   );
 }
