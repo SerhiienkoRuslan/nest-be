@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-const NavItem = ({ item, level }: { menu: any; level: number }) => {
+const NavItem = ({ item, level }: { item: any; level: number }) => {
   const theme = useTheme();
   const pathname = usePathname();
   const isOpen = item.url.includes(pathname);

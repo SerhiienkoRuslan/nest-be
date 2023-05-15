@@ -3,8 +3,17 @@
 import { FC, ReactElement } from 'react';
 import Link from 'next/link';
 
-import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import GoogleButton, { GoogleButtonType } from '@/components/Auth/GoogleButton';
 
 type Props = {
   children: ReactElement;
@@ -14,9 +23,16 @@ type Props = {
     href: string;
     text: string;
   };
+  googleBtnProps: GoogleButtonType;
 };
 
-const AuthContent: FC<Props> = ({ children, title, subtitle, link }) => {
+const AuthContent: FC<Props> = ({
+  children,
+  title,
+  subtitle,
+  link,
+  googleBtnProps,
+}) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -44,7 +60,7 @@ const AuthContent: FC<Props> = ({ children, title, subtitle, link }) => {
                 fontSize="16px"
                 textAlign={matchDownSM ? 'center' : 'inherit'}
               >
-                {subtitle}
+                Enter your credentials to continue
               </Typography>
             </Stack>
           </Grid>
@@ -52,6 +68,51 @@ const AuthContent: FC<Props> = ({ children, title, subtitle, link }) => {
       </Grid>
 
       <Grid item xs={12}>
+        <Grid container direction="column" justifyContent="center" spacing={2}>
+          <Grid item xs={12}>
+            <GoogleButton {...googleBtnProps} />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Box sx={{ alignItems: 'center', display: 'flex' }}>
+              <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+
+              <Button
+                variant="outlined"
+                sx={{
+                  cursor: 'unset',
+                  m: 2,
+                  py: 0.5,
+                  px: 7,
+                  borderColor: `${theme.palette.grey[100]} !important`,
+                  color: `${theme.palette.grey[900]}!important`,
+                  fontWeight: 500,
+                  // @ts-ignore
+                  borderRadius: `${theme.borderRadius}px`,
+                }}
+                disableRipple
+                disabled
+              >
+                OR
+              </Button>
+
+              <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            container
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1">{subtitle}</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+
         {children}
       </Grid>
 

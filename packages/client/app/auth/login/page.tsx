@@ -1,4 +1,5 @@
 import AuthContent from '@/components/Layout/AuthContent';
+import LoginForm from '@/components/Auth/LoginForm';
 import { urls } from '@/constants';
 
 export const metadata = {
@@ -9,13 +10,17 @@ export default function LoginPage() {
   return (
     <AuthContent
       title="Hi, Welcome Back"
-      subtitle="Enter your credentials to continue"
+      subtitle="Sign in with Email address"
       link={{
         href: urls.registration,
         text: 'Don`t have an account?',
       }}
+      googleBtnProps={{
+        text: 'Sign in with Google',
+        isLogin: true,
+      }}
     >
-      <div>Login</div>
+      <LoginForm />
     </AuthContent>
   );
 }
