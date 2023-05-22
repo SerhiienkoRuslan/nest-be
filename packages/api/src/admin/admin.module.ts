@@ -1,12 +1,14 @@
 import AdminJS from 'adminjs';
 import '@adminjs/express';
+import * as argon2 from 'argon2';
+
 import passwordsFeature from '@adminjs/passwords';
 import { AdminModule } from '@adminjs/nestjs';
 import { Database, Resource } from '@adminjs/prisma';
+
 import { DMMFClass } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaModule } from '../prisma/prisma.module';
-import * as argon2 from 'argon2';
 
 AdminJS.registerAdapter({ Database, Resource });
 
@@ -19,20 +21,20 @@ export default AdminModule.createAdminAsync({
       adminJsOptions: {
         rootPath: '/admin',
         resources: [
-          {
-            resource: { model: dmmf.modelMap.User, client: prisma },
-            options: {},
-            features: [
-              passwordsFeature({
-                properties: { encryptedPassword: 'password' },
-                hash: argon2.hash,
-              }),
-            ],
-          },
-          {
-            resource: { model: dmmf.modelMap.Post, client: prisma },
-            options: {},
-          },
+          // {
+          //   resource: { model: dmmf.modelMap.User, client: prisma },
+          //   options: {},
+          //   features: [
+          //     passwordsFeature({
+          //       properties: { encryptedPassword: 'password' },
+          //       hash: argon2.hash,
+          //     }),
+          //   ],
+          // },
+          // {
+          //   resource: { model: dmmf.modelMap.Post, client: prisma },
+          //   options: {},
+          // },
         ],
         // TODO: Uncomment Dashboard component
         // dashboard: {
