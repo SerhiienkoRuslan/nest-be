@@ -5,20 +5,24 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
-  Query
+  Query,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDTO, MessageResponseDTO } from './dto';
-import { User } from "../user/user.decorator";
-import { UserData } from "../user/user.interface";
+import { User } from '../user/user.decorator';
+import { UserData } from '../common/interfaces/user.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('messages')
 @Controller()
 export class MessageController {
   constructor(private messageService: MessageService) {}
 
   @Post('message')
   @UsePipes(new ValidationPipe())
-  async createMessage(@Body() data: CreateMessageDTO): Promise<MessageResponseDTO> {
+  async createMessage(
+    @Body() data: CreateMessageDTO,
+  ): Promise<MessageResponseDTO> {
     return this.messageService.createMessage(data);
   }
 
@@ -27,9 +31,12 @@ export class MessageController {
     @Query('with') convoWith: string,
     @Query('page') page: number = 0,
     @Query('limit') limit: number = 10,
-    @User() user: UserData
+    @User() user: UserData,
   ) {
     limit = limit > 100 ? 100 : limit;
-    return await this.messageService.getConversation(convoWith, user, { page, limit });
+    return await this.messageService.getConversation(convoWith, user, {
+      page,
+      limit,
+    });
   }
 }

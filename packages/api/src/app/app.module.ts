@@ -5,6 +5,8 @@ import AdminModule from '../admin/admin.module';
 /** APP */
 import { AppController } from './app.controller';
 import { AppGateway } from './app.gateway';
+/** AUTH */
+import { AuthModule } from './auth/auth.module';
 /** USER */
 import { UserModule } from './user/user.module';
 /** MESSAGE */
@@ -16,7 +18,7 @@ import { PostModule } from './post/post.module';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-  imports: [UserModule, MessageModule, PostModule, AdminModule],
+  imports: [AuthModule, UserModule, MessageModule, PostModule, AdminModule],
   controllers: [AppController],
   providers: [AppGateway, MessageService, PrismaService],
 })
