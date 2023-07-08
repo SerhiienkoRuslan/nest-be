@@ -27,7 +27,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('registration')
   async create(@Body() userData: CreateUserDto) {
-    return this.authService.create(userData);
+    return this.authService.registration(userData);
   }
 
   @UsePipes(new ValidationPipe())

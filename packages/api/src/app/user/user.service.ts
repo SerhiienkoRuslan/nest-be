@@ -4,7 +4,8 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { hasPermission } from 'src/shared/pipes/userUtils';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UpdateUserDto } from './dto';
-import { UserData } from '../common/interfaces/user.interface';
+import { UserData, UserRO } from '../common/interfaces/user.interface';
+import { CreateUserDto } from '../auth/dto';
 
 const select = {
   email: true,
@@ -29,6 +30,10 @@ export class UserService {
     return await this.prisma.user.findMany({ select });
   }
 
+  async create(data: CreateUserDto): Promise<UserData> {
+    return await this.prisma.user.create({ data, select });
+  }
+
   async update(userData: UserData, data: UpdateUserDto): Promise<any> {
     if (hasPermission(userData?.id, data)) {
       const where = { id: userData?.id };
@@ -48,19 +53,32 @@ export class UserService {
     }
   }
 
-  async findById(id: number): Promise<any> {
+  async findById(id: number): Promise<UserRO | null> {
     const user = await this.prisma.user.findUnique({
       where: { id },
       select: { id: true, ...select },
     });
-    return { user };
+
+    if (user) {
+      return { user };
+    }
+
+    return null;
   }
 
-  async findByEmail(email: string): Promise<any> {
+  async findByEmail(email: string, params: {} = {}): Promise<UserRO | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      select,
+      select: {
+        ...select,
+        ...params,
+      },
     });
-    return { user };
+
+    if (user) {
+      return { user };
+    }
+
+    return null;
   }
 }
