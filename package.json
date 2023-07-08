@@ -49,7 +49,6 @@
   "private": true,
   "devDependencies": {
     "@nestjs/testing": "9.4.0",
-    "@nrwl/schematics": "^8.12.11",
     "@nx/cypress": "16.1.4",
     "@nx/eslint-plugin": "16.1.4",
     "@nx/jest": "16.1.4",
