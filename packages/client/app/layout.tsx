@@ -1,5 +1,6 @@
 'use client';
-import { ThemeProvider, CssBaseline, Box } from '@mui/material';
+import Providers from '@/context/Providers';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import './global.css';
 
 import theme from '@/theme';
@@ -7,8 +8,9 @@ import { GlobalProvider } from '@/context/global';
 import { AuthProvider } from '@/context/AuthContext';
 
 import Wrapper from '@/components/Layout/Wrapper';
+import React from 'react';
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
@@ -23,17 +25,18 @@ const Layout = ({ children }) => {
           rel="stylesheet"
         />
       </head>
-
-      <AuthProvider>
-        <GlobalProvider>
-          <ThemeProvider theme={theme()}>
-            <CssBaseline />
-            <body>
-              <Wrapper>{children}</Wrapper>
-            </body>
-          </ThemeProvider>
-        </GlobalProvider>
-      </AuthProvider>
+      <Providers>
+        <AuthProvider>
+          <GlobalProvider>
+            <ThemeProvider theme={theme()}>
+              <CssBaseline />
+              <body>
+                <Wrapper>{children}</Wrapper>
+              </body>
+            </ThemeProvider>
+          </GlobalProvider>
+        </AuthProvider>
+      </Providers>
     </html>
   );
 };

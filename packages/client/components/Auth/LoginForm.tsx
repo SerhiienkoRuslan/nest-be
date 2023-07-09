@@ -1,7 +1,7 @@
 'use client';
+import { signIn, useSession } from 'next-auth/react';
 import { FC, useState } from 'react';
 import { Formik } from 'formik';
-
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
@@ -29,6 +29,9 @@ const initialValues = {
 };
 
 const LoginForm: FC = () => {
+  const { data: session } = useSession();
+  console.log(session);
+
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
@@ -50,6 +53,17 @@ const LoginForm: FC = () => {
     try {
       setStatus({ success: true });
       setSubmitting(false);
+      const res = await signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        redirect: true,
+        callbackUrl: '/',
+      });
+      // if (res && !res.error) {
+      //   router.push('/profile');
+      // } else {
+      //   console.log(res);
+      // }
     } catch (err) {
       setStatus({ success: false });
       setErrors({ submit: err.message });
