@@ -42,10 +42,6 @@ const LoginForm: FC = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   const {
     mutate: signInUser,
     isLoading,
@@ -139,7 +135,6 @@ const LoginForm: FC = () => {
                   <IconButton
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
                     edge="end"
                     size="large"
                   >
