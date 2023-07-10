@@ -1,7 +1,7 @@
 'use client';
-import { signIn, useSession } from 'next-auth/react';
 import { FC, useState } from 'react';
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
+import { useMutation } from 'react-query';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
@@ -21,6 +21,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { loginValidation } from '@/utils/validation';
+import { fetchLogin } from '@/lib/Auth/fetchLogin';
 
 const initialValues = {
   email: '',
@@ -29,12 +30,12 @@ const initialValues = {
 };
 
 const LoginForm: FC = () => {
-  const { data: session } = useSession();
-  console.log(session);
-
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
+  const [mutationSuccess, setMutationSuccess] = useState(false);
+  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
+  const [formErrors, setFormErrors] = useState<boolean>(false);
 
   const handleClickRememberMe = (event) => setRememberMe(event.target.checked);
 
@@ -46,36 +47,38 @@ const LoginForm: FC = () => {
     event.preventDefault();
   };
 
-  const handleSubmit = async (
-    values,
-    { setErrors, setStatus, setSubmitting },
-  ) => {
-    try {
-      setStatus({ success: true });
-      setSubmitting(false);
-      const res = await signIn('credentials', {
-        email: values.email,
-        password: values.password,
-        redirect: true,
-        callbackUrl: '/',
-      });
-      // if (res && !res.error) {
-      //   router.push('/profile');
-      // } else {
-      //   console.log(res);
-      // }
-    } catch (err) {
-      setStatus({ success: false });
-      setErrors({ submit: err.message });
-      setSubmitting(false);
-    }
+  const {
+    mutate: signInUser,
+    isLoading,
+    isError: isErrorLogin,
+    data: loginData,
+    isSuccess: isSuccessLogin,
+  } = useMutation(
+    () =>
+      fetchLogin({
+        email: 'admin@nestbe.com',
+        password: 'admin@nestbe.com',
+      }),
+    {
+      onSuccess: () => {
+        setMutationSuccess(true);
+      },
+      onError: () => {
+        setMutationSuccess(false);
+        setFormErrors(true);
+      },
+    },
+  );
+
+  const onSubmitLogin = async () => {
+    signInUser();
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={loginValidation}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmitLogin}
     >
       {({
         errors,
@@ -195,7 +198,7 @@ const LoginForm: FC = () => {
           <Box sx={{ mt: 2 }}>
             <Button
               disableElevation
-              disabled={isSubmitting}
+              disabled={isLoading || isSubmitting}
               fullWidth
               size="large"
               type="submit"

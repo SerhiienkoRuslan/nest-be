@@ -1,16 +1,16 @@
 'use client';
-import Providers from '@/context/Providers';
 import { ThemeProvider, CssBaseline } from '@mui/material';
+import { Hydrate } from 'react-query';
 import './global.css';
 
 import theme from '@/theme';
 import { GlobalProvider } from '@/context/global';
 import { AuthProvider } from '@/context/AuthContext';
+import ReactQueryWrapper from '@/context/ReactQueryWrapper';
 
 import Wrapper from '@/components/Layout/Wrapper';
-import React from 'react';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }) => {
   return (
     <html lang="en">
       <head>
@@ -25,18 +25,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           rel="stylesheet"
         />
       </head>
-      <Providers>
+
+      <ReactQueryWrapper>
         <AuthProvider>
-          <GlobalProvider>
-            <ThemeProvider theme={theme()}>
-              <CssBaseline />
-              <body>
-                <Wrapper>{children}</Wrapper>
-              </body>
-            </ThemeProvider>
-          </GlobalProvider>
+          <Hydrate>
+            <GlobalProvider>
+              <ThemeProvider theme={theme()}>
+                <CssBaseline />
+                <body>
+                  <Wrapper>{children}</Wrapper>
+                </body>
+              </ThemeProvider>
+            </GlobalProvider>
+          </Hydrate>
         </AuthProvider>
-      </Providers>
+      </ReactQueryWrapper>
     </html>
   );
 };
