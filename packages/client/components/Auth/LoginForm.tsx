@@ -33,7 +33,6 @@ const LoginForm: FC = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
-  const [mutationSuccess, setMutationSuccess] = useState(false);
   const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<boolean>(false);
 
@@ -61,10 +60,9 @@ const LoginForm: FC = () => {
       }),
     {
       onSuccess: () => {
-        setMutationSuccess(true);
+        // redirect
       },
       onError: () => {
-        setMutationSuccess(false);
         setFormErrors(true);
       },
     },
