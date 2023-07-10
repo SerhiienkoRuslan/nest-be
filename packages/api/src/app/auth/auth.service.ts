@@ -17,13 +17,15 @@ export class AuthService {
   ) {}
 
   async login(payload: LoginUserDto): Promise<any> {
-    const { user } = await this.userService.findByEmail(payload.email, {
+    const userData = await this.userService.findByEmail(payload.email, {
       password: true,
     });
 
     const errors = { User: 'email or password wrong!' };
 
-    if (!user) throw new HttpException({ errors }, 401);
+    if (!userData) throw new HttpException({ errors }, 401);
+
+    const { user } = userData;
 
     const authenticated = await argon2.verify(user.password, payload.password);
 

@@ -54,10 +54,10 @@ const LoginForm: FC = () => {
     data: loginData,
     isSuccess: isSuccessLogin,
   } = useMutation(
-    () =>
+    ({ email, password }: any) =>
       fetchLogin({
-        email: 'admin@nestbe.com',
-        password: 'admin@nestbe.com',
+        email,
+        password,
       }),
     {
       onSuccess: () => {
@@ -70,8 +70,8 @@ const LoginForm: FC = () => {
     },
   );
 
-  const onSubmitLogin = async () => {
-    signInUser();
+  const onSubmitLogin = async (data) => {
+    signInUser(data);
   };
 
   return (
