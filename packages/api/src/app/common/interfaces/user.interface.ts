@@ -5,6 +5,7 @@ export interface UserData {
   avatar?: string;
   password?: string;
   id: number;
+  validEmail: boolean;
 }
 
 export interface UserRO {
