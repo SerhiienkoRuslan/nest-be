@@ -14,6 +14,7 @@ const select = {
   avatar: true,
   id: true,
   role: true,
+  validEmail: true,
   posts: {
     select: {
       id: true,
