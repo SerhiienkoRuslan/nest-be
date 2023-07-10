@@ -35,7 +35,7 @@ model User {
   bio          String?
   role         Role    @default(USER)
   posts        Post[]
-  validEmail   Boolean @default(false)
+  validEmail   Boolean @default(true)
   birthday     DateTime?
   phone        String?
   gender       String?
