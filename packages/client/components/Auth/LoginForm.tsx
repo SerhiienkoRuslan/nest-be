@@ -198,7 +198,7 @@ const LoginForm: FC = () => {
               variant="contained"
               color="secondary"
             >
-              Sign in
+              {isLoading ? 'Loading...' : 'Sign in'}
             </Button>
           </Box>
         </form>
