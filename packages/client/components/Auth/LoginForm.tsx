@@ -55,7 +55,7 @@ const LoginForm: FC = () => {
       }),
     {
       onSuccess: () => {
-        // redirect
+        // redirect + setIsAuth from AuthContext
       },
       onError: () => {
         // error from BE
