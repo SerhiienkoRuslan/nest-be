@@ -33,13 +33,12 @@ const LoginForm: FC = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
-  const [isVisiblePassword, setIsVisiblePassword] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<boolean>(false);
 
   const handleClickRememberMe = (event) => setRememberMe(event.target.checked);
 
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+    setShowPassword((prev) => !prev);
   };
 
   const {
@@ -59,6 +58,7 @@ const LoginForm: FC = () => {
         // redirect
       },
       onError: () => {
+        // error from BE
         setFormErrors(true);
       },
     },
