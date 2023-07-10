@@ -12,6 +12,20 @@ enum Role {
   ADMIN
 }
 
+model ForgottenPassword {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  newPasswordToken  String
+  timestamp         DateTime  @default(now())
+}
+
+model EmailVerification {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  emailToken        String
+  timestamp         DateTime  @default(now())
+}
+
 model User {
   id           Int     @id @default(autoincrement())
   email        String  @unique
@@ -21,15 +35,22 @@ model User {
   bio          String?
   role         Role    @default(USER)
   posts        Post[]
+  validEmail   Boolean @default(false)
+  birthday     DateTime?
+  phone        String?
+  gender       String?
+  location     String?
+  interests    String[]
+  socialMedia  String[]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  authorId  Int?
-  author    User?    @relation(fields: [authorId], references: [id])
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String?
+  published   Boolean? @default(false)
+  authorId    Int?
+  author      User?    @relation(fields: [authorId], references: [id])
 }
 
 model Message {

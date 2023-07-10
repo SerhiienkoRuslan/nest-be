@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon2 from 'argon2';
 const prisma = new PrismaClient();
+
 async function main() {
   const email = 'admin@nestbe.com';
   const password = await argon2.hash(email);
@@ -13,6 +14,8 @@ async function main() {
       username: 'Nestbe Admin',
       password,
       role: 'ADMIN',
+      validEmail: true,
+      interests: ['some'],
     },
   });
   console.log('Admin created -', { admin });

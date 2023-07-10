@@ -128,6 +128,7 @@
     "material-ui-popup-state": "^5.0.8",
     "next": "13.3.0",
     "node-fetch": "^2.6.11",
+    "nodemailer": "^6.9.3",
     "react": "18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
