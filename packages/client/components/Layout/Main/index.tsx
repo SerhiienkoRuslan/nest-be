@@ -1,3 +1,4 @@
+// @ts-check
 import { useContext } from 'react';
 
 import { styled, useTheme } from '@mui/material/styles';
@@ -7,7 +8,6 @@ import { GlobalContext } from '@/context/global';
 // import Breadcrumbs from '@/components/Breadcrumbs';
 // import navigation from 'menu-items';
 
-// @ts-ignore
 const MainComponent = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({

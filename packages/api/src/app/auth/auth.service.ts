@@ -95,14 +95,15 @@ export class AuthService {
   }
 
   async login(payload: LoginUserDto): Promise<any> {
-    const { user } = await this.userService.findByEmail(payload.email, {
+    const userData = await this.userService.findByEmail(payload.email, {
       password: true,
       validEmail: true,
     });
 
-    if (!user) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    if (!user.validEmail) throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
+    if (!userData) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (!userData?.user?.validEmail) throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
 
+    const { user } = userData;
     const authenticated = await argon2.verify(user.password, payload.password);
 
     if (authenticated) {

@@ -1,7 +1,7 @@
 'use client';
 import { FC, useState } from 'react';
 import { Formik } from 'formik';
-
+import { useMutation } from 'react-query';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
@@ -21,6 +21,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { loginValidation } from '@/utils/validation';
+import { fetchLogin } from '@/lib/Auth/fetchLogin';
 
 const initialValues = {
   email: '',
@@ -32,36 +33,46 @@ const LoginForm: FC = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
+  const [formErrors, setFormErrors] = useState<boolean>(false);
 
   const handleClickRememberMe = (event) => setRememberMe(event.target.checked);
 
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+    setShowPassword((prev) => !prev);
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  const {
+    mutate: signInUser,
+    isLoading,
+    isError: isErrorLogin,
+    data: loginData,
+    isSuccess: isSuccessLogin,
+  } = useMutation(
+    ({ email, password }: any) =>
+      fetchLogin({
+        email,
+        password,
+      }),
+    {
+      onSuccess: () => {
+        // redirect + setIsAuth from AuthContext
+      },
+      onError: () => {
+        // error from BE
+        setFormErrors(true);
+      },
+    },
+  );
 
-  const handleSubmit = async (
-    values,
-    { setErrors, setStatus, setSubmitting },
-  ) => {
-    try {
-      setStatus({ success: true });
-      setSubmitting(false);
-    } catch (err) {
-      setStatus({ success: false });
-      setErrors({ submit: err.message });
-      setSubmitting(false);
-    }
+  const onSubmitLogin = async (data) => {
+    signInUser(data);
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={loginValidation}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmitLogin}
     >
       {({
         errors,
@@ -124,7 +135,6 @@ const LoginForm: FC = () => {
                   <IconButton
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
                     edge="end"
                     size="large"
                   >
@@ -181,14 +191,14 @@ const LoginForm: FC = () => {
           <Box sx={{ mt: 2 }}>
             <Button
               disableElevation
-              disabled={isSubmitting}
+              disabled={isLoading || isSubmitting}
               fullWidth
               size="large"
               type="submit"
               variant="contained"
               color="secondary"
             >
-              Sign in
+              {isLoading ? 'Loading...' : 'Sign in'}
             </Button>
           </Box>
         </form>

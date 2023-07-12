@@ -134,6 +134,7 @@
     "react-dom": "18.2.0",
     "react-is": "18.2.0",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-query": "^3.39.3",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "rxjs": "^7.0.0",

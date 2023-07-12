@@ -1,10 +1,12 @@
 'use client';
-import { ThemeProvider, CssBaseline, Box } from '@mui/material';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { Hydrate } from 'react-query';
 import './global.css';
 
 import theme from '@/theme';
 import { GlobalProvider } from '@/context/global';
 import { AuthProvider } from '@/context/AuthContext';
+import ReactQueryWrapper from '@/context/ReactQueryWrapper';
 
 import Wrapper from '@/components/Layout/Wrapper';
 
@@ -24,16 +26,20 @@ const Layout = ({ children }) => {
         />
       </head>
 
-      <AuthProvider>
-        <GlobalProvider>
-          <ThemeProvider theme={theme()}>
-            <CssBaseline />
-            <body>
-              <Wrapper>{children}</Wrapper>
-            </body>
-          </ThemeProvider>
-        </GlobalProvider>
-      </AuthProvider>
+      <ReactQueryWrapper>
+        <AuthProvider>
+          <Hydrate>
+            <GlobalProvider>
+              <ThemeProvider theme={theme()}>
+                <CssBaseline />
+                <body>
+                  <Wrapper>{children}</Wrapper>
+                </body>
+              </ThemeProvider>
+            </GlobalProvider>
+          </Hydrate>
+        </AuthProvider>
+      </ReactQueryWrapper>
     </html>
   );
 };
