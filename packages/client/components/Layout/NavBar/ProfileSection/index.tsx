@@ -1,5 +1,6 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import {AuthContext} from "@/context/AuthContext";
+import {useState, useRef, useEffect, useContext} from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useTheme } from '@mui/material/styles';
@@ -43,9 +44,11 @@ const ProfileSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
+  const { logOut } = useContext(AuthContext)
 
   const handleLogout = async () => {
-    console.log('Logout');
+    logOut()
+    router.push("/auth/login")
   };
 
   const handleClose = (event) => {

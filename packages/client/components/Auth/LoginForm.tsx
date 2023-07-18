@@ -1,5 +1,7 @@
 'use client';
-import { FC, useState } from 'react';
+import {AuthContext} from "@/context/AuthContext";
+import {FC, useContext, useState} from 'react';
+import {useRouter} from "next/navigation";
 import { Formik } from 'formik';
 import { useMutation } from 'react-query';
 import { useTheme } from '@mui/material/styles';
@@ -34,6 +36,8 @@ const LoginForm: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
   const [formErrors, setFormErrors] = useState<boolean>(false);
+  const { logIn } = useContext(AuthContext)
+  const router = useRouter()
 
   const handleClickRememberMe = (event) => setRememberMe(event.target.checked);
 
@@ -54,11 +58,13 @@ const LoginForm: FC = () => {
         password,
       }),
     {
-      onSuccess: () => {
-        // redirect + setIsAuth from AuthContext
+      onSuccess: ({user}) => {
+        logIn(user)
+        router.push("/dashboard")
       },
-      onError: () => {
+      onError: (error) => {
         // error from BE
+        console.log(error)
         setFormErrors(true);
       },
     },

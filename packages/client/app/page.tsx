@@ -7,10 +7,10 @@ import { AuthContext } from '@/context/AuthContext';
 
 export default function MainPage() {
   const router = useRouter();
-  const { isAuth } = useContext(AuthContext);
+  const { isLogIn } = useContext(AuthContext);
 
   useEffect(() => {
-    router.replace(isAuth ? urls.dashboard : urls.login);
+    router.replace(isLogIn ? urls.dashboard : urls.login);
   });
 
   return null;

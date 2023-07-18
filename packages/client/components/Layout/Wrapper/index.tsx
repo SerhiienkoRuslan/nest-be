@@ -8,9 +8,9 @@ import Main from '@/components/Layout/Main';
 import { AuthContext } from '@/context/AuthContext';
 
 const Wrapper = ({ children }) => {
-  const { isAuth } = useContext(AuthContext);
+  const { isLogIn } = useContext(AuthContext);
 
-  if (!isAuth) {
+  if (!isLogIn) {
     return children;
   }
 
