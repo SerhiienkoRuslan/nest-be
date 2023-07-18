@@ -1,7 +1,7 @@
 'use client';
-import {AuthContext} from "@/context/AuthContext";
-import {FC, useContext, useState} from 'react';
-import {useRouter} from "next/navigation";
+import { AuthContext } from '@/context/AuthContext';
+import { FC, useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Formik } from 'formik';
 import { useMutation } from 'react-query';
 import { useTheme } from '@mui/material/styles';
@@ -36,8 +36,8 @@ const LoginForm: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
   const [formErrors, setFormErrors] = useState<boolean>(false);
-  const { logIn } = useContext(AuthContext)
-  const router = useRouter()
+  const { logIn } = useContext(AuthContext);
+  const router = useRouter();
 
   const handleClickRememberMe = (event) => setRememberMe(event.target.checked);
 
@@ -58,13 +58,13 @@ const LoginForm: FC = () => {
         password,
       }),
     {
-      onSuccess: ({user}) => {
-        logIn(user)
-        router.push("/dashboard")
+      onSuccess: ({ user }) => {
+        logIn(user);
+        router.push('/dashboard');
       },
       onError: (error) => {
         // error from BE
-        console.log(error)
+        console.log(error);
         setFormErrors(true);
       },
     },
@@ -80,15 +80,7 @@ const LoginForm: FC = () => {
       validationSchema={loginValidation}
       onSubmit={onSubmitLogin}
     >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values,
-      }) => (
+      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           {/* Email */}
           <FormControl
@@ -125,9 +117,7 @@ const LoginForm: FC = () => {
             // @ts-ignore
             sx={{ ...theme.typography.customInput }}
           >
-            <InputLabel htmlFor="outlined-adornment-password-login">
-              Password
-            </InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
 
             <OutlinedInput
               id="outlined-adornment-password-login"
@@ -159,12 +149,7 @@ const LoginForm: FC = () => {
           </FormControl>
 
           {/* Forgot Password */}
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            spacing={1}
-          >
+          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
             <FormControlLabel
               control={
                 <Checkbox
