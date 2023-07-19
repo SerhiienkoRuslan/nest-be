@@ -66,7 +66,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       isLogIn,
       user,
-      // token,
       logIn,
       logOut,
     }),
