@@ -1,13 +1,20 @@
 'use client';
-import {fetchCurrent} from "@/lib/Auth/fetchCurrent";
-import {User} from "@/lib/Auth/models";
-import {createContext, Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useState} from 'react';
-import {getCookie, setCookie, deleteCookie} from 'cookies-next';
-import type {CookieValueTypes} from 'cookies-next';
+import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
+import { User } from '@/lib/Auth/models';
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 
 interface IAuthContext {
   user: User | null;
-  token: CookieValueTypes;
   isLogIn: boolean;
   logIn: Dispatch<SetStateAction<User>>;
   logOut: () => void;
@@ -16,55 +23,40 @@ interface IAuthContext {
 export const AuthContext = createContext<IAuthContext>({
   isLogIn: false,
   user: null,
-  token: null,
   logIn: () => {},
-  logOut: () => {}
+  logOut: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogIn, setIsLogIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [token, setTokenData] = useState<CookieValueTypes>(null);
 
-
-  const setToken = useCallback((tokenData) => {
-    setTokenData(tokenData);
-
-    if (tokenData) {
-      setCookie("token", tokenData);
-    } else {
-      deleteCookie("token");
-    }
-  }, []);
-
-  const logIn = (user: User)=> {
-    setUser(user)
-    setToken(user.token)
-    setIsLogIn(true)
-  }
-
+  const logIn = (user: User) => {
+    setUser(user);
+    setCookie('token', user.token);
+    setIsLogIn(true);
+  };
 
   const logOut = useCallback(() => {
     setUser(null);
-    setIsLogIn(false)
-    setToken(null);
-  }, [setToken, setIsLogIn, setUser]);
+    setIsLogIn(false);
+    deleteCookie('token');
+  }, [setIsLogIn, setUser]);
 
   const loadData = useCallback(async () => {
-    const tokenData = getCookie("token");
-    setTokenData(tokenData);
+    const token = getCookie('token');
 
     try {
-      if (tokenData) {
-        const { user } = await fetchCurrent()
-        setIsLogIn(true)
-        setUser(user)
+      if (token) {
+        const { user } = await fetchCurrent();
+        setIsLogIn(true);
+        setUser(user);
       }
     } catch {
-      setIsLogIn(false)
-      setToken(null);
+      setIsLogIn(false);
+      deleteCookie('token');
     }
-  }, [setToken]);
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -74,16 +66,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       isLogIn,
       user,
-      token,
+      // token,
       logIn,
       logOut,
     }),
-    [isLogIn, user, token, setToken, logOut]
+    [isLogIn, user, logOut],
   );
 
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
