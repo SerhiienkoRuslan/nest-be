@@ -27,15 +27,15 @@ model EmailVerification {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
   username     String
   password     String
   avatar       String?
   bio          String?
-  role         Role    @default(USER)
+  role         Role       @default(USER)
   posts        Post[]
-  validEmail   Boolean @default(true)
+  validEmail   Boolean    @default(false)
   birthday     DateTime?
   phone        String?
   gender       String?
