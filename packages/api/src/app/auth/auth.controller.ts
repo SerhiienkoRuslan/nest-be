@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @UsePipes(new ValidationPipe())
-  @Post('email/verify/:token')
+  @Post('verify/:token')
   async verifyEmail(@Param() params: VerifyEmailDto): Promise<IResponse> {
     try {
       const isEmailVerified = await this.authService.verifyEmail(params.token);
