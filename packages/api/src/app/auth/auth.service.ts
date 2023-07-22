@@ -5,7 +5,7 @@ import * as argon2 from 'argon2';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto, LoginUserDto } from './dto';
-import { CLIENT_HOST, CLIENT_PORT, MAIL_CONFIG, SECRET } from '../../config';
+import { MAIL_CONFIG, SECRET } from '../../config';
 import { UserService } from '../user/user.service';
 import { ResponseError, ResponseSuccess } from '../common/dto/response.dto';
 import { IResponse } from '../common/interfaces/response.interface';
@@ -69,14 +69,11 @@ export class AuthService {
         subject: 'Verify Email',
         text: 'Verify Email',
         html:
-          'Hi! <br><br> Thanks for your registration<br><br>' +
-          '<a href=' +
-          CLIENT_HOST +
-          ':' +
-          CLIENT_PORT +
-          '/auth/email/verify/' +
+          'Hi! <br><br>Thanks for your registration<br><br>' +
+          'Your code: ' +
+          '<b>' +
           model.emailToken +
-          '>Click here to activate your account</a>',
+          '</b>',
       };
 
       return await new Promise<boolean>(async function (resolve, reject) {
@@ -101,7 +98,8 @@ export class AuthService {
     });
 
     if (!userData) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    if (!userData?.user?.validEmail) throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
+    if (!userData?.user?.validEmail)
+      throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
 
     const { user } = userData;
     const authenticated = await argon2.verify(user.password, payload.password);
@@ -149,6 +147,41 @@ export class AuthService {
       }
     } catch (error) {
       return new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error);
+    }
+  }
+
+  async verifyEmail(token: string): Promise<boolean> {
+    const emailVerify = await this.prisma.emailVerification.findFirst({
+      where: {
+        emailToken: token,
+      },
+    });
+
+    if (emailVerify?.email) {
+      const userFromDb = await this.userService.findByEmail(emailVerify.email);
+
+      if (userFromDb) {
+        const savedUser = await this.prisma.user.update({
+          where: {
+            email: emailVerify?.email,
+          },
+          data: {
+            validEmail: true,
+          },
+          select: {
+            validEmail: true,
+          },
+        });
+        await this.prisma.emailVerification.delete({
+          where: {
+            email: emailVerify.email,
+          },
+        });
+
+        return !!savedUser;
+      }
+    } else {
+      throw new HttpException('LOGIN.EMAIL_CODE_NOT_VALID', HttpStatus.FORBIDDEN);
     }
   }
 
