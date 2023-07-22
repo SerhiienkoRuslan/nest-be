@@ -9,6 +9,7 @@ import { IResponse } from '../common/interfaces/response.interface';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { AuthService } from './auth.service';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { ResendEmailDto } from './dto/resend-email.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -28,8 +29,7 @@ export class AuthController {
     return await this.authService.login(loginUserDto);
   }
 
-  @UsePipes(new ValidationPipe())
-  @Post('verify/:token')
+  @Get('verify/:token')
   async verifyEmail(@Param() params: VerifyEmailDto): Promise<IResponse> {
     try {
       const isEmailVerified = await this.authService.verifyEmail(params.token);
@@ -37,6 +37,22 @@ export class AuthController {
     } catch (error) {
       console.log(error);
       return new ResponseError('LOGIN.ERROR', error);
+    }
+  }
+
+  @Get('resend-verification/:email')
+  async sendEmailVerification(@Param() params: ResendEmailDto): Promise<IResponse> {
+    try {
+      await this.authService.createEmailToken(params.email);
+      const isEmailSent = await this.authService.sendEmailVerification(params.email);
+
+      if (isEmailSent) {
+        return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
+      } else {
+        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+      }
+    } catch (error) {
+      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
     }
   }
 }
