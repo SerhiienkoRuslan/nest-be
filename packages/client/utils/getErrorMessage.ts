@@ -1,4 +1,4 @@
-export const errorLoginCheckers = (error: string): string => {
+export const getLoginErrorMessage = (error: string): string => {
   switch (error) {
     case 'LOGIN.ERROR':
       return 'Incorrect password. Please try again!';
@@ -11,7 +11,7 @@ export const errorLoginCheckers = (error: string): string => {
   }
 };
 
-export const errorRegisterCheckers = (error: string): string => {
+export const getRegistrationErrorMessage = (error: string): string => {
   switch (error) {
     case 'REGISTRATION.ERROR.MUST_BE_UNIQUE':
       return 'This email already used!';
