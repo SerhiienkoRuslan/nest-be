@@ -21,7 +21,7 @@ const pages = {
           id: 'register',
           title: 'Register',
           type: 'item',
-          url: '/auth/register',
+          url: '/auth/registration',
           target: true,
         },
       ],

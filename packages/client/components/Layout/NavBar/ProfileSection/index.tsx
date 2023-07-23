@@ -1,5 +1,6 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { AuthContext } from '@/context/AuthContext';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useTheme } from '@mui/material/styles';
@@ -43,9 +44,11 @@ const ProfileSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
+  const { logOut } = useContext(AuthContext);
 
   const handleLogout = async () => {
-    console.log('Logout');
+    logOut();
+    router.push('/auth/login');
   };
 
   const handleClose = (event) => {
@@ -147,33 +150,18 @@ const ProfileSection = () => {
           <Transitions in={open} {...TransitionProps}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MainCard
-                  border={false}
-                  content={false}
-                  boxShadow
-                  shadow={theme.shadows[16]}
-                >
+                <MainCard border={false} content={false} boxShadow shadow={theme.shadows[16]}>
                   <>
                     {/* User info */}
                     <Box sx={{ p: 2 }}>
                       <Stack>
-                        <Stack
-                          direction="row"
-                          spacing={0.5}
-                          alignItems="center"
-                        >
+                        <Stack direction="row" spacing={0.5} alignItems="center">
                           <Typography variant="h4">Good Morning,</Typography>
-                          <Typography
-                            component="span"
-                            variant="h4"
-                            sx={{ fontWeight: 400 }}
-                          >
+                          <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                             User
                           </Typography>
                         </Stack>
-                        <Typography variant="subtitle2">
-                          Project Admin
-                        </Typography>
+                        <Typography variant="subtitle2">Project Admin</Typography>
                       </Stack>
                     </Box>
 
@@ -196,16 +184,12 @@ const ProfileSection = () => {
                                 justifyContent="space-between"
                               >
                                 <Grid item>
-                                  <Typography variant="subtitle1">
-                                    Allow Notifications
-                                  </Typography>
+                                  <Typography variant="subtitle1">Allow Notifications</Typography>
                                 </Grid>
                                 <Grid item>
                                   <Switch
                                     checked={notification}
-                                    onChange={(e) =>
-                                      setNotification(e.target.checked)
-                                    }
+                                    onChange={(e) => setNotification(e.target.checked)}
                                     name="sdm"
                                     size="small"
                                   />
@@ -239,20 +223,14 @@ const ProfileSection = () => {
                             borderRadius: `${theme.borderRadius}px`,
                           }}
                           selected={selectedIndex === 0}
-                          onClick={(event) =>
-                            handleListItemClick(event, 0, '/user/profile')
-                          }
+                          onClick={(event) => handleListItemClick(event, 0, '/user/profile')}
                         >
                           <ListItemIcon>
                             <SettingsOutlinedIcon />
                           </ListItemIcon>
 
                           <ListItemText
-                            primary={
-                              <Typography variant="body2">
-                                Account Settings
-                              </Typography>
-                            }
+                            primary={<Typography variant="body2">Account Settings</Typography>}
                           />
                         </ListItemButton>
 
@@ -262,9 +240,7 @@ const ProfileSection = () => {
                             borderRadius: '10px',
                           }}
                           selected={selectedIndex === 1}
-                          onClick={(event) =>
-                            handleListItemClick(event, 1, '/user/posts')
-                          }
+                          onClick={(event) => handleListItemClick(event, 1, '/user/posts')}
                         >
                           <ListItemIcon>
                             <PersonOutlineOutlinedIcon />
@@ -272,15 +248,9 @@ const ProfileSection = () => {
 
                           <ListItemText
                             primary={
-                              <Grid
-                                container
-                                spacing={1}
-                                justifyContent="space-between"
-                              >
+                              <Grid container spacing={1} justifyContent="space-between">
                                 <Grid item>
-                                  <Typography variant="body2">
-                                    Social Profile
-                                  </Typography>
+                                  <Typography variant="body2">Social Profile</Typography>
                                 </Grid>
 
                                 <Grid item>
@@ -309,11 +279,7 @@ const ProfileSection = () => {
                           <ListItemIcon>
                             <LogoutOutlinedIcon />
                           </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography variant="body2">Logout</Typography>
-                            }
-                          />
+                          <ListItemText primary={<Typography variant="body2">Logout</Typography>} />
                         </ListItemButton>
                       </List>
                     </Box>

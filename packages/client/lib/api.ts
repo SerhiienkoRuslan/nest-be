@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { getCookie, setCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next';
 
 const processBuild =
   process.env.NODE_ENV === 'production'
@@ -22,7 +22,8 @@ API.interceptors.request.use(
       return config;
     }
 
-    // @ts-ignore
+    config.headers = config.headers ?? {};
+
     config.headers['Authorization'] = `Bearer ${token}`;
 
     return config;

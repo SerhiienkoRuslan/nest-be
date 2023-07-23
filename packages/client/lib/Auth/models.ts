@@ -4,10 +4,31 @@ export type Login = {
 };
 
 export type ResponseLogin = {
-  user: {
-    token: string;
-  };
+  user: User
 };
+
+export type ResponseCurrent = {
+  user: User
+};
+
+// need to change
+export type Post = {
+  id: string;
+  title: string;
+  description: string
+}
+
+export type User = {
+  "id": number;
+  "email":string;
+  "username": string;
+  "bio": string | null;
+  "avatar": string | null;
+  "token": string;
+  // "role": "USER",
+  // "validEmail": true,
+  "posts": Post[]
+}
 
 export type Register = {};
 
