@@ -29,7 +29,17 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('registration')
   async create(@Body() userData: CreateUserDto): Promise<IResponse> {
-    return this.authService.registration(userData);
+    try {
+      const sent = this.authService.registration(userData);
+
+      if (sent) {
+        return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
+      } else {
+        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+      }
+    } catch (error) {
+      return new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error);
+    }
   }
 
   @UsePipes(new ValidationPipe())

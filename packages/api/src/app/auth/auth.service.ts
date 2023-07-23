@@ -5,7 +5,6 @@ import * as argon2 from 'argon2';
 
 // DTO
 import { CreateUserDto, LoginUserDto, ResetPasswordDto } from './dto';
-import { ResponseError, ResponseSuccess } from '../common/dto/response.dto';
 
 // Interface
 import { IResponse } from '../common/interfaces/response.interface';
@@ -129,7 +128,7 @@ export class AuthService {
     }
   }
 
-  async registration(dto: CreateUserDto): Promise<IResponse> {
+  async registration(dto: CreateUserDto): Promise<boolean> {
     try {
       const { username, email, password } = dto;
 
@@ -137,9 +136,9 @@ export class AuthService {
       const userNotUnique = await this.userService.findByEmail(email);
 
       if (userNotUnique) {
-        return new ResponseError(
+        throw new HttpException(
           'REGISTRATION.ERROR.MUST_BE_UNIQUE',
-          'Input data validation failed',
+          HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }
 
@@ -152,14 +151,9 @@ export class AuthService {
 
       await this.createEmailToken(newUser.email);
       const sent = await this.sendEmailVerification(newUser.email);
-
-      if (sent) {
-        return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
-      } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
-      }
+      return !!sent;
     } catch (error) {
-      return new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error);
+      throw new HttpException('REGISTRATION.ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
