@@ -1,3 +1,4 @@
+import { errorLoginCheckers } from '@/utils/errorCheckers';
 import API from '../api';
 
 import { Login, ResponseLogin } from './models';
@@ -8,6 +9,7 @@ export const fetchLogin = async (options: Login): Promise<ResponseLogin> => {
       return response?.data;
     })
     .catch((error) => {
-      throw new Error(error);
+      const errorMessage = errorLoginCheckers(error?.response?.data?.message);
+      throw new Error(errorMessage);
     });
 };

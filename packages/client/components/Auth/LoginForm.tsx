@@ -1,4 +1,5 @@
 'use client';
+import Loader from '@/app/loading';
 import { AuthContext } from '@/context/AuthContext';
 import { FC, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -35,7 +36,7 @@ const LoginForm: FC = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [isRememberMe, setRememberMe] = useState(true);
-  const [formErrors, setFormErrors] = useState<boolean>(false);
+  const [formErrors, setFormErrors] = useState<string | null>(null);
   const { logIn } = useContext(AuthContext);
   const router = useRouter();
 
@@ -52,149 +53,158 @@ const LoginForm: FC = () => {
     data: loginData,
     isSuccess: isSuccessLogin,
   } = useMutation(
-    ({ email, password }: any) =>
+    ({ email, password }: { email: string; password: string }) =>
       fetchLogin({
         email,
         password,
       }),
     {
       onSuccess: ({ user }) => {
-        logIn(user);
         router.push('/dashboard');
+        logIn(user);
       },
-      onError: (error) => {
-        // error from BE
-        console.log(error);
-        setFormErrors(true);
+      onError: (error: string) => {
+        setFormErrors(error);
       },
     },
   );
 
   const onSubmitLogin = async (data) => {
+    setFormErrors(null);
     signInUser(data);
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={loginValidation}
-      onSubmit={onSubmitLogin}
-    >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-        <form noValidate onSubmit={handleSubmit}>
-          {/* Email */}
-          <FormControl
-            fullWidth
-            error={Boolean(touched.email && errors.email)}
-            // @ts-ignore
-            sx={{ ...theme.typography.customInput }}
-          >
-            <InputLabel htmlFor="outlined-adornment-email-login">
-              Email Address / Username
-            </InputLabel>
-
-            <OutlinedInput
-              id="outlined-adornment-email-login"
-              type="email"
-              value={values.email}
-              name="email"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              label="Email Address / Username"
-              inputProps={{}}
-            />
-
-            {touched.email && errors.email && (
-              // @ts-ignore
-              <FormHelperText error>{errors.email}</FormHelperText>
-            )}
-          </FormControl>
-
-          {/* Password */}
-          <FormControl
-            fullWidth
-            error={Boolean(touched.password && errors.password)}
-            // @ts-ignore
-            sx={{ ...theme.typography.customInput }}
-          >
-            <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
-
-            <OutlinedInput
-              id="outlined-adornment-password-login"
-              type={showPassword ? 'text' : 'password'}
-              value={values.password}
-              name="password"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                    size="large"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-              inputProps={{}}
-            />
-
-            {touched.password && errors.password && (
-              // @ts-ignore
-              <FormHelperText error>{errors.password}</FormHelperText>
-            )}
-          </FormControl>
-
-          {/* Forgot Password */}
-          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isRememberMe}
-                  onChange={handleClickRememberMe}
-                  name="isRememberMe"
-                  color="primary"
-                />
-              }
-              label="Remember me"
-            />
-
-            <Typography
-              variant="subtitle1"
-              color="secondary"
-              sx={{ textDecoration: 'none', cursor: 'pointer' }}
-            >
-              Forgot Password?
-            </Typography>
-          </Stack>
-
-          {/* Submit button */}
-          {errors.submit && (
-            <Box sx={{ mt: 3 }}>
-              {/* @ts-ignore */}
-              <FormHelperText error>{errors.submit}</FormHelperText>
-            </Box>
-          )}
-
-          <Box sx={{ mt: 2 }}>
-            <Button
-              disableElevation
-              disabled={isLoading || isSubmitting}
+    <>
+      {isLoading && <Loader />}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={loginValidation}
+        onSubmit={onSubmitLogin}
+      >
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+          <form noValidate onSubmit={handleSubmit}>
+            {/* Email */}
+            <FormControl
               fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              color="secondary"
+              error={Boolean(touched.email && errors.email)}
+              // @ts-ignore
+              sx={{ ...theme.typography.customInput }}
             >
-              {isLoading ? 'Loading...' : 'Sign in'}
-            </Button>
-          </Box>
-        </form>
-      )}
-    </Formik>
+              <InputLabel htmlFor="outlined-adornment-email-login">
+                Email Address / Username
+              </InputLabel>
+
+              <OutlinedInput
+                id="outlined-adornment-email-login"
+                type="email"
+                value={values.email}
+                name="email"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                label="Email Address / Username"
+                inputProps={{}}
+              />
+
+              {touched.email && errors.email && (
+                // @ts-ignore
+                <FormHelperText error>{errors.email}</FormHelperText>
+              )}
+            </FormControl>
+
+            {/* Password */}
+            <FormControl
+              fullWidth
+              error={Boolean(touched.password && errors.password)}
+              // @ts-ignore
+              sx={{ ...theme.typography.customInput }}
+            >
+              <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
+
+              <OutlinedInput
+                id="outlined-adornment-password-login"
+                type={showPassword ? 'text' : 'password'}
+                value={values.password}
+                name="password"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                      size="large"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+                inputProps={{}}
+              />
+
+              {touched.password && errors.password && (
+                // @ts-ignore
+                <FormHelperText error>{errors.password}</FormHelperText>
+              )}
+            </FormControl>
+
+            {/* Forgot Password */}
+            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isRememberMe}
+                    onChange={handleClickRememberMe}
+                    name="isRememberMe"
+                    color="primary"
+                  />
+                }
+                label="Remember me"
+              />
+
+              <Typography
+                variant="subtitle1"
+                color="secondary"
+                sx={{ textDecoration: 'none', cursor: 'pointer' }}
+              >
+                Forgot Password?
+              </Typography>
+            </Stack>
+
+            {/* Submit button */}
+            {errors.submit && (
+              <Box sx={{ mt: 3 }}>
+                {/* @ts-ignore */}
+                <FormHelperText error>{errors.submit}</FormHelperText>
+              </Box>
+            )}
+
+            {/*{ Submit error}*/}
+            {formErrors && (
+              <Box>
+                <FormHelperText error>{formErrors}</FormHelperText>
+              </Box>
+            )}
+
+            <Box sx={{ mt: 2 }}>
+              <Button
+                disableElevation
+                disabled={isLoading || isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="secondary"
+              >
+                {isLoading ? 'Loading...' : 'Sign in'}
+              </Button>
+            </Box>
+          </form>
+        )}
+      </Formik>
+    </>
   );
 };
 

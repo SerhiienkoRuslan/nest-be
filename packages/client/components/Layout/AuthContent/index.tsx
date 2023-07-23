@@ -3,15 +3,7 @@
 import { FC, ReactElement } from 'react';
 import Link from 'next/link';
 
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  Stack,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Button, Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GoogleButton, { GoogleButtonType } from '@/components/Auth/GoogleButton';
 
@@ -26,13 +18,7 @@ type Props = {
   googleBtnProps: GoogleButtonType;
 };
 
-const AuthContent: FC<Props> = ({
-  children,
-  title,
-  subtitle,
-  link,
-  googleBtnProps,
-}) => {
+const AuthContent: FC<Props> = ({ children, title, subtitle, link, googleBtnProps }) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -100,13 +86,7 @@ const AuthContent: FC<Props> = ({
             </Box>
           </Grid>
 
-          <Grid
-            item
-            xs={12}
-            container
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Grid item xs={12} container alignItems="center" justifyContent="center">
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1">{subtitle}</Typography>
             </Box>
@@ -126,7 +106,7 @@ const AuthContent: FC<Props> = ({
             component={Link}
             href={link.href}
             variant="subtitle1"
-            sx={{ textDecoration: 'none' }}
+            sx={{ textDecoration: 'none', mt: 3 }}
           >
             {link.text}
           </Typography>
