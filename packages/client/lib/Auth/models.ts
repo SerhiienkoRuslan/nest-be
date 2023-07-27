@@ -4,33 +4,37 @@ export type Login = {
 };
 
 export type ResponseLogin = {
-  user: User
+  user: User;
 };
 
 export type ResponseCurrent = {
-  user: User
+  user: User;
 };
 
 // need to change
 export type Post = {
   id: string;
   title: string;
-  description: string
-}
+  description: string;
+};
 
 export type User = {
-  "id": number;
-  "email":string;
-  "username": string;
-  "bio": string | null;
-  "avatar": string | null;
-  "token": string;
+  id: number;
+  email: string;
+  username: string;
+  bio: string | null;
+  avatar: string | null;
+  token: string;
   // "role": "USER",
   // "validEmail": true,
-  "posts": Post[]
-}
+  posts: Post[];
+};
 
-export type Register = {};
+export type Register = {
+  username: string;
+  email: string;
+  password: string;
+};
 
 export type ResponseRegister = {
   message: string;

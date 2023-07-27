@@ -64,7 +64,7 @@ const LoginForm: FC = () => {
         logIn(user);
       },
       onError: (error: string) => {
-        setFormErrors(error);
+        setFormErrors(error.toString());
       },
     },
   );
@@ -91,9 +91,7 @@ const LoginForm: FC = () => {
               // @ts-ignore
               sx={{ ...theme.typography.customInput }}
             >
-              <InputLabel htmlFor="outlined-adornment-email-login">
-                Email Address / Username
-              </InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
 
               <OutlinedInput
                 id="outlined-adornment-email-login"
@@ -102,7 +100,7 @@ const LoginForm: FC = () => {
                 name="email"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                label="Email Address / Username"
+                label="Email Address"
                 inputProps={{}}
               />
 
