@@ -1,9 +1,10 @@
-import { Get, Post, Body, Put, Delete, Param, Controller, UsePipes } from '@nestjs/common';
+import { Get, Post, Body, Param, Controller, UsePipes, HttpStatus } from '@nestjs/common';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 import { UserRO } from '../common/interfaces/user.interface';
-import { ResponseError, ResponseSuccess } from '../common/dto/response.dto';
+import { ResponseSuccess } from '../common/dto/response.dto';
 import { IResponse } from '../common/interfaces/response.interface';
 
 import { CreateUserDto, LoginUserDto } from './dto';
@@ -36,7 +37,10 @@ export class AuthController {
       return new ResponseSuccess('LOGIN.EMAIL_VERIFIED', isEmailVerified);
     } catch (error) {
       console.log(error);
-      return new ResponseError('LOGIN.ERROR', error);
+      throw new HttpException(
+        error.response || 'LOGIN.ERROR',
+        error.status || HttpStatus.FORBIDDEN,
+      );
     }
   }
 
@@ -49,10 +53,13 @@ export class AuthController {
       if (isEmailSent) {
         return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
       } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+        throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.FORBIDDEN);
       }
     } catch (error) {
-      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+      throw new HttpException(
+        error.response || 'LOGIN.ERROR.SEND_EMAIL',
+        error.status || HttpStatus.BAD_GATEWAY,
+      );
     }
   }
 }

@@ -7,7 +7,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { MAIL_CONFIG, SECRET } from '../../config';
 import { UserService } from '../user/user.service';
-import { ResponseError, ResponseSuccess } from '../common/dto/response.dto';
+import { ResponseSuccess } from '../common/dto/response.dto';
 import { IResponse } from '../common/interfaces/response.interface';
 
 const jwt = require('jsonwebtoken');
@@ -124,10 +124,7 @@ export class AuthService {
       const userNotUnique = await this.userService.findByEmail(email);
 
       if (userNotUnique) {
-        return new ResponseError(
-          'REGISTRATION.ERROR.MUST_BE_UNIQUE',
-          'Input data validation failed',
-        );
+        throw new HttpException('REGISTRATION.ERROR.MUST_BE_UNIQUE', HttpStatus.FORBIDDEN);
       }
 
       const hashedPassword = await argon2.hash(password);
@@ -143,10 +140,13 @@ export class AuthService {
       if (sent) {
         return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
       } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
+        throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.BAD_GATEWAY);
       }
     } catch (error) {
-      return new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error);
+      throw new HttpException(
+        error.response || 'REGISTRATION.ERROR.GENERIC_ERROR',
+        error.status || HttpStatus.BAD_GATEWAY,
+      );
     }
   }
 
