@@ -1,8 +1,9 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext, HttpStatus } from '@nestjs/common';
 // @ts-ignore
 import * as jwt from 'jsonwebtoken';
 
 import { SECRET } from '../../config';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 export const User = createParamDecorator((data: any, ctx: ExecutionContext) => {
   const req = ctx.switchToHttp().getRequest();
