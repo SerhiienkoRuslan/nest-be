@@ -28,82 +28,58 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<any[]> {
-    try {
-      return await this.prisma.user.findMany({ select });
-    } catch (e) {
-      throw new HttpException('USERS.FIND_ALL', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.prisma.user.findMany({ select });
   }
 
   async create(data: CreateUserDto): Promise<UserData> {
-    try {
-      return await this.prisma.user.create({ data, select });
-    } catch (e) {
-      throw new HttpException('USERS.CREATE', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.prisma.user.create({ data, select });
   }
 
   async update(userData: UserData, data: UpdateUserDto): Promise<any> {
-    try {
-      if (hasPermission(userData?.id, data)) {
-        const where = { id: userData?.id };
-        const user = await this.prisma.user.update({ where, data, select });
+    if (hasPermission(userData?.id, data)) {
+      const where = { id: userData?.id };
+      const user = await this.prisma.user.update({ where, data, select });
 
-        return { user };
-      } else {
-        throw new HttpException('USERS.UPDATE.FORBIDDEN', HttpStatus.FORBIDDEN);
-      }
-    } catch (e) {
-      throw new HttpException('USERS.UPDATE', HttpStatus.INTERNAL_SERVER_ERROR);
+      return { user };
+    } else {
+      throw new HttpException('USERS.UPDATE.FORBIDDEN', HttpStatus.FORBIDDEN);
     }
   }
 
   async delete(id: number, user: any): Promise<any> {
-    try {
-      if (hasPermission(id, user)) {
-        return await this.prisma.user.delete({ where: { id }, select });
-      } else {
-        throw new HttpException('USERS.DELETE.FORBIDDEN', HttpStatus.FORBIDDEN);
-      }
-    } catch (e) {
-      throw new HttpException('USERS.DELETE', HttpStatus.INTERNAL_SERVER_ERROR);
+    if (hasPermission(id, user)) {
+      return await this.prisma.user.delete({ where: { id }, select });
+    } else {
+      throw new HttpException('USERS.DELETE.FORBIDDEN', HttpStatus.FORBIDDEN);
     }
   }
 
   async findById(id: number): Promise<UserRO | null> {
-    try {
-      const user = await this.prisma.user.findUnique({
-        where: { id },
-        select: { id: true, ...select },
-      });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true, ...select },
+    });
 
-      if (user) {
-        return { user };
-      }
-
-      return null;
-    } catch (e) {
-      throw new HttpException('USERS.FIND_BY_ID', HttpStatus.INTERNAL_SERVER_ERROR);
+    if (user) {
+      return { user };
     }
+
+    return null;
   }
 
   async findByEmail(email: string, params: {} = {}): Promise<UserRO | null> {
-    try {
-      const user = await this.prisma.user.findUnique({
-        where: { email },
-        select: {
-          ...select,
-          ...params,
-        },
-      });
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        ...select,
+        ...params,
+      },
+    });
 
-      if (user) {
-        return { user };
-      }
-
-      return null;
-    } catch (e) {
-      throw new HttpException('USERS.FIND_BY_EMAIL', HttpStatus.INTERNAL_SERVER_ERROR);
+    if (user) {
+      return { user };
     }
+
+    return null;
   }
 }
