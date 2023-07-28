@@ -63,7 +63,7 @@ export class AuthService {
         return true;
       }
     } catch (e) {
-      console.log(e);
+      throw new HttpException('LOGIN.EMAIL_NOT_SENT', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
