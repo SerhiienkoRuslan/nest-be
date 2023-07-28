@@ -129,32 +129,27 @@ export class AuthService {
   }
 
   async registration(dto: CreateUserDto): Promise<boolean> {
-    try {
-      const { username, email, password } = dto;
+    const { username, email, password } = dto;
 
-      // check uniqueness of username/email
-      const userNotUnique = await this.userService.findByEmail(email);
+    // check uniqueness of username/email
+    const userNotUnique = await this.userService.findByEmail(email);
 
-      if (userNotUnique) {
-        throw new HttpException(
-          'REGISTRATION.ERROR.MUST_BE_UNIQUE',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
+    if (!!userNotUnique)
+      throw new HttpException(
+        'REGISTRATION.ERROR.MUST_BE_UNIQUE',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
 
-      const hashedPassword = await argon2.hash(password);
-      const newUser = await this.userService.create({
-        username,
-        email,
-        password: hashedPassword,
-      });
+    const hashedPassword = await argon2.hash(password);
+    const newUser = await this.userService.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-      await this.createEmailToken(newUser.email);
-      const sent = await this.sendEmailVerification(newUser.email);
-      return !!sent;
-    } catch (error) {
-      throw new HttpException('REGISTRATION.ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    await this.createEmailToken(newUser.email);
+    const sent = await this.sendEmailVerification(newUser.email);
+    return !!sent;
   }
 
   async verifyEmail(token: string): Promise<boolean> {
