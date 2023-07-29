@@ -30,19 +30,12 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('registration')
   async create(@Body() userData: CreateUserDto): Promise<IResponse> {
-    try {
-      const sent = this.authService.registration(userData);
+    const sent = await this.authService.registration(userData);
 
-      if (sent) {
-        return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
-      } else {
-        throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.FORBIDDEN);
-      }
-    } catch (error) {
-      throw new HttpException(
-        error.response || 'REGISTRATION.ERROR.GENERIC_ERROR',
-        error.status || HttpStatus.BAD_GATEWAY,
-      );
+    if (sent) {
+      return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
+    } else {
+      throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.FORBIDDEN);
     }
   }
 
