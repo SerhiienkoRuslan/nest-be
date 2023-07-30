@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 import { hasPermission } from 'src/shared/pipes/userUtils';
@@ -42,7 +42,7 @@ export class UserService {
 
       return { user };
     } else {
-      throw new HttpException({ error: 'No Permission' }, 403);
+      throw new HttpException('USERS.UPDATE.FORBIDDEN', HttpStatus.FORBIDDEN);
     }
   }
 
@@ -50,7 +50,7 @@ export class UserService {
     if (hasPermission(id, user)) {
       return await this.prisma.user.delete({ where: { id }, select });
     } else {
-      throw new HttpException({ error: 'No Permission' }, 403);
+      throw new HttpException('USERS.DELETE.FORBIDDEN', HttpStatus.FORBIDDEN);
     }
   }
 

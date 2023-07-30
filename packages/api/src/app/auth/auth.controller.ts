@@ -1,15 +1,25 @@
-import { Get, Post, Body, Put, Delete, Param, Controller, UsePipes } from '@nestjs/common';
+import { Get, Post, Body, Param, Controller, UsePipes, HttpStatus } from '@nestjs/common';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+
+// Interface
 import { UserRO } from '../common/interfaces/user.interface';
-import { ResponseError, ResponseSuccess } from '../common/dto/response.dto';
+import { ResponseSuccess } from '../common/dto/response.dto';
 import { IResponse } from '../common/interfaces/response.interface';
 
-import { CreateUserDto, LoginUserDto } from './dto';
+// DTO
+import {
+  CreateUserDto,
+  LoginUserDto,
+  VerifyEmailDto,
+  ResendEmailDto,
+  ResetPasswordDto,
+} from './dto';
+
+// Service
 import { AuthService } from './auth.service';
-import { VerifyEmailDto } from './dto/verify-email.dto';
-import { ResendEmailDto } from './dto/resend-email.dto';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -20,7 +30,13 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @Post('registration')
   async create(@Body() userData: CreateUserDto): Promise<IResponse> {
-    return this.authService.registration(userData);
+    const sent = await this.authService.registration(userData);
+
+    if (sent) {
+      return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
+    } else {
+      throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.FORBIDDEN);
+    }
   }
 
   @UsePipes(new ValidationPipe())
@@ -31,28 +47,36 @@ export class AuthController {
 
   @Get('verify/:token')
   async verifyEmail(@Param() params: VerifyEmailDto): Promise<IResponse> {
-    try {
-      const isEmailVerified = await this.authService.verifyEmail(params.token);
-      return new ResponseSuccess('LOGIN.EMAIL_VERIFIED', isEmailVerified);
-    } catch (error) {
-      console.log(error);
-      return new ResponseError('LOGIN.ERROR', error);
-    }
+    const isEmailVerified = await this.authService.verifyEmail(params.token);
+    return new ResponseSuccess('LOGIN.EMAIL_VERIFIED', isEmailVerified);
   }
 
   @Get('resend-verification/:email')
   async sendEmailVerification(@Param() params: ResendEmailDto): Promise<IResponse> {
-    try {
-      await this.authService.createEmailToken(params.email);
-      const isEmailSent = await this.authService.sendEmailVerification(params.email);
+    await this.authService.createEmailToken(params.email);
+    const isEmailSent = await this.authService.sendEmailVerification(params.email);
 
-      if (isEmailSent) {
-        return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
-      } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
-      }
-    } catch (error) {
-      return new ResponseError('LOGIN.ERROR.SEND_EMAIL', error);
+    if (isEmailSent) {
+      return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
+    } else {
+      throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.FORBIDDEN);
     }
+  }
+
+  @Get('forgot-password/:email')
+  async sendEmailForgotPassword(@Param() params): Promise<IResponse> {
+    const isEmailSent = await this.authService.sendEmailForgotPassword(params.email);
+
+    if (isEmailSent) {
+      return new ResponseSuccess('LOGIN.EMAIL_RESENT', null);
+    } else {
+      throw new HttpException('REGISTRATION.ERROR.MAIL_NOT_SENT', HttpStatus.FORBIDDEN);
+    }
+  }
+
+  @Post('reset-password')
+  async setNewPassword(@Body() resetPassword: ResetPasswordDto): Promise<IResponse> {
+    await this.authService.setNewPassword(resetPassword);
+    return new ResponseSuccess('RESET_PASSWORD.PASSWORD_CHANGED');
   }
 }

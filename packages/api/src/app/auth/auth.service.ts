@@ -3,47 +3,62 @@ import * as nodemailer from 'nodemailer';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import * as argon2 from 'argon2';
 
-import { PrismaService } from '../../prisma/prisma.service';
-import { CreateUserDto, LoginUserDto } from './dto';
-import { MAIL_CONFIG, SECRET } from '../../config';
-import { UserService } from '../user/user.service';
-import { ResponseError, ResponseSuccess } from '../common/dto/response.dto';
+// DTO
+import { CreateUserDto, LoginUserDto, ResetPasswordDto } from './dto';
+
+// Interface
 import { IResponse } from '../common/interfaces/response.interface';
+import { ForgottenPassword } from '../common/interfaces/forgotten-password.interface';
+
+// Services
+import { PrismaService } from '../../prisma/prisma.service';
+import { UserService } from '../user/user.service';
+
+// Config
+import { MAIL_CONFIG, SECRET } from '../../config';
+
+// utils
+import { getRandomDigitsNumbers } from '../../shared/getRandomDigitsNumbers';
 
 const jwt = require('jsonwebtoken');
+
+const mailerConfig = {
+  host: MAIL_CONFIG.host,
+  port: MAIL_CONFIG.port,
+  secure: MAIL_CONFIG.secure, // true for 465, false for other ports
+  auth: {
+    user: MAIL_CONFIG.user,
+    pass: MAIL_CONFIG.pass,
+  },
+};
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private userService: UserService) {}
 
   async createEmailToken(email: string): Promise<boolean> {
-    try {
-      const emailVerification = await this.prisma.emailVerification.findUnique({
-        where: { email },
-      });
-      const isTimeLeft =
-        (new Date().getTime() - emailVerification?.timestamp?.getTime()) / 60000 < 1; // 1min left
+    const emailVerification = await this.prisma.emailVerification.findUnique({
+      where: { email },
+    });
+    const isTimeLeft = (new Date().getTime() - emailVerification?.timestamp?.getTime()) / 60000 < 1; // 1min left
 
-      if (emailVerification && isTimeLeft) {
-        throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
-      } else {
-        const emailData = {
+    if (emailVerification && isTimeLeft) {
+      throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+    } else {
+      const emailData = {
+        email,
+        emailToken: getRandomDigitsNumbers(), //Generate 7 digits number
+        timestamp: new Date(),
+      };
+
+      await this.prisma.emailVerification.upsert({
+        where: {
           email,
-          emailToken: (Math.floor(Math.random() * 9000000) + 1000000).toString(), //Generate 7 digits number
-          timestamp: new Date(),
-        };
-
-        await this.prisma.emailVerification.upsert({
-          where: {
-            email,
-          },
-          create: emailData,
-          update: emailData,
-        });
-        return true;
-      }
-    } catch (e) {
-      console.log(e);
+        },
+        create: emailData,
+        update: emailData,
+      });
+      return true;
     }
   }
 
@@ -53,15 +68,7 @@ export class AuthService {
     });
 
     if (model?.emailToken) {
-      const transporter = nodemailer.createTransport({
-        host: MAIL_CONFIG.host,
-        port: MAIL_CONFIG.port,
-        secure: MAIL_CONFIG.secure, // true for 465, false for other ports
-        auth: {
-          user: MAIL_CONFIG.user,
-          pass: MAIL_CONFIG.pass,
-        },
-      });
+      const transporter = nodemailer.createTransport(mailerConfig);
 
       const mailOptions = {
         from: '"Company" <' + MAIL_CONFIG.user + '>',
@@ -116,38 +123,28 @@ export class AuthService {
     }
   }
 
-  async registration(dto: CreateUserDto): Promise<IResponse> {
-    try {
-      const { username, email, password } = dto;
+  async registration(dto: CreateUserDto): Promise<boolean> {
+    const { username, email, password } = dto;
 
-      // check uniqueness of username/email
-      const userNotUnique = await this.userService.findByEmail(email);
+    // check uniqueness of username/email
+    const userNotUnique = await this.userService.findByEmail(email);
 
-      if (userNotUnique) {
-        return new ResponseError(
-          'REGISTRATION.ERROR.MUST_BE_UNIQUE',
-          'Input data validation failed',
-        );
-      }
+    if (!!userNotUnique)
+      throw new HttpException(
+        'REGISTRATION.ERROR.MUST_BE_UNIQUE',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
 
-      const hashedPassword = await argon2.hash(password);
-      const newUser = await this.userService.create({
-        username,
-        email,
-        password: hashedPassword,
-      });
+    const hashedPassword = await argon2.hash(password);
+    const newUser = await this.userService.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-      await this.createEmailToken(newUser.email);
-      const sent = await this.sendEmailVerification(newUser.email);
-
-      if (sent) {
-        return new ResponseSuccess('REGISTRATION.USER_REGISTERED_SUCCESSFULLY');
-      } else {
-        return new ResponseError('REGISTRATION.ERROR.MAIL_NOT_SENT');
-      }
-    } catch (error) {
-      return new ResponseError('REGISTRATION.ERROR.GENERIC_ERROR', error);
-    }
+    await this.createEmailToken(newUser.email);
+    const sent = await this.sendEmailVerification(newUser.email);
+    return !!sent;
   }
 
   async verifyEmail(token: string): Promise<boolean> {
@@ -182,6 +179,159 @@ export class AuthService {
       }
     } else {
       throw new HttpException('LOGIN.EMAIL_CODE_NOT_VALID', HttpStatus.FORBIDDEN);
+    }
+  }
+
+  async createForgottenPasswordToken(email: string): Promise<ForgottenPassword> {
+    const forgottenPassword = await this.prisma.forgottenPassword.findUnique({
+      where: { email },
+    });
+
+    if (
+      forgottenPassword &&
+      (new Date().getTime() - forgottenPassword.timestamp.getTime()) / 60000 < 15
+    ) {
+      throw new HttpException(
+        'RESET_PASSWORD.EMAIL_SENT_RECENTLY',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    } else {
+      const forgottenPasswordData = {
+        email: email,
+        newPasswordToken: getRandomDigitsNumbers(), //Generate 7 digits number,
+        timestamp: new Date(),
+      };
+
+      const forgottenPasswordModel = await this.prisma.forgottenPassword.upsert({
+        where: {
+          email,
+        },
+        create: forgottenPasswordData,
+        update: forgottenPasswordData,
+      });
+
+      if (forgottenPasswordModel) {
+        return forgottenPasswordModel;
+      } else {
+        throw new HttpException('LOGIN.ERROR.GENERIC_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+  }
+
+  async sendEmailForgotPassword(email: string): Promise<boolean> {
+    const userFromDb = await this.userService.findByEmail(email);
+
+    if (!userFromDb) throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    const tokenModel = await this.createForgottenPasswordToken(email);
+
+    if (tokenModel && tokenModel.newPasswordToken) {
+      const transporter = nodemailer.createTransport(mailerConfig);
+
+      const mailOptions = {
+        from: '"Company" <' + MAIL_CONFIG.user + '>',
+        to: email,
+        subject: 'Forgotten Password',
+        text: 'Forgot Password',
+        html:
+          'Hi! <br><br> If you requested to reset your password<br><br>' +
+          'Your code: ' +
+          '<b>' +
+          tokenModel.newPasswordToken +
+          '</b>',
+      };
+
+      return await new Promise<boolean>(async function (resolve, reject) {
+        return await transporter.sendMail(mailOptions, async (error, info) => {
+          if (error) {
+            console.log('Message sent: %s', error);
+            return reject(false);
+          }
+          console.log('Message sent: %s', info.messageId);
+          resolve(true);
+        });
+      });
+    } else {
+      throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
+    }
+  }
+
+  async setNewCurrentPassword(resetPassword: ResetPasswordDto): Promise<IResponse | void> {
+    const userFromDb = await this.userService.findByEmail(resetPassword.email, {
+      password: true,
+      validEmail: true,
+    });
+
+    if (!userFromDb) {
+      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+    if (!userFromDb?.user?.validEmail) {
+      throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
+    }
+
+    const isValidPassword = await argon2.verify(
+      userFromDb.user.password,
+      resetPassword.currentPassword,
+    );
+
+    if (isValidPassword) {
+      const hashedPassword = await argon2.hash(resetPassword.newPassword);
+      await this.prisma.user.update({
+        where: {
+          email: userFromDb.user.email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+        select: {
+          password: true,
+        },
+      });
+    } else {
+      throw new HttpException('RESET_PASSWORD.WRONG_CURRENT_PASSWORD', HttpStatus.FORBIDDEN);
+    }
+  }
+
+  async changeNewPassword(resetPassword: ResetPasswordDto): Promise<void> {
+    const forgottenPasswordModel = await this.prisma.forgottenPassword.findFirst({
+      where: {
+        newPasswordToken: resetPassword.newPasswordToken,
+      },
+    });
+
+    if (forgottenPasswordModel && forgottenPasswordModel.email === resetPassword.email) {
+      const hashedPassword = await argon2.hash(resetPassword.newPassword);
+      await this.prisma.user.update({
+        where: {
+          email: forgottenPasswordModel.email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+        select: {
+          password: true,
+        },
+      });
+      await this.prisma.forgottenPassword.delete({
+        where: {
+          email: resetPassword.email,
+        },
+      });
+    } else {
+      throw new HttpException(
+        'RESET_PASSWORD.CHANGE_PASSWORD_ERROR',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async setNewPassword(resetPassword: ResetPasswordDto): Promise<IResponse | void> {
+    if (resetPassword.email && resetPassword.currentPassword) {
+      return await this.setNewCurrentPassword(resetPassword);
+    } else if (resetPassword.newPasswordToken) {
+      return await this.changeNewPassword(resetPassword);
+    } else {
+      throw new HttpException('RESET_PASSWORD.CHANGE_PASSWORD_ERROR', HttpStatus.NOT_FOUND);
     }
   }
 
