@@ -37,33 +37,28 @@ export class AuthService {
   constructor(private prisma: PrismaService, private userService: UserService) {}
 
   async createEmailToken(email: string): Promise<boolean> {
-    try {
-      const emailVerification = await this.prisma.emailVerification.findUnique({
-        where: { email },
-      });
-      const isTimeLeft =
-        (new Date().getTime() - emailVerification?.timestamp?.getTime()) / 60000 < 1; // 1min left
+    const emailVerification = await this.prisma.emailVerification.findUnique({
+      where: { email },
+    });
+    const isTimeLeft = (new Date().getTime() - emailVerification?.timestamp?.getTime()) / 60000 < 1; // 1min left
 
-      if (emailVerification && isTimeLeft) {
-        throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
-      } else {
-        const emailData = {
+    if (emailVerification && isTimeLeft) {
+      throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+    } else {
+      const emailData = {
+        email,
+        emailToken: getRandomDigitsNumbers(), //Generate 7 digits number
+        timestamp: new Date(),
+      };
+
+      await this.prisma.emailVerification.upsert({
+        where: {
           email,
-          emailToken: getRandomDigitsNumbers(), //Generate 7 digits number
-          timestamp: new Date(),
-        };
-
-        await this.prisma.emailVerification.upsert({
-          where: {
-            email,
-          },
-          create: emailData,
-          update: emailData,
-        });
-        return true;
-      }
-    } catch (e) {
-      throw new HttpException('LOGIN.EMAIL_NOT_SENT', HttpStatus.INTERNAL_SERVER_ERROR);
+        },
+        create: emailData,
+        update: emailData,
+      });
+      return true;
     }
   }
 
@@ -262,81 +257,67 @@ export class AuthService {
   }
 
   async setNewCurrentPassword(resetPassword: ResetPasswordDto): Promise<IResponse | void> {
-    try {
-      const userFromDb = await this.userService.findByEmail(resetPassword.email, {
-        password: true,
-        validEmail: true,
+    const userFromDb = await this.userService.findByEmail(resetPassword.email, {
+      password: true,
+      validEmail: true,
+    });
+
+    if (!userFromDb) {
+      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+    if (!userFromDb?.user?.validEmail) {
+      throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
+    }
+
+    const isValidPassword = await argon2.verify(
+      userFromDb.user.password,
+      resetPassword.currentPassword,
+    );
+
+    if (isValidPassword) {
+      const hashedPassword = await argon2.hash(resetPassword.newPassword);
+      await this.prisma.user.update({
+        where: {
+          email: userFromDb.user.email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+        select: {
+          password: true,
+        },
       });
-
-      if (!userFromDb) {
-        throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-      }
-      if (!userFromDb?.user?.validEmail) {
-        throw new HttpException('LOGIN.EMAIL_NOT_VERIFIED', HttpStatus.FORBIDDEN);
-      }
-
-      const isValidPassword = await argon2.verify(
-        userFromDb.user.password,
-        resetPassword.currentPassword,
-      );
-
-      if (isValidPassword) {
-        const hashedPassword = await argon2.hash(resetPassword.newPassword);
-        await this.prisma.user.update({
-          where: {
-            email: userFromDb.user.email,
-          },
-          data: {
-            password: hashedPassword,
-          },
-          select: {
-            password: true,
-          },
-        });
-      } else {
-        throw new HttpException('RESET_PASSWORD.WRONG_CURRENT_PASSWORD', HttpStatus.FORBIDDEN);
-      }
-    } catch (error) {
-      throw new HttpException(
-        'RESET_PASSWORD.CHANGE_PASSWORD_ERROR',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    } else {
+      throw new HttpException('RESET_PASSWORD.WRONG_CURRENT_PASSWORD', HttpStatus.FORBIDDEN);
     }
   }
 
   async changeNewPassword(resetPassword: ResetPasswordDto): Promise<void> {
-    try {
-      const forgottenPasswordModel = await this.prisma.forgottenPassword.findFirst({
+    const forgottenPasswordModel = await this.prisma.forgottenPassword.findFirst({
+      where: {
+        newPasswordToken: resetPassword.newPasswordToken,
+      },
+    });
+
+    if (forgottenPasswordModel && forgottenPasswordModel.email === resetPassword.email) {
+      const hashedPassword = await argon2.hash(resetPassword.newPassword);
+      await this.prisma.user.update({
         where: {
-          newPasswordToken: resetPassword.newPasswordToken,
+          email: forgottenPasswordModel.email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+        select: {
+          password: true,
         },
       });
-
-      if (forgottenPasswordModel && forgottenPasswordModel.email === resetPassword.email) {
-        const hashedPassword = await argon2.hash(resetPassword.newPassword);
-        await this.prisma.user.update({
-          where: {
-            email: forgottenPasswordModel.email,
-          },
-          data: {
-            password: hashedPassword,
-          },
-          select: {
-            password: true,
-          },
-        });
-        await this.prisma.forgottenPassword.delete({
-          where: {
-            email: resetPassword.email,
-          },
-        });
-      } else {
-        throw new HttpException(
-          'RESET_PASSWORD.CHANGE_PASSWORD_ERROR',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    } catch (error) {
+      await this.prisma.forgottenPassword.delete({
+        where: {
+          email: resetPassword.email,
+        },
+      });
+    } else {
       throw new HttpException(
         'RESET_PASSWORD.CHANGE_PASSWORD_ERROR',
         HttpStatus.INTERNAL_SERVER_ERROR,

@@ -32,13 +32,8 @@ export class ResponseSuccess implements IResponse {
       try {
         const offuscateRequest = JSON.parse(JSON.stringify(data));
 
-        if (offuscateRequest && offuscateRequest.token)
-          offuscateRequest.token = '*******';
-        console.log(
-          new Date().toString() +
-            ' - [Response]: ' +
-            JSON.stringify(offuscateRequest),
-        );
+        if (offuscateRequest && offuscateRequest.token) offuscateRequest.token = '*******';
+        console.log(new Date().toString() + ' - [Response]: ' + JSON.stringify(offuscateRequest));
       } catch (error) {}
     }
   }
