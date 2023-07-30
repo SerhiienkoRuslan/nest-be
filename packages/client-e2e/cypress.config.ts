@@ -25,7 +25,7 @@ export default defineConfig({
     requestTimeout: 15000,
     testIsolation: false,
     chromeWebSecurity: false,
-    specPattern: 'e2e/**/*.feature',
+    specPattern: '**/*.feature',
     // supportFile: 'support/e2e.ts',
     supportFile: false,
     downloadsFolder: 'downloads',
