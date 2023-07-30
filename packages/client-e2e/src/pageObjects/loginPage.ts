@@ -3,9 +3,9 @@ type FieldName = 'email' | 'password';
 type ButtonText = 'Login';
 
 class LoginPage {
-  readonly route = '/login';
+  readonly route = '/auth/login';
 
-  private readonly page = (): Cypress.Chainable => cy.get('*[class^="AuthLayoutstyles__Wrapper"]');
+  private readonly page = (): Cypress.Chainable => cy.get('body[id="app"]');
 
   private readonly field = (name: FieldName): Cypress.Chainable => cy.get(`input[name="${name}"]`);
 

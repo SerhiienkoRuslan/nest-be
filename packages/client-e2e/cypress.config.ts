@@ -20,7 +20,7 @@ export default defineConfig({
     failSilently: false,
   },
   e2e: {
-    baseUrl: 'http://localhost:4300',
+    baseUrl: 'http://localhost:4200',
     defaultCommandTimeout: 10000,
     requestTimeout: 15000,
     testIsolation: false,
