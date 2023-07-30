@@ -26,10 +26,9 @@ export default defineConfig({
     testIsolation: false,
     chromeWebSecurity: false,
     specPattern: '**/*.feature',
-    // supportFile: 'support/e2e.ts',
-    supportFile: false,
+    supportFile: 'src/support/e2e.ts',
     downloadsFolder: 'downloads',
-    fixturesFolder: 'fixtures',
+    fixturesFolder: 'src/fixtures',
     screenshotsFolder: 'screenshots',
     videosFolder: 'videos',
     async setupNodeEvents(on, config) {

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es5", "dom"],
-    "types": ["cypress", "node", "@testing-library/cypress", "@4tw/cypress-drag-drop"],
+    "types": ["cypress", "node", "@testing-library/cypress"],
     "esModuleInterop": true,
     "strict": true,
     "resolveJsonModule": true,
