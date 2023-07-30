@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
             <GlobalProvider>
               <ThemeProvider theme={theme()}>
                 <CssBaseline />
-                <body>
+                <body id="app">
                   <Wrapper>{children}</Wrapper>
                 </body>
               </ThemeProvider>
