@@ -267,14 +267,14 @@ const RegistrationForm: FC = () => {
             <Box sx={{ mt: 2 }}>
               <Button
                 disableElevation
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoading}
                 fullWidth
                 size="large"
                 type="submit"
                 variant="contained"
                 color="secondary"
               >
-                Sign up
+                {isLoading ? 'Loading...' : 'Sign up'}
               </Button>
             </Box>
           </form>
