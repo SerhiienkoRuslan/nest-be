@@ -1,7 +1,7 @@
 import API from '@/lib/api';
 import { getLoginErrorMessage } from '@/utils/getErrorMessage';
 
-export const fetchConfirm = (value: string) => {
+export const confirmEmail = (value: string) => {
   return API.get(`/verify/${value}`)
     .then((response) => {
       return response?.data;

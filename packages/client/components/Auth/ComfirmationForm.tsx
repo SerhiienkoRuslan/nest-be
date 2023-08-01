@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/app/loading';
 import { MuiOtpInput } from '@/components/MuiOtpInput/MuiOtpInput';
-import { fetchConfirm } from '@/lib/Auth/fetchConfirm';
+import { confirmEmail } from '@/lib/Auth/confirmEmail';
 import { Box, Button, FormHelperText, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -22,11 +22,10 @@ const ConfirmationForm = () => {
     isError: isErrorLogin,
     data: loginData,
     isSuccess: isSuccessLogin,
-  } = useMutation((str: string) => fetchConfirm(str), {
+  } = useMutation((str: string) => confirmEmail(str), {
     onSuccess: (data) => {
       setFormErrors(null);
       router.push('/auth/login');
-      console.log('success:', data);
     },
     onError: (error: Error) => {
       setFormErrors(error.toString());
@@ -40,9 +39,11 @@ const ConfirmationForm = () => {
   return (
     <>
       {isLoading && <Loader />}
+
       <Typography variant="h4" gutterBottom>
-        Confirm Registration
+        Enter 6 digits to confirm your email
       </Typography>
+
       <MuiOtpInput
         length={7}
         autoFocus

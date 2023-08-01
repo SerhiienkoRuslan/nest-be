@@ -1,6 +1,6 @@
 'use client';
 import Loader from '@/app/loading';
-import { fetchRegister } from '@/lib/Auth/fetchRegister';
+import { register } from '@/lib/Auth/register';
 import { FC, useState } from 'react';
 import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -78,7 +78,7 @@ const RegistrationForm: FC = () => {
       email: string;
       password: string;
     }) =>
-      fetchRegister({
+      register({
         username: `${fname} ${lname}`,
         email,
         password,
