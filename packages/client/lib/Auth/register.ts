@@ -1,5 +1,5 @@
-import API from '@/lib/api';
 import { Register, ResponseRegister } from '@/lib/Auth/models';
+import API from '@/lib/api';
 import { getRegistrationErrorMessage } from '@/utils/getErrorMessage';
 
 export const register = async (option: Register): Promise<ResponseRegister> => {

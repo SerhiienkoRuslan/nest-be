@@ -1,17 +1,18 @@
 'use client';
-import Loader from '@/app/loading';
-import { register } from '@/lib/Auth/register';
-import { FC, useState } from 'react';
+
 import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';
+import { FC, useState } from 'react';
+import { useMutation } from 'react-query';
 
-import { useTheme } from '@mui/material/styles';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
-  Grid,
   Box,
   Button,
   FormControl,
   FormHelperText,
+  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -19,12 +20,12 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useTheme } from '@mui/material/styles';
 
-import { registrationValidation } from '@/utils/validation';
+import Loader from '@/app/loading';
+import { register } from '@/lib/Auth/register';
 import { strengthColor, strengthIndicator } from '@/utils/password-strength';
-import { useMutation } from 'react-query';
+import { registrationValidation } from '@/utils/validation';
 
 const initialValues = {
   fname: '',

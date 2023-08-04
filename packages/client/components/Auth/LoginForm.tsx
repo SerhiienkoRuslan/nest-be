@@ -1,11 +1,12 @@
 'use client';
-import Loader from '@/app/loading';
-import { AuthContext } from '@/context/AuthContext';
-import { FC, useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { FC, useContext, useState } from 'react';
 import { useMutation } from 'react-query';
-import { useTheme } from '@mui/material/styles';
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Box,
   Button,
@@ -20,11 +21,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useTheme } from '@mui/material/styles';
 
-import { loginValidation } from '@/utils/validation';
+import Loader from '@/app/loading';
+import { AuthContext } from '@/context/AuthContext';
 import { fetchLogin } from '@/lib/Auth/fetchLogin';
+import { loginValidation } from '@/utils/validation';
 
 const initialValues = {
   email: '',
