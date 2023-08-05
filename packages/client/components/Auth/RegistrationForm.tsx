@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import Loader from '@/app/loading';
+import { RequestLoading } from '@/components/Loading';
 import { register } from '@/lib/Auth/register';
 import { strengthColor, strengthIndicator } from '@/utils/password-strength';
 import { registrationValidation } from '@/utils/validation';
@@ -85,8 +85,7 @@ const RegistrationForm: FC = () => {
         password,
       }),
     {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
         router.push('/auth/confirmation');
       },
       onError: (error: string) => {
@@ -101,7 +100,8 @@ const RegistrationForm: FC = () => {
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <RequestLoading />}
+
       <Formik
         initialValues={initialValues}
         validationSchema={registrationValidation}

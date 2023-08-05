@@ -1,11 +1,14 @@
 'use client';
-import Loader from '@/app/loading';
-import { MuiOtpInput } from '@/components/MuiOtpInput/MuiOtpInput';
-import { confirmEmail } from '@/lib/Auth/confirmEmail';
-import { Box, Button, FormHelperText, Typography } from '@mui/material';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
+
+import { Box, Button, FormHelperText, Typography } from '@mui/material';
+
+import { RequestLoading } from '@/components/Loading';
+import { MuiOtpInput } from '@/components/MuiOtpInput/MuiOtpInput';
+import { confirmEmail } from '@/lib/Auth/confirmEmail';
 
 const ConfirmationForm = () => {
   const [value, setValue] = useState<string>('');
@@ -38,7 +41,7 @@ const ConfirmationForm = () => {
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <RequestLoading />}
 
       <Typography variant="h4" gutterBottom>
         Enter 6 digits to confirm your email

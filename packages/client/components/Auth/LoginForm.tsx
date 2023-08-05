@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import Loader from '@/app/loading';
+import { RequestLoading } from '@/components/Loading';
 import { AuthContext } from '@/context/AuthContext';
 import { fetchLogin } from '@/lib/Auth/fetchLogin';
 import { loginValidation } from '@/utils/validation';
@@ -78,7 +78,8 @@ const LoginForm: FC = () => {
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <RequestLoading />}
+
       <Formik
         initialValues={initialValues}
         validationSchema={loginValidation}
