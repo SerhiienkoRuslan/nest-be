@@ -1,14 +1,16 @@
-import TextField from '@mui/material/TextField';
 import React, { forwardRef } from 'react';
+
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+
 import { KEYBOARD_KEY } from '@/constants/event';
+import type { MuiOtpInputProps } from '@/types/otpInput';
 import {
   getFilledArray,
   joinArrayStrings,
   mergeArrayStringFromIndex,
   updateIndex,
 } from '@/utils/array';
-import type { MuiOtpInputProps } from '@/types/otpInput';
 
 export type { MuiOtpInputProps };
 
@@ -38,24 +40,15 @@ const MuiOtpInput = forwardRef((props: MuiOtpInputProps, propRef: MuiOtpInputPro
     ...restTextFieldsProps
   } = TextFieldsProps || {};
 
-  const valueSplitted: ValueSplitted = getFilledArray(length as number, (_, index) => {
-    return {
-      character: (value as string)[index] || '',
-      inputRef: React.createRef<HTMLInputElement>(),
-    };
-  });
+  const valueSplitted: ValueSplitted = getFilledArray(length as number, (_, index) => ({
+    character: (value as string)[index] || '',
+    inputRef: React.createRef<HTMLInputElement>(),
+  }));
 
-  const getIndexByInputElement = (inputElement: HTMLInputElement) => {
-    return valueSplitted.findIndex(({ inputRef }) => {
-      return inputRef.current === inputElement;
-    });
-  };
+  const getIndexByInputElement = (inputElement: HTMLInputElement) =>
+    valueSplitted.findIndex(({ inputRef }) => inputRef.current === inputElement);
 
-  const getCharactersSplitted = () => {
-    return valueSplitted.map(({ character }) => {
-      return character;
-    });
-  };
+  const getCharactersSplitted = () => valueSplitted.map(({ character }) => character);
 
   const replaceCharOfValue = (charIndex: number, charValue: string) => {
     const newValueSplitted = updateIndex(getCharactersSplitted(), charIndex, charValue);
