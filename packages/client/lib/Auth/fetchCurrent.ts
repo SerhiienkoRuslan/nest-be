@@ -1,8 +1,9 @@
-import {ResponseCurrent} from "@/lib/Auth/models";
 import API from '../api';
 
+import { ResponseCurrent } from '@/lib/Auth/models';
+
 export const fetchCurrent = async () => {
-  return API.get<ResponseCurrent>("/me")
+  return API.get<ResponseCurrent>('/me')
     .then((response) => {
       // setCookie('token', response?.data?.user?.token);
       return response?.data;
@@ -10,4 +11,4 @@ export const fetchCurrent = async () => {
     .catch((error) => {
       throw new Error(error);
     });
-}
+};

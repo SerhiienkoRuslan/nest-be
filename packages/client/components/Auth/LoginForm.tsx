@@ -1,11 +1,12 @@
 'use client';
-import Loader from '@/app/loading';
-import { AuthContext } from '@/context/AuthContext';
-import { FC, useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { FC, useContext, useState } from 'react';
 import { useMutation } from 'react-query';
-import { useTheme } from '@mui/material/styles';
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Box,
   Button,
@@ -20,11 +21,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useTheme } from '@mui/material/styles';
 
-import { loginValidation } from '@/utils/validation';
+import { RequestLoading } from '@/components/Loading';
+import { AuthContext } from '@/context/AuthContext';
 import { fetchLogin } from '@/lib/Auth/fetchLogin';
+import { loginValidation } from '@/utils/validation';
 
 const initialValues = {
   email: '',
@@ -64,7 +66,7 @@ const LoginForm: FC = () => {
         logIn(user);
       },
       onError: (error: string) => {
-        setFormErrors(error);
+        setFormErrors(error.toString());
       },
     },
   );
@@ -76,7 +78,8 @@ const LoginForm: FC = () => {
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <RequestLoading />}
+
       <Formik
         initialValues={initialValues}
         validationSchema={loginValidation}
@@ -91,9 +94,7 @@ const LoginForm: FC = () => {
               // @ts-ignore
               sx={{ ...theme.typography.customInput }}
             >
-              <InputLabel htmlFor="outlined-adornment-email-login">
-                Email Address / Username
-              </InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
 
               <OutlinedInput
                 id="outlined-adornment-email-login"
@@ -102,7 +103,7 @@ const LoginForm: FC = () => {
                 name="email"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                label="Email Address / Username"
+                label="Email Address"
                 inputProps={{}}
               />
 

@@ -1,20 +1,5 @@
-'use client';
-import LinearProgress from '@mui/material/LinearProgress';
-import { styled } from '@mui/material/styles';
+import { AppLoading } from '@/components/Loading';
 
-const LoaderWrapper = styled('div')({
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  zIndex: 1301,
-  width: '100%',
-  height: '100%',
-});
-
-const Loader = () => (
-  <LoaderWrapper>
-    <LinearProgress color="primary" />
-  </LoaderWrapper>
-);
+const Loader = () => <AppLoading />;
 
 export default Loader;
