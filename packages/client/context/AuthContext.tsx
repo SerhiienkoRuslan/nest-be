@@ -1,17 +1,19 @@
 'use client';
-import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
-import { User } from '@/lib/Auth/models';
+
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import {
-  createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
+  createContext,
   useCallback,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+
+import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
+import { User } from '@/lib/Auth/models';
 
 interface IAuthContext {
   user: User | null;
@@ -35,12 +37,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(user);
     setCookie('token', user.token);
     setIsLogIn(true);
+    setCookie('isLogged', true);
   };
 
   const logOut = useCallback(() => {
     setUser(null);
     setIsLogIn(false);
     deleteCookie('token');
+    deleteCookie('isLogged');
   }, [setIsLogIn, setUser]);
 
   const loadData = useCallback(async () => {
