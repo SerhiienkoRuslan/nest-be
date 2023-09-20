@@ -37,14 +37,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(user);
     setCookie('token', user.token);
     setIsLogIn(true);
-    setCookie('isLogged', true);
   };
 
   const logOut = useCallback(() => {
     setUser(null);
     setIsLogIn(false);
     deleteCookie('token');
-    deleteCookie('isLogged');
   }, [setIsLogIn, setUser]);
 
   const loadData = useCallback(async () => {

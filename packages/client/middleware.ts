@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const redirectUrlArr = ['/dashboard', '/blog'];
+// const redirectUrlArr = ['/dashboard', '/blog'];
 export default function middleware(req: NextRequest) {
-  const verify = req.cookies.get('isLogged');
+  const verify = req.cookies.get('token');
   const url = req.url;
 
-  if (!verify && redirectUrlArr.some((v) => url.includes(v))) {
-    return NextResponse.redirect(new URL('/auth/login', url));
-  }
-  console.log(url);
-  if (!verify && url === 'http://localhost:4200/') {
+  // if (!verify && redirectUrlArr.some((v) => url.includes(v))) {
+  //   return NextResponse.redirect(new URL('/auth/login', url));
+  // }
+
+  if (!verify && !url.includes('/auth')) {
     return NextResponse.redirect(new URL('/auth/login', url));
   }
 }
