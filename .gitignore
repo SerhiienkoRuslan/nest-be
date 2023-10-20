@@ -43,3 +43,7 @@ Thumbs.db
 
 # Next.js
 .next
+/packages/client-e2e/reports/separate/137621bda1f310d273bde622420bc348.xml
+
+/packages/client/.vscode/settings.json
+/packages/client-e2e/videos/login.feature.mp4
