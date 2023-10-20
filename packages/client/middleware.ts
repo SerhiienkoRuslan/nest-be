@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// const redirectUrlArr = ['/dashboard', '/blog'];
 export default function middleware(req: NextRequest) {
   const verify = req.cookies.get('token');
-  const url = req.url;
 
-  // if (!verify && redirectUrlArr.some((v) => url.includes(v))) {
-  //   return NextResponse.redirect(new URL('/auth/login', url));
-  // }
-
-  if (!verify && !url.includes('/auth')) {
-    return NextResponse.redirect(new URL('/auth/login', url));
+  if (!verify && !req.url.includes('/auth')) {
+    return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 }
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+};
