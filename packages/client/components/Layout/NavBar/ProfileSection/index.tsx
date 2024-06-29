@@ -1,9 +1,12 @@
 'use client';
-import { AuthContext } from '@/context/AuthContext';
-import { useState, useRef, useEffect, useContext } from 'react';
-import { useRouter } from 'next/navigation';
 
-import { useTheme } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
+import { useContext, useEffect, useRef, useState } from 'react';
+
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import {
   Avatar,
   Box,
@@ -25,14 +28,11 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import SearchIcon from '@mui/icons-material/Search';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { useTheme } from '@mui/material/styles';
 
 import MainCard from '@/components/MainCard';
 import Transitions from '@/components/Transitions';
+import { AuthContext } from '@/context/AuthContext';
 
 const ProfileSection = () => {
   const theme = useTheme();
@@ -223,7 +223,7 @@ const ProfileSection = () => {
                             borderRadius: `${theme.borderRadius}px`,
                           }}
                           selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '/user/profile')}
+                          onClick={(event) => handleListItemClick(event, 0, '/profile')}
                         >
                           <ListItemIcon>
                             <SettingsOutlinedIcon />
