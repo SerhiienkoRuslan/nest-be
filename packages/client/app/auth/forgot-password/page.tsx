@@ -3,9 +3,6 @@ export const metadata = {
 };
 
 export default function ForgotPasswordPage() {
-  return (
-    <div>
-      ForgotPasswordPage
-    </div>
-  );
-};
+  // TODO: Need design
+  return <div>ForgotPasswordPage</div>;
+}
