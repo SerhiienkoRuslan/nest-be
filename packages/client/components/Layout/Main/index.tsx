@@ -2,6 +2,7 @@
 import { useContext } from 'react';
 
 import { styled, useTheme } from '@mui/material/styles';
+
 import { drawerWidth } from '@/constants';
 import { GlobalContext } from '@/context/global';
 
@@ -10,6 +11,7 @@ import { GlobalContext } from '@/context/global';
 
 const MainComponent = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
+  // @ts-ignore
 })(({ theme, open }) => ({
   // @ts-ignore
   ...theme.typography.mainContent,
@@ -61,6 +63,7 @@ const Main = ({ children }) => {
   return (
     // @ts-ignore
     <MainComponent theme={theme} open={isNavigationOpen}>
+      {/*TODO:*/}
       {/*<Breadcrumbs*/}
       {/*  navigation={navigation}*/}
       {/*  icon*/}

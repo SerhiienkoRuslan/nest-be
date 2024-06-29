@@ -23,9 +23,9 @@ import {
 import { useTheme } from '@mui/material/styles';
 
 import { RequestLoading } from '@/components/Loading';
-import { register } from '@/lib/Auth/register';
+import { registration } from '@/lib/Auth/registration';
 import { strengthColor, strengthIndicator } from '@/utils/password-strength';
-import { registrationValidation } from '@/utils/validation';
+import { registrationValidation } from '@/utils/validation/auth';
 
 const initialValues = {
   fname: '',
@@ -79,7 +79,7 @@ const RegistrationForm: FC = () => {
       email: string;
       password: string;
     }) =>
-      register({
+      registration({
         username: `${fname} ${lname}`,
         email,
         password,
@@ -258,6 +258,7 @@ const RegistrationForm: FC = () => {
               </Box>
             )}
 
+            {/*TODO: should be notification*/}
             {/*{ Submit error}*/}
             {formErrors && (
               <Box>

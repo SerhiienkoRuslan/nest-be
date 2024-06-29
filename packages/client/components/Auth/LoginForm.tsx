@@ -26,7 +26,7 @@ import { useTheme } from '@mui/material/styles';
 import { RequestLoading } from '@/components/Loading';
 import { AuthContext } from '@/context/AuthContext';
 import { fetchLogin } from '@/lib/Auth/fetchLogin';
-import { loginValidation } from '@/utils/validation';
+import { loginValidation } from '@/utils/validation/auth';
 
 const initialValues = {
   email: '',

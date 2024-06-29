@@ -1,9 +1,9 @@
 import API from '../api';
 
-import { ResponseCurrent } from '@/lib/Auth/models';
+import { CurrentUserResponseAPI } from '@/types/api/auth';
 
 export const fetchCurrent = async () => {
-  return API.get<ResponseCurrent>('/me')
+  return API.get<CurrentUserResponseAPI>('/me')
     .then((response) => {
       // setCookie('token', response?.data?.user?.token);
       return response?.data;

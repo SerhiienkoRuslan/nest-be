@@ -3,8 +3,10 @@ export const urls = {
   registration: 'auth/registration',
   forgotPassword: 'auth/forgot-password',
   login: 'auth/login',
-  blog: 'blog',
-  messager: 'messager',
+  posts: 'posts',
+  createPost: 'posts/create-post',
+  myPosts: 'posts/my-posts',
+  messenger: 'messenger',
   profile: 'profile',
   dashboard: 'dashboard',
 };

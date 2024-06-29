@@ -25,3 +25,13 @@ export const getRegistrationErrorMessage = (error: string): string => {
       return 'Whoops! Somethings wrong!';
   }
 };
+
+export const getCreatePostErrorMessage = (error: string): string => {
+  switch (error) {
+    // TODO:
+    case 'REGISTRATION.ERROR.MUST_BE_UNIQUE':
+      return 'This email already used!';
+    default:
+      return 'Whoops! Somethings wrong!';
+  }
+};

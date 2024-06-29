@@ -1,10 +1,10 @@
-import { getLoginErrorMessage } from '@/utils/getErrorMessage';
 import API from '../api';
 
-import { Login, ResponseLogin } from './models';
+import { LoginBody, LoginResponseAPI } from '@/types/api/auth';
+import { getLoginErrorMessage } from '@/utils/getErrorMessage';
 
-export const fetchLogin = async (options: Login): Promise<ResponseLogin> => {
-  return API.post<ResponseLogin>('/login', options)
+export const fetchLogin = async (options: LoginBody): Promise<LoginResponseAPI> => {
+  return API.post<LoginResponseAPI>('/login', options)
     .then((response) => {
       return response?.data;
     })

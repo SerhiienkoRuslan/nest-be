@@ -1,8 +1,8 @@
-import { Register, ResponseRegister } from '@/lib/Auth/models';
 import API from '@/lib/api';
+import { RegistrationBody, RegistrationResponseAPI } from '@/types/api/auth';
 import { getRegistrationErrorMessage } from '@/utils/getErrorMessage';
 
-export const register = async (option: Register): Promise<ResponseRegister> => {
+export const registration = async (option: RegistrationBody): Promise<RegistrationResponseAPI> => {
   return API.post('/registration', option)
     .then((response) => {
       return response?.data;

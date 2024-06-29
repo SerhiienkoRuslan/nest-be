@@ -1,28 +1,34 @@
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import BookIcon from '@mui/icons-material/Book';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+
+import { urls } from '@/constants';
+
 const pages = {
-  id: 'pages',
-  title: 'Pages',
-  // caption: 'Pages Caption',
+  id: 'posts',
   type: 'group',
   children: [
     {
-      id: 'authentication',
-      title: 'Authentication',
+      id: 'post-create',
+      title: 'Posts',
       type: 'collapse',
-      // icon: icons.IconKey,
+      icon: BookIcon,
       children: [
         {
-          id: 'login',
-          title: 'Login',
+          id: 'post-create',
+          title: 'Create Post',
           type: 'item',
-          url: '/auth/login',
-          target: true,
+          url: urls.createPost,
+          icon: AddBoxIcon,
+          // breadcrumbs: true,
         },
         {
-          id: 'register',
-          title: 'Register',
+          id: 'my-posts',
+          title: 'My Posts',
           type: 'item',
-          url: '/auth/registration',
-          target: true,
+          url: urls.myPosts,
+          icon: BookmarksIcon,
+          // breadcrumbs: true,
         },
       ],
     },

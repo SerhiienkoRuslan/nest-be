@@ -1,17 +1,19 @@
 'use client';
-import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
-import { User } from '@/lib/Auth/models';
+
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import {
-  createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
+  createContext,
   useCallback,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+
+import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
+import { User } from '@/types/api/auth';
 
 interface IAuthContext {
   user: User | null;
