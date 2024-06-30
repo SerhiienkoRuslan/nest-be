@@ -24,20 +24,20 @@ const Layout = ({ children }) => {
         />
       </head>
 
-      <ReactQueryWrapper>
-        <AuthProvider>
-          <Hydrate>
-            <GlobalProvider>
-              <ThemeProvider theme={theme()}>
-                <CssBaseline />
-                <body id="app">
+      <body id="app">
+        <ReactQueryWrapper>
+          <AuthProvider>
+            <Hydrate>
+              <GlobalProvider>
+                <ThemeProvider theme={theme()}>
+                  <CssBaseline />
                   <Wrapper>{children}</Wrapper>
-                </body>
-              </ThemeProvider>
-            </GlobalProvider>
-          </Hydrate>
-        </AuthProvider>
-      </ReactQueryWrapper>
+                </ThemeProvider>
+              </GlobalProvider>
+            </Hydrate>
+          </AuthProvider>
+        </ReactQueryWrapper>
+      </body>
     </html>
   );
 };
