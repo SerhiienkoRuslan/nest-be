@@ -7,11 +7,12 @@ import { AuthProvider } from "@/context/AuthContext";
 import { AuthContext } from "@/context/AuthContext";
 
 const ProfilePage: FC = () => {
-  const [value, setValue] = useState(0);
-  const theme = useTheme();
-
   const { user, updateUser } = useContext(AuthContext);
-  const [newUsername, setNewUsername] = useState(user?.username || '');
+  const theme = useTheme();
+  const [newUsername, setNewUsername] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+
+  const [value, setValue] = useState(0);
 
   const handlePageChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -22,11 +23,29 @@ const ProfilePage: FC = () => {
   };
 
   const handleUsernameSubmit = async () => {
+    const error = validateUsername(newUsername);
+    if (error) {
+      setUsernameError(error);
+      return;
+    }
+    setUsernameError('');
+
     try {
       await updateUser({ username: newUsername }, user.id);
+      setNewUsername('')
     } catch (error) {
       console.error('Failed to update user data:', error.message);
     }
+  };
+
+  const validateUsername = (username: string) => {
+    if (!username) {
+      return 'UserName cannot be empty';
+    }
+    if (username.length < 3 || username.length > 20) {
+      return 'Username must be between 3 and 20 characters';
+    }
+    return '';
   };
 
   return (
@@ -91,7 +110,7 @@ const ProfilePage: FC = () => {
             }}>
               <Typography
                 sx={{ width: '5vw' }}>
-                <p>Nickname</p>
+                <p>UserName</p>
               </Typography>
               <Box
                 component="form"
@@ -106,6 +125,7 @@ const ProfilePage: FC = () => {
               >
                 <Input
                   placeholder="UserName"
+                  value={newUsername}
                   onChange={handleUsernameChange}
                   sx={{
                     ':after': { borderBottomColor: theme.palette.secondary.main },
@@ -113,6 +133,11 @@ const ProfilePage: FC = () => {
                 />
               </Box>
             </Box>
+            {usernameError && (
+              <Typography color="error" variant="body2">
+                {usernameError}
+              </Typography>
+            )}
 
             <Box sx={{
               display: "flex",
@@ -161,6 +186,7 @@ const ProfilePage: FC = () => {
             </Button>
 
           </Box>
+
         )}
 
         {value === 1 && (
