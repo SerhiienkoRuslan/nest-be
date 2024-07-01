@@ -38,7 +38,7 @@ export const AuthContext = createContext<IAuthContext>({
   },
   logIn: () => { },
   logOut: () => { },
-  updateUser: async () => { throw new Error("updateUser not implemented"); }
+  updateUser: async () => { }
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -73,10 +73,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const updateUser = useCallback(async (userNewData: Partial<User>, id: number) => {
-
+    const token = getCookie('token');
     try {
-      const newUser = await updateUserData(userNewData, id);
-      setUser(newUser);
+      if (token) {
+        const newUser = await updateUserData(userNewData, id);
+        setUser(newUser);
+      }
     } catch (error) {
       console.log(error);
     }

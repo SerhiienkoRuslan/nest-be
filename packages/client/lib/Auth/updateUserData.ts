@@ -1,7 +1,7 @@
 import API from '../api';
 import { getCookie } from 'cookies-next';
 
-export const updateUserData = async (userData, id) => {
+export const updateUserData = async (userData: string, id: number) => {
   try {
     const token = getCookie('token');
     const response = await API.put(`/user/${id}/`, userData, {
