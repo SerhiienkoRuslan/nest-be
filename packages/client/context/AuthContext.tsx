@@ -22,6 +22,7 @@ interface IAuthContext {
   logIn: Dispatch<SetStateAction<User>>;
   logOut: () => void;
   updateUser: (userNewData: Partial<User>, id: number) => Promise<User>;
+  isLoading: boolean;
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -38,12 +39,14 @@ export const AuthContext = createContext<IAuthContext>({
   },
   logIn: () => { },
   logOut: () => { },
-  updateUser: async () => { }
+  updateUser: async () => { },
+  isLoading: false,
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogIn, setIsLogIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsloading] = useState<boolean>(false)
 
   const logIn = (user: User) => {
     setUser(user);
@@ -78,9 +81,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token) {
         const newUser = await updateUserData(userNewData, id);
         setUser(newUser);
+        setIsloading(true)
       }
     } catch (error) {
       console.log(error);
+    }
+    finally {
+      (setIsloading(false))
     }
   }, []);
 
@@ -95,9 +102,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       user,
       logIn,
       logOut,
-      updateUser
+      updateUser,
+      isLoading,
     }),
-    [isLogIn, user, logOut, updateUser],
+    [isLogIn, user, logOut, updateUser, isLoading],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

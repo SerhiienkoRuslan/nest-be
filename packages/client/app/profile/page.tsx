@@ -1,9 +1,7 @@
-import { FC } from "react";
-import ProfileSettings from "@/components/ProfileSettings/layout";
-
-const ProfilePage: FC = () => {
+const ProfilePage = () => {
   return (
-    <ProfileSettings />
+    <>
+    </>
   )
 };
 export default ProfilePage;
