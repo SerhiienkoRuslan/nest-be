@@ -14,15 +14,14 @@ import {
 
 import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
 import { updateUserData } from '@/lib/Auth/updateUserData';
-import { User } from '@/types/api/auth';
+import { User } from '@/types/api/user';
 
 interface IAuthContext {
   user: User | null;
   isLogIn: boolean;
   logIn: Dispatch<SetStateAction<User>>;
   logOut: () => void;
-  updateUser: (userNewData: Partial<User>, id: number) => Promise<User>;
-  isLoading: boolean;
+  updateUser: (id: number, userNewData: Partial<User>) => Promise<void>;
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -31,22 +30,21 @@ export const AuthContext = createContext<IAuthContext>({
     avatar: null,
     bio: null,
     email: '',
-    id: null,
+    id: 0,
     posts: [],
     role: '',
     username: '',
     validEmail: false,
+    token: ''
   },
   logIn: () => { },
   logOut: () => { },
   updateUser: async () => { },
-  isLoading: false,
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogIn, setIsLogIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsloading] = useState<boolean>(false)
 
   const logIn = (user: User) => {
     setUser(user);
@@ -75,20 +73,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const updateUser = useCallback(async (userNewData: Partial<User>, id: number) => {
-    const token = getCookie('token');
-    try {
-      if (token) {
-        const newUser = await updateUserData(userNewData, id);
-        setUser(newUser);
-        setIsloading(true)
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    finally {
-      (setIsloading(false))
-    }
+  const updateUser = useCallback(async (id: number, userNewData: Partial<User>) => {
+    const newUser = await updateUserData(id, userNewData);
+    setUser(newUser);
   }, []);
 
 
@@ -103,9 +90,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       logIn,
       logOut,
       updateUser,
-      isLoading,
     }),
-    [isLogIn, user, logOut, updateUser, isLoading],
+    [isLogIn, user, logOut, updateUser],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

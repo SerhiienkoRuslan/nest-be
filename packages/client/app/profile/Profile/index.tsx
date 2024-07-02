@@ -6,24 +6,23 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useFormik } from 'formik';
 import { profileSettingsValidation } from "@/utils/validation/profileSettingsValidation";
 
-const UserSettings: FC = () => {
-  const { user, updateUser, isLoading } = useContext(AuthContext);
+const Profile: FC = () => {
+  const { user, updateUser } = useContext(AuthContext);
   const theme: Theme = useTheme();
 
-  const handleSubmit = async (values: { username: string }, { setSubmitting, setErrors, resetForm }) => {
+  const handleSubmit = async (values: { username: string }, { setErrors }) => {
     try {
-      await updateUser({ username: values.username }, user.id);
-      resetForm();
+      if (user) {
+        await updateUser(user.id, { username: values.username });
+      }
     } catch (error) {
-      console.error('Failed to update user data:', error.message);
       setErrors({ submit: error.message });
     }
-    setSubmitting(false);
   };
 
   const formik = useFormik({
     initialValues: {
-      username: '',
+      username: user?.username || '',
     },
     validationSchema: profileSettingsValidation,
     onSubmit: handleSubmit,
@@ -61,6 +60,8 @@ const UserSettings: FC = () => {
               placeholder={user?.username}
               value={formik.values.username}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              disabled={formik.isSubmitting}
               sx={{ ':after': { borderBottomColor: theme.palette.secondary.main } }}
             />
           </Box>
@@ -71,26 +72,24 @@ const UserSettings: FC = () => {
             </Typography>
           )}
 
-          {!isLoading &&
-            < Button
-              variant="contained"
-              type="submit"
-              disabled={isLoading}
-              sx={{
-                backgroundColor: theme.palette.secondary.light,
-                color: theme.palette.secondary.main,
-                width: '10vw',
-                mt: 4,
-                '&:hover': {
-                  backgroundColor: theme.palette.secondary.main,
-                  color: theme.palette.secondary.light,
-                },
-              }}>
-              Save
-            </Button>
-          }
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={formik.isSubmitting}
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.secondary.main,
+              width: '10vw',
+              mt: 4,
+              '&:hover': {
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+              },
+            }}>
+            Save
+          </Button>
 
-          {isLoading &&
+          {formik.isSubmitting &&
             <LinearProgress sx={{
               width: '10vw',
               height: '1vh',
@@ -106,4 +105,4 @@ const UserSettings: FC = () => {
   );
 };
 
-export default UserSettings;
+export default Profile;

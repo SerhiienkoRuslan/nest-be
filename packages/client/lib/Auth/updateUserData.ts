@@ -1,6 +1,7 @@
 import API from '../api';
+import { User } from '@/types/api/user';
 
-export const updateUserData = async (userData: string, id: number) => {
+export const updateUserData = async (id: number, userData: Partial<User>) => {
   try {
     const response = await API.put(`/user/${id}/`, userData,);
     return response.data.user;
