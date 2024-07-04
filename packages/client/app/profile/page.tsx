@@ -1,10 +1,11 @@
 'use client'
 
 import { FC, useState } from "react";
-import Profile from "./Profile";
+import ProfileSettings from "./ProfileSettings";
+import ProfileChangePassword from "./ProfileChangePassword";
 import ProfileHeader from "./Header";
 import { useTheme, Theme } from '@mui/material/styles';
-import { Tabs, Tab, Typography, Box } from '@mui/material';
+import { Tabs, Tab, Box } from '@mui/material';
 
 const ProfilePage: FC = () => {
   const theme: Theme = useTheme();
@@ -46,12 +47,12 @@ const ProfilePage: FC = () => {
       </Box>
 
       {value === 0 && (
-        <Profile />
+        <ProfileSettings />
       )}
 
       {value === 1 && (
         <Box p={3}>
-          <Typography>Item Two Content</Typography>
+          <ProfileChangePassword />
         </Box>
       )}
     </>

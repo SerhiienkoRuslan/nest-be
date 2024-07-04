@@ -1,16 +1,16 @@
 import { FC, useContext } from "react";
 import { useTheme, Theme } from '@mui/material/styles';
 import { AuthContext } from "@/context/AuthContext";
-import { Typography, Box, Input, Button } from '@mui/material';
-import LinearProgress from '@mui/material/LinearProgress';
+import { Typography, Box, Input, Button, CircularProgress } from '@mui/material';
 import { useFormik } from 'formik';
 import { profileSettingsValidation } from "@/utils/validation/profileSettingsValidation";
 
-const Profile: FC = () => {
+const ProfileSettings: FC = () => {
   const { user, updateUser } = useContext(AuthContext);
   const theme: Theme = useTheme();
 
   const handleSubmit = async (values: { username: string }, { setErrors }) => {
+
     try {
       if (user) {
         await updateUser(user.id, { username: values.username });
@@ -59,9 +59,8 @@ const Profile: FC = () => {
               name="username"
               placeholder={user?.username}
               value={formik.values.username}
-              onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              disabled={formik.isSubmitting}
+              onChange={formik.handleChange}
               sx={{ ':after': { borderBottomColor: theme.palette.secondary.main } }}
             />
           </Box>
@@ -90,14 +89,13 @@ const Profile: FC = () => {
           </Button>
 
           {formik.isSubmitting &&
-            <LinearProgress sx={{
-              width: '10vw',
-              height: '1vh',
-              marginTop: '20px',
-              '& .MuiLinearProgress-bar': {
-                backgroundColor: theme.palette.secondary.main,
-              },
-            }} />
+            <CircularProgress
+              sx={{
+                width: '10vw',
+                height: '1vh',
+                marginTop: '20px',
+                color: theme.palette.secondary.main
+              }} />
           }
         </Box>
       </form>
@@ -105,4 +103,4 @@ const Profile: FC = () => {
   );
 };
 
-export default Profile;
+export default ProfileSettings;
