@@ -148,7 +148,11 @@ const ProfileSettings: FC = () => {
               enableSearch={true}
               value={formik.values.phone}
               onChange={(phone) => formik.setFieldValue('phone', phone)}
-              inputStyle={{ width: '100%', minWidth: '100%' }}
+              inputStyle={{
+                width: '100%',
+                minWidth: '100%',
+                backgroundColor: 'rgba(248, 250, 252, 1)',
+              }}
             />
           </FormRow>
 
