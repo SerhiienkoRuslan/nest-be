@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useFormik } from 'formik';
 import { strengthColor, strengthIndicator } from '@/utils/password-strength';
 import { passwordValidation } from "@/utils/validation/passwordValidation";
-import { Container, TextField, Button, Typography, CircularProgress, Box, IconButton } from '@mui/material';
+import { TextField, Button, Typography, CircularProgress, Box, IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -67,7 +67,7 @@ const ProfileChangePassword: FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Box maxWidth="sm">
       <Typography variant="h4" component="h1" gutterBottom>
         Change Password
       </Typography>
@@ -127,43 +127,48 @@ const ProfileChangePassword: FC = () => {
           helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
           color="secondary"
         />
-        {formik.isSubmitting ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+
+        <Box sx={{
+          justifyContent: 'space-between',
+          display: 'flex',
+          mt: '15px'
+        }}>
+          <Button color="primary"
+            variant="contained"
+            type="submit"
+            disabled={formik.isSubmitting}
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.secondary.main,
+              '&:hover': {
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+              },
+            }}>
+            Change Password
+          </Button>
+
+          <IconButton
+            aria-label="toggle password visibility"
+            onClick={handleShowPassword}
+            edge="end"
+            size="large"
+          >
+            {showPassword ? <VisibilityIcon /> : <VisibilityOff />}
+          </IconButton>
+        </Box>
+
+        {formik.isSubmitting &&
+          <Box sx={{
+            m: '20px 0 0 50px'
+          }}>
             <CircularProgress
               sx={{
                 color: theme.palette.secondary.main,
               }} />
           </Box>
-        ) : (
-          <Box sx={{
-            justifyContent: 'space-between',
-            display: 'flex',
-            mt: '15px'
-          }}>
-            <Button color="primary"
-              variant="contained"
-              type="submit"
-              sx={{
-                backgroundColor: theme.palette.secondary.light,
-                color: theme.palette.secondary.main,
-                '&:hover': {
-                  backgroundColor: theme.palette.secondary.main,
-                  color: theme.palette.secondary.light,
-                },
-              }}>
-              Change Password
-            </Button>
+        }
 
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleShowPassword}
-              edge="end"
-              size="large"
-            >
-              {showPassword ? <VisibilityIcon /> : <VisibilityOff />}
-            </IconButton>
-          </Box>
-        )}
       </form>
 
       {message && (
@@ -173,7 +178,7 @@ const ProfileChangePassword: FC = () => {
           </Typography>
         </Box>
       )}
-    </Container>
+    </Box>
   );
 };
 

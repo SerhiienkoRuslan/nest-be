@@ -35,7 +35,12 @@ export const AuthContext = createContext<IAuthContext>({
     role: '',
     username: '',
     validEmail: false,
-    token: ''
+    token: '',
+    phone: '',
+    gender: '',
+    birthday: new Date(),
+    location: '',
+    interests: ''
   },
   logIn: () => { },
   logOut: () => { },
@@ -64,6 +69,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       if (token) {
         const { user } = await fetchCurrent();
+
+        // await fetch1() // 10 
+        // await fetch2() // 20
+        // await fetch3() // 30
+        // await fetch4() // 40
+        // // 100
+
+        // const [res1, res2, res3, res4] = await Promise.all([
+        //   await fetch1() // 10
+        //   await fetch2() // 20
+        //   await fetch3() // 30
+        //   await fetch4() // 40
+        // ]) // 40
+
         setIsLogIn(true);
         setUser(user);
       }

@@ -21,6 +21,11 @@ const select = {
       title: true,
     },
   },
+  birthday: true,
+  phone: true,
+  gender: true,
+  location: true,
+  interests : true,
 };
 
 @Injectable()

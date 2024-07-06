@@ -11,7 +11,8 @@ const ProfileHeader: FC = () => {
     <Box sx={{
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      ml: 10
     }}>
       <Avatar
         alt="Profile Photo"
