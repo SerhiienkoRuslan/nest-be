@@ -29,7 +29,7 @@ const ProfileHeader: FC = () => {
           ml: '6vw',
           fontSize: '26px',
         }}>
-        {user?.username}
+        {user?.username || ''}
       </Typography>
     </Box>
   )

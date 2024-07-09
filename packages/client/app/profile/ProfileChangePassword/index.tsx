@@ -1,13 +1,13 @@
 import { FC, useState, useContext, ChangeEvent } from "react";
+import { useFormik } from 'formik';
 import { AuthContext } from "@/context/AuthContext";
 import { useTheme, Theme } from '@mui/material/styles';
-import axios from 'axios'
-import { useFormik } from 'formik';
 import { strengthColor, strengthIndicator } from '@/utils/password-strength';
 import { passwordValidation } from "@/utils/validation/passwordValidation";
 import { TextField, Button, Typography, CircularProgress, Box, IconButton } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import API from "@/lib/api";
 
 const ProfileChangePassword: FC = () => {
   const { user } = useContext(AuthContext);
@@ -35,7 +35,7 @@ const ProfileChangePassword: FC = () => {
       setMessage('');
 
       try {
-        const response = await axios.post('/api/reset-password', {
+        const response = await API.post('/reset-password', {
           email,
           currentPassword: values.currentPassword,
           newPassword: values.newPassword,
@@ -168,7 +168,6 @@ const ProfileChangePassword: FC = () => {
               }} />
           </Box>
         }
-
       </form>
 
       {message && (
@@ -183,3 +182,8 @@ const ProfileChangePassword: FC = () => {
 };
 
 export default ProfileChangePassword
+
+
+
+
+
