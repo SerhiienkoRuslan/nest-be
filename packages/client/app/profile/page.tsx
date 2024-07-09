@@ -1,11 +1,12 @@
 'use client'
 
 import { FC, useState } from "react";
-import ProfileSettings from "./ProfileSettings";
-import ProfileChangePassword from "./ProfileChangePassword";
-import ProfileHeader from "./Header";
-import { useTheme, Theme } from '@mui/material/styles';
 import { Tabs, Tab, Box } from '@mui/material';
+import { useTheme, Theme } from '@mui/material/styles';
+
+import ProfileHeader from "./Header";
+import ProfileChangePassword from "./ProfileChangePassword";
+import ProfileSettings from "./ProfileSettings";
 
 const ProfilePage: FC = () => {
   const theme: Theme = useTheme();

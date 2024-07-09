@@ -1,13 +1,15 @@
-import { FC, useState, useContext, ChangeEvent } from "react";
-import { useFormik } from 'formik';
-import { AuthContext } from "@/context/AuthContext";
-import { useTheme, Theme } from '@mui/material/styles';
-import { strengthColor, strengthIndicator } from '@/utils/password-strength';
-import { passwordValidation } from "@/utils/validation/passwordValidation";
-import { TextField, Button, Typography, CircularProgress, Box, IconButton } from '@mui/material';
+import { ChangeEvent, FC, useContext, useState } from "react";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Box, Button, CircularProgress, IconButton, TextField, Typography } from '@mui/material';
+import { Theme, useTheme } from '@mui/material/styles';
+import { useFormik } from 'formik';
+
+import { AuthContext } from "@/context/AuthContext";
 import API from "@/lib/api";
+import { strengthColor, strengthIndicator } from '@/utils/password-strength';
+import { passwordValidation } from "@/utils/validation/passwordValidation";
+
 
 const ProfileChangePassword: FC = () => {
   const { user } = useContext(AuthContext);

@@ -1,22 +1,20 @@
-import { FC, useContext, useEffect, useState } from "react";
-import { useFormik } from 'formik';
-import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useTheme, Theme } from '@mui/material/styles';
 import axios from 'axios'
 import PhoneInput from 'react-phone-input-2'
-
-import { useTheme, Theme } from '@mui/material/styles';
-import { Typography, Box, Input, Button, CircularProgress, RadioGroup, FormControlLabel, Radio, TextField, Grid } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { FC, useContext, useEffect, useState } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
+import { useFormik } from 'formik';
+import { Typography, Box, Input, Button, CircularProgress, RadioGroup, FormControlLabel, Radio, TextField, Grid } from '@mui/material';
+
+import FormRow from "./formRow";
 
 import { AuthContext } from "@/context/AuthContext";
 import { profileSettingsValidation } from "@/utils/validation/profileSettingsValidation";
 
-import FormRow from "./formRow";
-
 import 'react-phone-input-2/lib/style.css'
-
 
 const ProfileSettings: FC = () => {
   const { user, updateUser } = useContext(AuthContext);

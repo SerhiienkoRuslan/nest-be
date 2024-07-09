@@ -1,6 +1,7 @@
 import { FC, useContext } from "react"
-import { Box, Avatar, Typography } from "@mui/material"
-import { useTheme, Theme } from '@mui/material/styles';
+import { Avatar, Box, Typography } from "@mui/material"
+import { Theme, useTheme } from '@mui/material/styles';
+
 import { AuthContext } from "@/context/AuthContext";
 
 const ProfileHeader: FC = () => {
