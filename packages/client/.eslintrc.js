@@ -73,22 +73,6 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
-      rules: {
-        '@next/next/no-html-link-for-pages': ['error', 'packages/client/pages'],
-      },
-    },
-    {
-      files: ['*.ts', '*.tsx'],
-      rules: {},
-    },
-    {
-      files: ['*.js', '*.jsx'],
-      rules: {},
-    },
-  ],
-  overrides: [
-    {
-      files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
       extends: ['plugin:@typescript-eslint/recommended'],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint', 'jest-dom'],
