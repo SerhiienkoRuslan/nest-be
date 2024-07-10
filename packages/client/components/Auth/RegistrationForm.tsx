@@ -258,8 +258,8 @@ const RegistrationForm: FC = () => {
               </Box>
             )}
 
-            {/*TODO: should be notification*/}
-            {/*{ Submit error}*/}
+            {/* TODO: should be notification */}
+            {/* { Submit error} */}
             {formErrors && (
               <Box>
                 <FormHelperText error>{formErrors}</FormHelperText>

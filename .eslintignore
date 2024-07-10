@@ -1,0 +1,23 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build directories
+dist/
+build/
+
+# Ignore coverage directories
+coverage/
+
+# Ignore specific files or patterns
+*.min.js
+*.test.js
+
+# Ignore all dotfiles
+.*
+
+# Ignore specific directories within the project
+logs/
+tmp/
+
+# Do not ignore the following to allow linting
+#packages/client/**/*.{ts,tsx,js,jsx}

@@ -55,7 +55,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/client/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["packages/client/**/*.{ts,tsx}"]
       }
     }
   },

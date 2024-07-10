@@ -1,9 +1,7 @@
 'use client';
 
-import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Card, Grid } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Card, Grid } from '@mui/material';
 
 import Logo from '@/components/Logo';
 
@@ -17,19 +15,9 @@ const AuthLayout = ({ children }) => {
 
   return (
     <AuthWrapper>
-      <Grid
-        container
-        direction="column"
-        justifyContent="flex-end"
-        sx={{ minHeight: '100vh' }}
-      >
+      <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
         <Grid item xs={12}>
-          <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-            sx={{ minHeight: '100vh' }}
-          >
+          <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
             <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
               <Card
                 sx={{

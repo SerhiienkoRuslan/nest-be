@@ -29,6 +29,7 @@ type Props = {
 const NotificationItem: FC<Props> = ({ notification }) => {
   // TODO: should be integrated
   console.log('notification', notification);
+
   return (
     <ListItemWrapper>
       <ListItem alignItems="center">

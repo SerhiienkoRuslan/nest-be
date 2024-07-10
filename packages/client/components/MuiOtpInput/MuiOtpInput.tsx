@@ -52,6 +52,7 @@ const MuiOtpInput = forwardRef((props: MuiOtpInputProps, propRef: MuiOtpInputPro
 
   const replaceCharOfValue = (charIndex: number, charValue: string) => {
     const newValueSplitted = updateIndex(getCharactersSplitted(), charIndex, charValue);
+
     return joinArrayStrings(newValueSplitted);
   };
 
@@ -160,6 +161,7 @@ const MuiOtpInput = forwardRef((props: MuiOtpInputProps, propRef: MuiOtpInputPro
     if (newValue.length === length) {
       onComplete?.(newValue);
       focusInputByIndex(length - 1);
+
       return;
     }
 

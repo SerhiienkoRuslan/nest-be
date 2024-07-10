@@ -1,14 +1,8 @@
-import { forwardRef, ReactElement, FC } from 'react';
+import { FC, ReactElement, forwardRef } from 'react';
 
+import { Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Typography,
-} from '@mui/material';
 
 // constant
 const headerSX = {
@@ -58,9 +52,7 @@ const MainCard: FC<Props> = forwardRef(
           border: border ? '1px solid' : 'none',
           borderColor: theme.palette.primary[200] + 25,
           ':hover': {
-            boxShadow: boxShadow
-              ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)'
-              : 'inherit',
+            boxShadow: boxShadow ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)' : 'inherit',
           },
           ...sx,
         }}
@@ -70,13 +62,7 @@ const MainCard: FC<Props> = forwardRef(
           <>
             <CardHeader
               sx={headerSX}
-              title={
-                darkTitle ? (
-                  <Typography variant="h3">{title}</Typography>
-                ) : (
-                  title
-                )
-              }
+              title={darkTitle ? <Typography variant="h3">{title}</Typography> : title}
               action={secondary}
             />
 
