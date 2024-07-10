@@ -1,39 +1,44 @@
-import { FC, useContext } from "react"
-import { Avatar, Box, Typography } from "@mui/material"
+import { FC, useContext } from 'react';
+
+import { Avatar, Box, Typography } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 
-import { AuthContext } from "@/context/AuthContext";
+import { AuthContext } from '@/context/AuthContext';
 
 const ProfileHeader: FC = () => {
   const { user } = useContext(AuthContext);
   const theme: Theme = useTheme();
 
   return (
-    <Box sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      ml: 10
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        ml: 10,
+      }}
+    >
       <Avatar
-        alt="Profile Photo"
+        alt='Profile Photo'
         sx={{
           width: '7vw',
           height: '7vw',
-          border: `1px solid ${theme.palette.secondary.main}`
-        }}>
+          border: `1px solid ${theme.palette.secondary.main}`,
+        }}
+      >
         {user?.username.charAt(0).toUpperCase()}
       </Avatar>
       <Typography
-        variant="h3"
+        variant='h3'
         sx={{
           ml: '6vw',
           fontSize: '26px',
-        }}>
+        }}
+      >
         {user?.username || ''}
       </Typography>
     </Box>
-  )
-}
+  );
+};
 
-export default ProfileHeader
+export default ProfileHeader;

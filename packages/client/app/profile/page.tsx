@@ -1,12 +1,13 @@
-'use client'
+'use client';
 
-import { FC, useState } from "react";
-import { Tabs, Tab, Box } from '@mui/material';
-import { useTheme, Theme } from '@mui/material/styles';
+import { FC, useState } from 'react';
 
-import ProfileHeader from "./Header";
-import ProfileChangePassword from "./ProfileChangePassword";
-import ProfileSettings from "./ProfileSettings";
+import ProfileHeader from './Header';
+import ProfileChangePassword from './ProfileChangePassword';
+import ProfileSettings from './ProfileSettings';
+
+import { Box, Tab, Tabs } from '@mui/material';
+import { Theme, useTheme } from '@mui/material/styles';
 
 const ProfilePage: FC = () => {
   const theme: Theme = useTheme();
@@ -18,38 +19,40 @@ const ProfilePage: FC = () => {
 
   return (
     <>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
         <ProfileHeader />
 
         <Box>
-          <Tabs value={value}
+          <Tabs
+            value={value}
             onChange={handlePageChange}
-            aria-label="simple tabs example"
+            aria-label='simple tabs example'
             sx={{
               '& .MuiTabs-indicator': {
                 backgroundColor: theme.palette.secondary.main,
               },
               '& .MuiTab-root': {
-                color: theme.palette.secondary.main,
-                borderRadius: '5px',
-                margin: '0 5px',
+                'color': theme.palette.secondary.main,
+                'borderRadius': '5px',
+                'margin': '0 5px',
                 '&.Mui-selected': {
                   color: theme.palette.secondary.main,
                 },
               },
-            }}>
-            <Tab label="Edit Profile" />
-            <Tab label="Change Password" />
+            }}
+          >
+            <Tab label='Edit Profile' />
+            <Tab label='Change Password' />
           </Tabs>
         </Box>
       </Box>
 
-      {value === 0 && (
-        <ProfileSettings />
-      )}
+      {value === 0 && <ProfileSettings />}
 
       {value === 1 && (
         <Box p={3}>
@@ -61,5 +64,3 @@ const ProfilePage: FC = () => {
 };
 
 export default ProfilePage;
-
-
