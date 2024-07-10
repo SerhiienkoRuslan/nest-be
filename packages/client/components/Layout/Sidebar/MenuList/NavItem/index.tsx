@@ -81,9 +81,7 @@ const NavItem = ({ item, level }: { item: any; level: number }) => {
       selected={isOpen}
       onClick={() => itemHandler(item.id)}
     >
-      <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>
-        {itemIcon}
-      </ListItemIcon>
+      <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>{itemIcon}</ListItemIcon>
 
       <ListItemText
         primary={

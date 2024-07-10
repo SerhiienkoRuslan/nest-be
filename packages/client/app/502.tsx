@@ -1,11 +1,7 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 const BadConnectionPage: FC = () => {
-  return (
-    <div>
-      Error: BadConnectionPage
-    </div>
-  );
+  return <div>Error: BadConnectionPage</div>;
 };
 
 export default BadConnectionPage;

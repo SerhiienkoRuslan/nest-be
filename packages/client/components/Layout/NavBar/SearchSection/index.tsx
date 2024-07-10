@@ -2,14 +2,7 @@ import { useState } from 'react';
 
 import PopupState, { bindPopper, bindToggle } from 'material-ui-popup-state';
 import { useTheme } from '@mui/material/styles';
-import {
-  Avatar,
-  Box,
-  ButtonBase,
-  Card,
-  Grid,
-  InputAdornment,
-} from '@mui/material';
+import { Avatar, Box, ButtonBase, Card, Grid, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
@@ -87,10 +80,7 @@ const SearchSection = () => {
             <>
               <Box sx={{ ml: 2 }}>
                 <ButtonBase sx={{ borderRadius: '12px' }}>
-                  <HeaderAvatarStyle
-                    variant="rounded"
-                    {...bindToggle(popupState)}
-                  >
+                  <HeaderAvatarStyle variant="rounded" {...bindToggle(popupState)}>
                     <SearchIcon />
                   </HeaderAvatarStyle>
                 </ButtonBase>
@@ -114,11 +104,7 @@ const SearchSection = () => {
                         }}
                       >
                         <Box sx={{ p: 2 }}>
-                          <Grid
-                            container
-                            alignItems="center"
-                            justifyContent="space-between"
-                          >
+                          <Grid container alignItems="center" justifyContent="space-between">
                             <Grid item xs>
                               <MobileSearch
                                 value={value}

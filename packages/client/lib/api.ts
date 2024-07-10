@@ -24,7 +24,7 @@ API.interceptors.request.use(
 
     config.headers = config.headers ?? {};
 
-    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   },

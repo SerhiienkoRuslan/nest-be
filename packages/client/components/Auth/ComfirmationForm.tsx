@@ -57,7 +57,7 @@ const ConfirmationForm = () => {
         onChange={handleChange}
       />
 
-      {/*{ Submit error}*/}
+      {/* { Submit error} */}
       {formErrors && (
         <Box>
           <FormHelperText error>{formErrors}</FormHelperText>

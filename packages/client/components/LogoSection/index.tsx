@@ -6,12 +6,7 @@ import { urls } from '@/constants/urls';
 
 const LogoSection = () => {
   return (
-    <ButtonBase
-      disableRipple
-      onClick={() => {}}
-      component={Link}
-      href={urls.profile}
-    >
+    <ButtonBase disableRipple onClick={() => {}} component={Link} href={urls.profile}>
       <Logo />
     </ButtonBase>
   );

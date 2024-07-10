@@ -1,11 +1,7 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 const NotFoundPage: FC = () => {
-  return (
-    <div>
-      Error: NotFoundPage
-    </div>
-  );
+  return <div>Error: NotFoundPage</div>;
 };
 
 export default NotFoundPage;

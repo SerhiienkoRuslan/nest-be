@@ -19,9 +19,7 @@ const NavBar: FC = () => {
       elevation={0}
       sx={{
         bgcolor: theme.palette.background.default,
-        transition: isNavigationOpen
-          ? theme.transitions.create('width')
-          : 'none',
+        transition: isNavigationOpen ? theme.transitions.create('width') : 'none',
       }}
     >
       <Toolbar>
