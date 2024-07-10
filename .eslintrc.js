@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['**/*'],
+  ignorePatterns: ['!**/*'],
   plugins: ['@nx'],
+  extends: ['plugin:prettier/recommended'],
   overrides: [
     {
       files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
@@ -19,6 +20,7 @@ module.exports = {
             ],
           },
         ],
+        'prettier/prettier': 'error',
       },
     },
     {
