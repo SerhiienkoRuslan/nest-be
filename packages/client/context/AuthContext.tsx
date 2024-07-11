@@ -13,20 +13,38 @@ import {
 } from 'react';
 
 import { fetchCurrent } from '@/lib/Auth/fetchCurrent';
-import { User } from '@/types/api/auth';
+import { updateUserData } from '@/lib/Auth/updateUserData';
+import { User } from '@/types/api/user';
 
 interface IAuthContext {
   user: User | null;
   isLogIn: boolean;
   logIn: Dispatch<SetStateAction<User>>;
   logOut: () => void;
+  updateUser: (id: number, userNewData: Partial<User>) => Promise<void>;
 }
 
 export const AuthContext = createContext<IAuthContext>({
   isLogIn: false,
-  user: null,
-  logIn: () => {},
-  logOut: () => {},
+  user: {
+    avatar: null,
+    bio: null,
+    email: '',
+    id: 0,
+    posts: [],
+    role: '',
+    username: '',
+    validEmail: false,
+    token: '',
+    phone: '',
+    gender: '',
+    birthday: new Date(),
+    location: '',
+    interests: ''
+  },
+  logIn: () => { },
+  logOut: () => { },
+  updateUser: async () => { },
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -60,6 +78,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const updateUser = useCallback(async (id: number, userNewData: Partial<User>) => {
+    const newUser = await updateUserData(id, userNewData);
+    setUser(newUser);
+  }, []);
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -70,8 +93,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       user,
       logIn,
       logOut,
+      updateUser,
     }),
-    [isLogIn, user, logOut],
+    [isLogIn, user, logOut, updateUser],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

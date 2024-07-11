@@ -10,4 +10,9 @@ export type User = {
   role: string;
   validEmail: boolean;
   posts: CreatePostResponseAPI[];
+  phone: string;
+  gender: string;
+  birthday: Date;
+  location: string;
+  interests: string;
 };
