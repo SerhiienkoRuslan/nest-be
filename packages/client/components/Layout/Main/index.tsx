@@ -63,13 +63,13 @@ const Main = ({ children }) => {
   return (
     // @ts-ignore
     <MainComponent theme={theme} open={isNavigationOpen}>
-      {/*TODO:*/}
-      {/*<Breadcrumbs*/}
-      {/*  navigation={navigation}*/}
-      {/*  icon*/}
-      {/*  title*/}
-      {/*  rightAlign*/}
-      {/*/>*/}
+      {/* TODO: */}
+      {/* <Breadcrumbs */}
+      {/*  navigation={navigation} */}
+      {/*  icon */}
+      {/*  title */}
+      {/*  rightAlign */}
+      {/* /> */}
       {children}
     </MainComponent>
   );

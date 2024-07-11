@@ -55,7 +55,9 @@ const NotificationSection = () => {
   }, [open]);
 
   const handleChange = (event) => {
-    if (event?.target.value) setValue(event?.target.value);
+    if (event?.target.value) {
+      setValue(event?.target.value);
+    }
   };
 
   return (
@@ -117,19 +119,10 @@ const NotificationSection = () => {
         }}
       >
         {({ TransitionProps }) => (
-          <Transitions
-            position={matchesXs ? 'top' : 'top-right'}
-            in={open}
-            {...TransitionProps}
-          >
+          <Transitions position={matchesXs ? 'top' : 'top-right'} in={open} {...TransitionProps}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MainCard
-                  border={false}
-                  content={false}
-                  boxShadow
-                  shadow={theme.shadows[16]}
-                >
+                <MainCard border={false} content={false} boxShadow shadow={theme.shadows[16]}>
                   <>
                     <Grid container direction="column" spacing={2}>
                       {/* Head links */}
@@ -142,9 +135,7 @@ const NotificationSection = () => {
                         >
                           <Grid item>
                             <Stack direction="row" spacing={2}>
-                              <Typography variant="subtitle1">
-                                All Notification
-                              </Typography>
+                              <Typography variant="subtitle1">All Notification</Typography>
                               <Chip
                                 size="small"
                                 label="01"
@@ -186,10 +177,7 @@ const NotificationSection = () => {
                                   }}
                                 >
                                   {notificationStatuses.map((option) => (
-                                    <option
-                                      key={option.value}
-                                      value={option.value}
-                                    >
+                                    <option key={option.value} value={option.value}>
                                       {option.label}
                                     </option>
                                   ))}

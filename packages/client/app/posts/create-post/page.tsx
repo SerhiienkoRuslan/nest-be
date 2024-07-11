@@ -48,8 +48,8 @@ const CreatePost = () => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            {/*TODO: should be notification*/}
-            {/*{ Submit error}*/}
+            {/* TODO: should be notification */}
+            {/* { Submit error} */}
             {formErrors && (
               <Box>
                 <FormHelperText error>{formErrors}</FormHelperText>

@@ -1,7 +1,7 @@
 import ConfirmationForm from '@/components/Auth/ComfirmationForm';
 
-export function ConfirmationPage() {
+export const ConfirmationPage = () => {
   return <ConfirmationForm />;
-}
+};
 
 export default ConfirmationPage;

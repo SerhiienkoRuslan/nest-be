@@ -1,32 +1,17 @@
 import PropTypes from 'prop-types';
-import { forwardRef, FC, ReactElement } from 'react';
+import { FC, ReactElement, forwardRef } from 'react';
 
-import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
+import { Box, Collapse, Fade, Grow, Slide, Zoom } from '@mui/material';
 
 type Props = {
   children: ReactElement;
   type?: 'grow' | 'fade' | 'collapse' | 'slide' | 'zoom';
-  position?:
-    | 'top-left'
-    | 'top-right'
-    | 'top'
-    | 'bottom-left'
-    | 'bottom-right'
-    | 'bottom';
+  position?: 'top-left' | 'top-right' | 'top' | 'bottom-left' | 'bottom-right' | 'bottom';
   direction?: 'up' | 'down' | 'left' | 'right';
 };
 
 const Transition: FC<Props> = forwardRef(
-  (
-    {
-      children,
-      position = 'top-left',
-      type = 'grow',
-      direction = 'up',
-      ...others
-    },
-    ref,
-  ) => {
+  ({ children, position = 'top-left', type = 'grow', direction = 'up', ...others }, ref) => {
     let positionSX = {
       transformOrigin: '0 0 0',
     };
