@@ -6,12 +6,14 @@ import { useTheme } from '@mui/material/styles';
 type TSubmitButtonProps = {
   children: React.ReactNode;
   disabled?: boolean;
+  type: string;
 } & ButtonProps;
 
 export const SubmitButton: FC<TSubmitButtonProps> = ({
   children,
   disabled = false,
   sx,
+  type,
   ...rest
 }) => {
   const theme = useTheme();
@@ -20,7 +22,7 @@ export const SubmitButton: FC<TSubmitButtonProps> = ({
     <Button
       color="primary"
       variant="contained"
-      type="submit"
+      type={type}
       disabled={disabled}
       sx={{
         backgroundColor: theme.palette.secondary.light,

@@ -6,8 +6,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, CircularProgress, Grid, IconButton, Typography } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 
-import { FormicTextField } from '@/components/FormikTextField';
-import { SubmitButton } from '@/components/SubmitButton';
+import { FormicTextField } from '@/components/FormikComponents/FormikTextField';
+import { SubmitButton } from '@/components/SubmitButton/SubmitButton';
 import { AuthContext } from '@/context/AuthContext';
 import API from '@/lib/api';
 import { strengthColor, strengthIndicator } from '@/utils/password-strength';
@@ -135,7 +135,7 @@ const ProfileChangePassword: FC = () => {
                 mt: '15px',
               }}
             >
-              <SubmitButton disabled={formik.isSubmitting}>
+              <SubmitButton disabled={formik.isSubmitting} type="submit">
                 {formik.isSubmitting ? 'Submitting...' : 'Change Password'}
               </SubmitButton>
 

@@ -7,14 +7,15 @@ import 'react-phone-input-2/lib/style.css';
 
 import FormRow from './formRow';
 
-import { Box, CircularProgress, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { FormicTextField } from '@/components/FormikTextField';
-import { SubmitButton } from '@/components/SubmitButton';
+import { FormicDatePicker } from '@/components/FormikComponents/FormikDatePicker';
+import { FormikRadioGroup } from '@/components/FormikComponents/FormikRadioGroup';
+import { FormicTextField } from '@/components/FormikComponents/FormikTextField';
+import { SubmitButton } from '@/components/SubmitButton/SubmitButton';
 import { AuthContext } from '@/context/AuthContext';
 import { profileSettingsValidation } from '@/utils/validation/profileSettingsValidation';
 
@@ -60,7 +61,7 @@ const ProfileSettings: FC = () => {
     initialValues: {
       username: user?.username || '',
       phone: user?.phone || '',
-      gender: user?.gender || '',
+      gender: user?.gender || 'male',
       birthday: user?.birthday ? dayjs(user.birthday) : dayjs(),
       location: user?.location || '',
       interests: user?.interests || '',
@@ -98,33 +99,22 @@ const ProfileSettings: FC = () => {
 
             {/* Field: Gender */}
             <FormRow label="Gender">
-              <RadioGroup
+              <FormikRadioGroup
                 name="gender"
-                value={formik.values.gender}
-                onChange={formik.handleChange}
+                options={[
+                  { value: 'male', label: 'Male' },
+                  { value: 'female', label: 'Female' },
+                ]}
+                radioSx={{ '&.Mui-checked': { color: theme.palette.secondary.main } }}
                 row
-              >
-                <FormControlLabel
-                  value="male"
-                  control={
-                    <Radio sx={{ '&.Mui-checked': { color: theme.palette.secondary.main } }} />
-                  }
-                  label="Male"
-                />
-                <FormControlLabel
-                  value="female"
-                  control={
-                    <Radio sx={{ '&.Mui-checked': { color: theme.palette.secondary.main } }} />
-                  }
-                  label="Female"
-                />
-              </RadioGroup>
+              />
             </FormRow>
 
             {/* Field:Date of Birth */}
             <FormRow label="Date of Birth">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
+                <FormicDatePicker
+                  name="birthday"
                   label="Select date"
                   sx={{
                     '& .MuiInputLabel-root.Mui-focused': {
@@ -134,8 +124,6 @@ const ProfileSettings: FC = () => {
                       '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
                     },
                   }}
-                  value={formik.values.birthday}
-                  onChange={(date) => formik.setFieldValue('birthday', date)}
                 />
               </LocalizationProvider>
             </FormRow>
@@ -217,6 +205,7 @@ const ProfileSettings: FC = () => {
                   width: '10vw',
                   mt: 4,
                 }}
+                type="submit"
                 disabled={formik.isSubmitting}
               >
                 {formik.isSubmitting ? 'Submitting...' : 'Save'}
