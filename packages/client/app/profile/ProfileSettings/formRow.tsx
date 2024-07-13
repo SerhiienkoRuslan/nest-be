@@ -4,10 +4,10 @@ const FormRow = ({ label, children }) => {
   return (
     <Box
       sx={{
-        'display': 'flex',
-        'alignItems': 'center',
-        'gap': '2vw',
-        'mb': '20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '2vw',
+        mb: '20px',
         '& > *': { width: '100%' },
       }}
     >
@@ -17,7 +17,7 @@ const FormRow = ({ label, children }) => {
           minWidth: '10vw',
         }}
       >
-        <Typography variant='body1'>{label}</Typography>
+        <Typography variant="body1">{label}</Typography>
       </Box>
 
       {children}

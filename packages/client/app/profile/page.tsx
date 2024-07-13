@@ -31,34 +31,30 @@ const ProfilePage: FC = () => {
           <Tabs
             value={value}
             onChange={handlePageChange}
-            aria-label='simple tabs example'
+            aria-label="simple tabs example"
             sx={{
               '& .MuiTabs-indicator': {
                 backgroundColor: theme.palette.secondary.main,
               },
               '& .MuiTab-root': {
-                'color': theme.palette.secondary.main,
-                'borderRadius': '5px',
-                'margin': '0 5px',
+                color: theme.palette.secondary.main,
+                borderRadius: '5px',
+                margin: '0 5px',
                 '&.Mui-selected': {
                   color: theme.palette.secondary.main,
                 },
               },
             }}
           >
-            <Tab label='Edit Profile' />
-            <Tab label='Change Password' />
+            <Tab label="Edit Profile" />
+            <Tab label="Change Password" />
           </Tabs>
         </Box>
       </Box>
 
       {value === 0 && <ProfileSettings />}
 
-      {value === 1 && (
-        <Box p={3}>
-          <ProfileChangePassword />
-        </Box>
-      )}
+      {value === 1 && <ProfileChangePassword />}
     </>
   );
 };
