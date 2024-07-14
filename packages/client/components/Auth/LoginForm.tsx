@@ -1,6 +1,7 @@
 'use client';
 
 import { Formik } from 'formik';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FC, useContext, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -165,13 +166,15 @@ const LoginForm: FC = () => {
                 label="Remember me"
               />
 
-              <Typography
-                variant="subtitle1"
-                color="secondary"
-                sx={{ textDecoration: 'none', cursor: 'pointer' }}
-              >
-                Forgot Password?
-              </Typography>
+              <Link href="/auth/forgot-password">
+                <Typography
+                  variant="subtitle1"
+                  color="secondary"
+                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                >
+                  Forgot Password?
+                </Typography>
+              </Link>
             </Stack>
 
             {/* Submit button */}
