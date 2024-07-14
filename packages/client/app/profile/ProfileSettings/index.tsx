@@ -1,45 +1,28 @@
-import axios from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
-import { useFormik } from 'formik';
-import { FC, useContext, useEffect, useState } from 'react';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { FC, useContext } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
 import FormRow from './formRow';
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControlLabel,
-  Grid,
-  Input,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
+import { FormicDatePicker } from '@/components/FormikComponents/FormikDatePicker';
+import { FormikRadioGroup } from '@/components/FormikComponents/FormikRadioGroup';
+import { FormicTextField } from '@/components/FormikComponents/FormikTextField';
+import { SubmitButton } from '@/components/SubmitButton/SubmitButton';
 import { AuthContext } from '@/context/AuthContext';
+import { useCountryCode } from '@/hooks/useCountryCode';
 import { profileSettingsValidation } from '@/utils/validation/profileSettingsValidation';
 
 const ProfileSettings: FC = () => {
   const { user, updateUser } = useContext(AuthContext);
   const theme: Theme = useTheme();
-
-  const [countryCode, setCountryCode] = useState<string>('');
-
-  useEffect(() => {
-    const fetchCountryCode = async () => {
-      const response = await axios.get('https://ipapi.co/json/');
-      setCountryCode(response.data.country_code.toLowerCase());
-    };
-    fetchCountryCode();
-  }, []);
+  const countryCode = useCountryCode();
 
   const handleSubmit = async (
     values: {
@@ -51,7 +34,7 @@ const ProfileSettings: FC = () => {
       interests: string;
       bio: string;
     },
-    { setErrors }
+    { setErrors },
   ) => {
     try {
       if (user) {
@@ -69,7 +52,7 @@ const ProfileSettings: FC = () => {
     initialValues: {
       username: user?.username || '',
       phone: user?.phone || '',
-      gender: user?.gender || '',
+      gender: user?.gender || 'male',
       birthday: user?.birthday ? dayjs(user.birthday) : dayjs(),
       location: user?.location || '',
       interests: user?.interests || '',
@@ -80,173 +63,123 @@ const ProfileSettings: FC = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} autoComplete='off'>
-      <Grid
-        container
-        sx={{
-          mt: 5,
-          ml: 4,
-        }}
-      >
-        <Grid item xs={4}>
-          {/* Field: Your Name */}
-          <FormRow label='Your Name'>
-            <Input
-              sx={{
-                ':after': { borderBottomColor: theme.palette.secondary.main },
-              }}
-              type='text'
-              name='username'
-              placeholder={user?.username}
-              value={formik.values.username}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-            />
-          </FormRow>
+    <Grid
+      container
+      sx={{
+        mt: 5,
+        ml: 4,
+      }}
+    >
+      <Grid item xs={5}>
+        <FormikProvider value={formik}>
+          <Form onSubmit={formik.handleSubmit} autoComplete="off">
+            {/* Field: Your Name */}
+            <FormRow label="Your Name">
+              <FormicTextField name="username" type="text" label={user?.username} />
+            </FormRow>
 
-          {formik.touched.username && formik.errors.username && (
-            <Typography
+            {/* Field: Gender */}
+            <FormRow label="Gender">
+              <FormikRadioGroup
+                name="gender"
+                options={[
+                  { value: 'male', label: 'Male' },
+                  { value: 'female', label: 'Female' },
+                ]}
+                row
+              />
+            </FormRow>
+
+            {/* Field:Date of Birth */}
+            <FormRow label="Date of Birth">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <FormicDatePicker name="birthday" label="Select date" />
+              </LocalizationProvider>
+            </FormRow>
+
+            {/* Field: Location */}
+
+            <FormRow label="Location">
+              <FormicTextField
+                type="text"
+                name="location"
+                color="secondary"
+                label="Enter your location"
+              />
+            </FormRow>
+
+            {/* Field: Phone number */}
+            <FormRow label="Phone number">
+              <PhoneInput
+                country={
+                  user?.phone ? (user.phone.length > 0 ? undefined : countryCode) : countryCode
+                }
+                enableSearch={true}
+                value={formik.values.phone}
+                onChange={(phone) => formik.setFieldValue('phone', phone)}
+                inputStyle={{
+                  width: '100%',
+                  minWidth: '100%',
+                  backgroundColor: 'rgba(248, 250, 252, 1)',
+                }}
+              />
+            </FormRow>
+
+            {/* Field: Your interests */}
+            <FormRow label="Your interests">
+              <FormicTextField
+                type="text"
+                name="interests"
+                label="Your interests"
+                color="secondary"
+              />
+            </FormRow>
+
+            {/* Field Bio */}
+            <FormRow label="Bio">
+              <FormicTextField
+                name="bio"
+                label="Tell us about yourself"
+                color="secondary"
+                multiline
+                rows={4}
+              />
+            </FormRow>
+
+            {/* save button */}
+            <Box
               sx={{
-                textAlign: 'left',
+                display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
               }}
-              color='error'
-              variant='body2'
             >
-              {formik.errors.username}
-            </Typography>
-          )}
-
-          {/* Field: Gender */}
-          <FormRow label='Gender'>
-            <RadioGroup name='gender' value={formik.values.gender} onChange={formik.handleChange} row>
-              <FormControlLabel
-                value='male'
-                control={<Radio sx={{ '&.Mui-checked': { color: theme.palette.secondary.main } }} />}
-                label='Male'
-              />
-              <FormControlLabel
-                value='female'
-                control={<Radio sx={{ '&.Mui-checked': { color: theme.palette.secondary.main } }} />}
-                label='Female'
-              />
-            </RadioGroup>
-          </FormRow>
-
-          {/* Field:Date of Birth */}
-          <FormRow label='Date of Birth'>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
-                  },
-                }}
-                value={formik.values.birthday}
-                onChange={(date) => formik.setFieldValue('birthday', date)}
-              />
-            </LocalizationProvider>
-          </FormRow>
-
-          {/* Field: Location */}
-          <FormRow label='Location'>
-            <TextField
-              type='text'
-              name='location'
-              placeholder='Enter your location'
-              value={formik.values.location}
-              onChange={formik.handleChange}
-              sx={{
-                '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main } },
-              }}
-            />
-          </FormRow>
-
-          {/* Field: Phone number */}
-          <FormRow label='Phone number'>
-            <PhoneInput
-              country={user?.phone ? (user.phone.length > 0 ? undefined : countryCode) : countryCode}
-              enableSearch={true}
-              value={formik.values.phone}
-              onChange={(phone) => formik.setFieldValue('phone', phone)}
-              inputStyle={{
-                width: '100%',
-                minWidth: '100%',
-                backgroundColor: 'rgba(248, 250, 252, 1)',
-              }}
-            />
-          </FormRow>
-
-          {/* Field: Your interests */}
-          <FormRow label='Your interests'>
-            <TextField
-              type='text'
-              name='interests'
-              placeholder='Your interests'
-              value={formik.values.interests}
-              onChange={formik.handleChange}
-              sx={{
-                '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main } },
-              }}
-            />
-          </FormRow>
-
-          {/* Поле Bio */}
-          <FormRow label='Bio'>
-            <TextField
-              name='bio'
-              placeholder='Tell us about yourself'
-              multiline
-              rows={4}
-              value={formik.values.bio}
-              onChange={formik.handleChange}
-              sx={{
-                '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main } },
-              }}
-            />
-          </FormRow>
-
-          {/* save button */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              variant='contained'
-              type='submit'
-              disabled={formik.isSubmitting}
-              sx={{
-                'backgroundColor': theme.palette.secondary.light,
-                'color': theme.palette.secondary.main,
-                'width': '10vw',
-                'mt': 4,
-
-                '&:hover': {
-                  backgroundColor: theme.palette.secondary.main,
-                  color: theme.palette.secondary.light,
-                },
-              }}
-            >
-              Save
-            </Button>
-
-            {formik.isSubmitting && (
-              <CircularProgress
+              <SubmitButton
                 sx={{
                   width: '10vw',
-                  height: '1vh',
-                  marginTop: '20px',
-                  color: theme.palette.secondary.main,
+                  mt: 4,
                 }}
-              />
-            )}
-          </Box>
-        </Grid>
+                type="submit"
+                disabled={formik.isSubmitting}
+              >
+                {formik.isSubmitting ? 'Submitting...' : 'Save'}
+              </SubmitButton>
+
+              {formik.isSubmitting && (
+                <CircularProgress
+                  sx={{
+                    width: '10vw',
+                    height: '1vh',
+                    marginTop: '20px',
+                    color: theme.palette.secondary.main,
+                  }}
+                />
+              )}
+            </Box>
+          </Form>
+        </FormikProvider>
       </Grid>
-    </form>
+    </Grid>
   );
 };
 
