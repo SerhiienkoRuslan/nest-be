@@ -16,7 +16,7 @@ const ResetPasswordPage: FC = () => {
 
   const currentPassword = '111222333';
   useEffect(() => {
-    const email = sessionStorage.getItem('email');
+    const email = sessionStorage.Item('email');
     if (email) {
       setStoredEmail(email);
     }

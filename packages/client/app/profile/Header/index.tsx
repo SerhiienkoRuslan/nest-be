@@ -19,7 +19,7 @@ const ProfileHeader: FC = () => {
       }}
     >
       <Avatar
-        alt='Profile Photo'
+        alt="Profile Photo"
         sx={{
           width: '7vw',
           height: '7vw',
@@ -29,7 +29,7 @@ const ProfileHeader: FC = () => {
         {user?.username.charAt(0).toUpperCase()}
       </Avatar>
       <Typography
-        variant='h3'
+        variant="h3"
         sx={{
           ml: '6vw',
           fontSize: '26px',
