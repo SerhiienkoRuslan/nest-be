@@ -21,10 +21,9 @@ const ProfileChangePassword: FC = () => {
 
   const [message, setMessage] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [passwordStrength, setPasswordStrength] = useState<number>(0);
-  const [level, setLevel] = useState({
-    label: '',
-    color: '',
+  const [passwordInfo, setPasswordInfo] = useState({
+    strength: 0,
+    level: { label: '', color: '' },
   });
 
   const formik = useFormik({
@@ -64,10 +63,14 @@ const ProfileChangePassword: FC = () => {
   };
 
   const handleNewPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newPassword = event.target.value;
     formik.handleChange(event);
-    const strength = strengthIndicator(event.target.value);
-    setPasswordStrength(strength);
-    setLevel(strengthColor(passwordStrength));
+
+    const strength = strengthIndicator(newPassword);
+
+    const level = strengthColor(strength);
+
+    setPasswordInfo({ strength, level });
   };
 
   return (
@@ -92,7 +95,6 @@ const ProfileChangePassword: FC = () => {
               name="currentPassword"
               type={showPassword ? 'text' : 'password'}
               margin="normal"
-              color="secondary"
             />
 
             <FormicTextField
@@ -102,18 +104,22 @@ const ProfileChangePassword: FC = () => {
               autoComplete="off"
               type={showPassword ? 'text' : 'password'}
               margin="normal"
-              color="secondary"
               onChange={handleNewPasswordChange}
             />
 
             {formik.values.newPassword.length > 0 && (
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body2" style={{ color: level.color }}>
-                  {level.label}
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <Typography variant="body2" style={{ color: passwordInfo.level.color }}>
+                  {passwordInfo.level.label}
                 </Typography>
                 <Box
-                  style={{ backgroundColor: level.color }}
-                  sx={{ width: 85, height: 8, borderRadius: '7px', ml: 1 }}
+                  sx={{
+                    backgroundColor: passwordInfo.level.color,
+                    width: 85,
+                    height: 8,
+                    borderRadius: '7px',
+                    ml: 1,
+                  }}
                 />
               </Box>
             )}
@@ -125,7 +131,6 @@ const ProfileChangePassword: FC = () => {
               autoComplete="off"
               type={showPassword ? 'text' : 'password'}
               margin="normal"
-              color="secondary"
             />
 
             <Box

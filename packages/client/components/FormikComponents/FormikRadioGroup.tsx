@@ -2,6 +2,7 @@ import { useField } from 'formik';
 import React from 'react';
 
 import { FormControlLabel, Radio, RadioGroup, RadioGroupProps } from '@mui/material';
+import { Theme, useTheme } from '@mui/material/styles';
 import { SxProps } from '@mui/system';
 
 type TFormikRadioGroupProps = {
@@ -13,6 +14,7 @@ type TFormikRadioGroupProps = {
 
 export const FormikRadioGroup: React.FC<TFormikRadioGroupProps> = (props) => {
   const { name, options, sx, radioSx, ...rest } = props;
+  const theme: Theme = useTheme();
 
   const [field, , helpers] = useField(name);
 
@@ -27,7 +29,9 @@ export const FormikRadioGroup: React.FC<TFormikRadioGroupProps> = (props) => {
           key={option.value}
           value={option.value}
           label={option.label}
-          control={<Radio sx={radioSx} />}
+          control={
+            <Radio sx={{ '&.Mui-checked': { color: theme.palette.secondary.main }, ...radioSx }} />
+          }
         />
       ))}
     </RadioGroup>

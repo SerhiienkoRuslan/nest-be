@@ -27,6 +27,7 @@ export const FormicTextField: FC<TFormicTextFieldProps> = (props) => {
       multiline={multiline}
       rows={rows}
       fullWidth
+      color="secondary"
       {...rest}
       sx={sx}
     />

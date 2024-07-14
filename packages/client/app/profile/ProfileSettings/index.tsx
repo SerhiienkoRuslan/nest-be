@@ -1,7 +1,6 @@
-import axios from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
 import { Form, FormikProvider, useFormik } from 'formik';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
@@ -17,21 +16,13 @@ import { FormikRadioGroup } from '@/components/FormikComponents/FormikRadioGroup
 import { FormicTextField } from '@/components/FormikComponents/FormikTextField';
 import { SubmitButton } from '@/components/SubmitButton/SubmitButton';
 import { AuthContext } from '@/context/AuthContext';
+import { useCountryCode } from '@/hooks/useCountryCode';
 import { profileSettingsValidation } from '@/utils/validation/profileSettingsValidation';
 
 const ProfileSettings: FC = () => {
   const { user, updateUser } = useContext(AuthContext);
   const theme: Theme = useTheme();
-
-  const [countryCode, setCountryCode] = useState<string>('');
-
-  useEffect(() => {
-    const fetchCountryCode = async () => {
-      const response = await axios.get('https://ipapi.co/json/');
-      setCountryCode(response.data.country_code.toLowerCase());
-    };
-    fetchCountryCode();
-  }, []);
+  const countryCode = useCountryCode();
 
   const handleSubmit = async (
     values: {
@@ -84,17 +75,7 @@ const ProfileSettings: FC = () => {
           <Form onSubmit={formik.handleSubmit} autoComplete="off">
             {/* Field: Your Name */}
             <FormRow label="Your Name">
-              <FormicTextField
-                name="username"
-                type="text"
-                label={user?.username}
-                color="secondary"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
-                  },
-                }}
-              />
+              <FormicTextField name="username" type="text" label={user?.username} />
             </FormRow>
 
             {/* Field: Gender */}
@@ -105,7 +86,6 @@ const ProfileSettings: FC = () => {
                   { value: 'male', label: 'Male' },
                   { value: 'female', label: 'Female' },
                 ]}
-                radioSx={{ '&.Mui-checked': { color: theme.palette.secondary.main } }}
                 row
               />
             </FormRow>
@@ -113,18 +93,7 @@ const ProfileSettings: FC = () => {
             {/* Field:Date of Birth */}
             <FormRow label="Date of Birth">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <FormicDatePicker
-                  name="birthday"
-                  label="Select date"
-                  sx={{
-                    '& .MuiInputLabel-root.Mui-focused': {
-                      color: { color: theme.palette.secondary.main },
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
-                    },
-                  }}
-                />
+                <FormicDatePicker name="birthday" label="Select date" />
               </LocalizationProvider>
             </FormRow>
 
@@ -136,11 +105,6 @@ const ProfileSettings: FC = () => {
                 name="location"
                 color="secondary"
                 label="Enter your location"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
-                  },
-                }}
               />
             </FormRow>
 
@@ -168,11 +132,6 @@ const ProfileSettings: FC = () => {
                 name="interests"
                 label="Your interests"
                 color="secondary"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
-                  },
-                }}
               />
             </FormRow>
 
@@ -184,11 +143,6 @@ const ProfileSettings: FC = () => {
                 color="secondary"
                 multiline
                 rows={4}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
-                  },
-                }}
               />
             </FormRow>
 
