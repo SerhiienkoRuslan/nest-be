@@ -6,13 +6,13 @@ import { Theme, useTheme } from '@mui/material/styles';
 import { SxProps } from '@mui/system';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 
-type TFormicDatePickerProps = {
+type TFormikDatePickerProps = {
   name: string;
   label?: string;
   sx?: SxProps;
 } & Omit<DatePickerProps<Dayjs>, 'value' | 'onChange'>;
 
-export const FormicDatePicker: FC<TFormicDatePickerProps> = (props) => {
+export const FormikDatePicker: FC<TFormikDatePickerProps> = (props) => {
   const { name, sx, label, ...rest } = props;
   const theme: Theme = useTheme();
 

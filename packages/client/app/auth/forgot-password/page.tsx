@@ -1,24 +1,80 @@
 'use client';
 
-// import { useTheme } from '@mui/material/styles';
-import { Formik } from 'formik';
+import { Form, FormikProvider, useFormik } from 'formik';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 
-import { Grid } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
-import API from '@/lib/api';
+import { FormikTextField } from '@/components/FormikComponents/FormikTextField';
+import { forgotPassword } from '@/lib/Auth/forgotPassword';
+import { emailValidation } from '@/utils/validation/emailValidaton';
 
 const ForgotPasswordPage: FC = () => {
-  // const theme = useTheme();
+  const router = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validationSchema: emailValidation,
+
+    onSubmit: async (values, { setErrors, resetForm }) => {
+      try {
+        await forgotPassword(values.email);
+        sessionStorage.setItem('email', values.email);
+        router.push('/auth/forgot-password/confirmation-password');
+        resetForm();
+      } catch (error) {
+        setErrors({ email: error.message });
+      }
+    },
+  });
 
   return (
-    <>
-      <Grid item xs={12}>
-        <Grid container alignItems="center" justifyContent="center">
-          <h1>FAFSAF</h1>
-        </Grid>
-      </Grid>
-    </>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Box sx={{ width: '50vw', textAlign: 'center' }}>
+        <Typography variant="h3" gutterBottom>
+          Forgot Password
+        </Typography>
+        <Typography variant="h5" gutterBottom>
+          Enter Email Address
+        </Typography>
+
+        <FormikProvider value={formik}>
+          <Form onSubmit={formik.handleSubmit}>
+            <FormikTextField fullWidth name="email" label="Email" margin="normal" />
+
+            <Link href="/auth/login" passHref>
+              <Typography variant="body2" style={{ marginTop: '1rem', display: 'block' }}>
+                Back to sign in
+              </Typography>
+            </Link>
+
+            <Box sx={{ mt: 2 }}>
+              <Button
+                disableElevation
+                disabled={formik.isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="secondary"
+              >
+                {formik.isSubmitting ? 'Loading...' : 'Send'}
+              </Button>
+            </Box>
+          </Form>
+        </FormikProvider>
+      </Box>
+    </Box>
   );
 };
 

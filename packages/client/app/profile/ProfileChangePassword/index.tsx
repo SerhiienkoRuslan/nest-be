@@ -6,7 +6,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, CircularProgress, Grid, IconButton, Typography } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 
-import { FormicTextField } from '@/components/FormikComponents/FormikTextField';
+import { FormikTextField } from '@/components/FormikComponents/FormikTextField';
 import { SubmitButton } from '@/components/SubmitButton/SubmitButton';
 import { AuthContext } from '@/context/AuthContext';
 import API from '@/lib/api';
@@ -88,7 +88,7 @@ const ProfileChangePassword: FC = () => {
               Change Password
             </Typography>
 
-            <FormicTextField
+            <FormikTextField
               fullWidth
               label="CurrentPassword"
               autoComplete="off"
@@ -97,7 +97,7 @@ const ProfileChangePassword: FC = () => {
               margin="normal"
             />
 
-            <FormicTextField
+            <FormikTextField
               fullWidth
               label="NewPassword"
               name="newPassword"
@@ -124,7 +124,7 @@ const ProfileChangePassword: FC = () => {
               </Box>
             )}
 
-            <FormicTextField
+            <FormikTextField
               fullWidth
               label="Confirm New Password"
               name="confirmPassword"

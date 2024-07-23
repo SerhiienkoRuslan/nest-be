@@ -1,15 +1,17 @@
 'use client';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+
 import { Hydrate } from 'react-query';
+
 import './global.css';
 
-import theme from '@/theme';
-
-import { GlobalProvider } from '@/context/global';
-import { AuthProvider } from '@/context/AuthContext';
-import ReactQueryWrapper from '@/context/ReactQueryWrapper';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 
 import Wrapper from '@/components/Layout/Wrapper';
+import { AuthProvider } from '@/context/AuthContext';
+import ReactQueryWrapper from '@/context/ReactQueryWrapper';
+import { GlobalProvider } from '@/context/global';
+import theme from '@/theme';
 
 const Layout = ({ children }) => {
   return (
@@ -24,20 +26,22 @@ const Layout = ({ children }) => {
         />
       </head>
 
-      <body id="app">
-        <ReactQueryWrapper>
-          <AuthProvider>
-            <Hydrate>
-              <GlobalProvider>
-                <ThemeProvider theme={theme()}>
-                  <CssBaseline />
-                  <Wrapper>{children}</Wrapper>
-                </ThemeProvider>
-              </GlobalProvider>
-            </Hydrate>
-          </AuthProvider>
-        </ReactQueryWrapper>
-      </body>
+      <ReactQueryWrapper>
+        <AuthProvider>
+          <Hydrate>
+            <GlobalProvider>
+              <ThemeProvider theme={theme()}>
+                <CssBaseline />
+                <AppRouterCacheProvider>
+                  <body id="app">
+                    <Wrapper>{children}</Wrapper>
+                  </body>
+                </AppRouterCacheProvider>
+              </ThemeProvider>
+            </GlobalProvider>
+          </Hydrate>
+        </AuthProvider>
+      </ReactQueryWrapper>
     </html>
   );
 };

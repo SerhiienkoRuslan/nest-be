@@ -3,11 +3,11 @@ import { FC } from 'react';
 
 import { TextField, TextFieldProps } from '@mui/material';
 
-type TFormicTextFieldProps = {
+type TFormikTextFieldProps = {
   name: string;
 } & TextFieldProps;
 
-export const FormicTextField: FC<TFormicTextFieldProps> = (props) => {
+export const FormikTextField: FC<TFormikTextFieldProps> = (props) => {
   const { name, type, sx, placeholder, multiline, rows, ...rest } = props;
 
   const [{ value, onChange, onBlur }, { error, touched }] = useField(name);

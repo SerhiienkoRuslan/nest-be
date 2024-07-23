@@ -11,9 +11,9 @@ import { Theme, useTheme } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { FormicDatePicker } from '@/components/FormikComponents/FormikDatePicker';
+import { FormikDatePicker } from '@/components/FormikComponents/FormikDatePicker';
 import { FormikRadioGroup } from '@/components/FormikComponents/FormikRadioGroup';
-import { FormicTextField } from '@/components/FormikComponents/FormikTextField';
+import { FormikTextField } from '@/components/FormikComponents/FormikTextField';
 import { SubmitButton } from '@/components/SubmitButton/SubmitButton';
 import { AuthContext } from '@/context/AuthContext';
 import { useCountryCode } from '@/hooks/useCountryCode';
@@ -75,7 +75,7 @@ const ProfileSettings: FC = () => {
           <Form onSubmit={formik.handleSubmit} autoComplete="off">
             {/* Field: Your Name */}
             <FormRow label="Your Name">
-              <FormicTextField name="username" type="text" label={user?.username} />
+              <FormikTextField name="username" type="text" label={user?.username} />
             </FormRow>
 
             {/* Field: Gender */}
@@ -93,14 +93,14 @@ const ProfileSettings: FC = () => {
             {/* Field:Date of Birth */}
             <FormRow label="Date of Birth">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <FormicDatePicker name="birthday" label="Select date" />
+                <FormikDatePicker name="birthday" label="Select date" />
               </LocalizationProvider>
             </FormRow>
 
             {/* Field: Location */}
 
             <FormRow label="Location">
-              <FormicTextField
+              <FormikTextField
                 type="text"
                 name="location"
                 color="secondary"
@@ -127,7 +127,7 @@ const ProfileSettings: FC = () => {
 
             {/* Field: Your interests */}
             <FormRow label="Your interests">
-              <FormicTextField
+              <FormikTextField
                 type="text"
                 name="interests"
                 label="Your interests"
@@ -137,7 +137,7 @@ const ProfileSettings: FC = () => {
 
             {/* Field Bio */}
             <FormRow label="Bio">
-              <FormicTextField
+              <FormikTextField
                 name="bio"
                 label="Tell us about yourself"
                 color="secondary"
