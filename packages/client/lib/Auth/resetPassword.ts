@@ -3,16 +3,16 @@ import { getLoginErrorMessage } from '@/utils/getErrorMessage';
 
 export const resetPassword = async (
   email: string,
-  currentPassword: string,
   newPassword: string,
   newPasswordToken: string,
+  currentPassword: string,
 ) => {
   try {
     const response = await API.post(`/reset-password/`, {
       email,
-      currentPassword,
       newPassword,
       newPasswordToken,
+      currentPassword,
     });
 
     return response.data;

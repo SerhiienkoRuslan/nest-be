@@ -106,6 +106,7 @@ const LoginForm: FC = () => {
                 onChange={handleChange}
                 label="Email Address"
                 inputProps={{}}
+                color="secondary"
               />
 
               {touched.email && errors.email && (
@@ -128,6 +129,7 @@ const LoginForm: FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={values.password}
                 name="password"
+                color="secondary"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 endAdornment={

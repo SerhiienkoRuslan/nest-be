@@ -1,24 +1,37 @@
 'use client';
 
-import { useFormik } from 'formik';
+import { Form, FormikProvider, useFormik } from 'formik';
 import { FC, useEffect, useState } from 'react';
 
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 
+import { FormikTextField } from '@/components/FormikComponents/FormikTextField';
 import { resetPassword } from '@/lib/Auth/resetPassword';
 import { resetPasswordValidation } from '@/utils/validation/resetPasswordValidation';
 
 const ResetPasswordPage: FC = () => {
   const [storedEmail, setStoredEmail] = useState<string>('');
+  const [storedToken, setStoredToken] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const theme: Theme = useTheme();
 
-  const currentPassword = '111222333';
+  // const storedEmail = useMemo(() => {
+  //   return sessionStorage.getItem('email') || '';
+  // }, []);
+
+  // const storedToken = useMemo(() => {
+  //   return sessionStorage.getItem('email-token') || '';
+  // }, []);
+
   useEffect(() => {
-    const email = sessionStorage.Item('email');
+    const email = sessionStorage.getItem('email');
+    const token = sessionStorage.getItem('emailtoken');
     if (email) {
       setStoredEmail(email);
+    }
+    if (token) {
+      setStoredToken(token);
     }
   }, []);
 
@@ -31,13 +44,9 @@ const ResetPasswordPage: FC = () => {
 
     onSubmit: async (values, { setErrors, resetForm }) => {
       try {
-        await resetPassword(
-          storedEmail,
-          currentPassword,
-          values.newPassword,
-          values.confirmPassword,
-        );
-        localStorage.removeItem('email');
+        await resetPassword(storedEmail, values.newPassword, storedToken, '');
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('emailtoken');
         resetForm();
         setMessage('Password successfully changed');
       } catch (error) {
@@ -54,59 +63,49 @@ const ResetPasswordPage: FC = () => {
         </Typography>
         <Typography variant="h5">Enter New Password</Typography>
 
-        <form onSubmit={formik.handleSubmit}>
-          <TextField
-            fullWidth
-            id="newPassword"
-            name="newPassword"
-            label="New Password"
-            type="password"
-            value={formik.values.newPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
-            helperText={formik.touched.newPassword && formik.errors.newPassword}
-            margin="normal"
-          />
-          <Typography variant="h5">Confim Password</Typography>
-          <TextField
-            fullWidth
-            id="confirmPassword"
-            name="confirmPassword"
-            label="Confirm New Password"
-            type="password"
-            value={formik.values.confirmPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-            helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-            margin="normal"
-          />
-
-          <Box sx={{ mt: 2 }}>
-            <Button
-              disableElevation
-              disabled={formik.isSubmitting}
+        <FormikProvider value={formik}>
+          <Form onSubmit={formik.handleSubmit}>
+            <FormikTextField
               fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              color="secondary"
-            >
-              {formik.isSubmitting ? 'Loading...' : 'Send'}
-            </Button>
-          </Box>
-          {message && (
-            <Box mt={2}>
-              <Typography
-                variant="body2"
-                color={message.includes('successfully') ? theme.palette.success.dark : 'error'}
+              name="newPassword"
+              label="New Password"
+              type="password"
+              margin="normal"
+            />
+            <Typography variant="h5">Confim Password</Typography>
+            <FormikTextField
+              fullWidth
+              name="confirmPassword"
+              label="Confirm New Password"
+              type="password"
+              margin="normal"
+            />
+
+            <Box sx={{ mt: 2 }}>
+              <Button
+                disableElevation
+                disabled={formik.isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="secondary"
               >
-                {message}
-              </Typography>
+                {formik.isSubmitting ? 'Loading...' : 'Send'}
+              </Button>
             </Box>
-          )}
-        </form>
+            {message && (
+              <Box mt={2}>
+                <Typography
+                  variant="body2"
+                  color={message.includes('successfully') ? theme.palette.success.dark : 'error'}
+                >
+                  {message}
+                </Typography>
+              </Box>
+            )}
+          </Form>
+        </FormikProvider>
       </Box>
     </Box>
   );
