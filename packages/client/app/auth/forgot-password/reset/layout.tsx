@@ -3,36 +3,28 @@
 import { Form, FormikProvider, useFormik } from 'formik';
 import { FC, useEffect, useState } from 'react';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 import { Theme, useTheme } from '@mui/material/styles';
 
 import { FormikTextField } from '@/components/FormikComponents/FormikTextField';
 import { resetPassword } from '@/lib/Auth/resetPassword';
 import { resetPasswordValidation } from '@/utils/validation/resetPasswordValidation';
 
-const ResetPasswordPage: FC = () => {
+const ResetPasswordLayout: FC = () => {
   const [storedEmail, setStoredEmail] = useState<string>('');
   const [storedToken, setStoredToken] = useState<string>('');
   const [message, setMessage] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const theme: Theme = useTheme();
 
-  // const storedEmail = useMemo(() => {
-  //   return sessionStorage.getItem('email') || '';
-  // }, []);
-
-  // const storedToken = useMemo(() => {
-  //   return sessionStorage.getItem('email-token') || '';
-  // }, []);
-
   useEffect(() => {
-    const email = sessionStorage.getItem('email');
-    const token = sessionStorage.getItem('emailtoken');
-    if (email) {
-      setStoredEmail(email);
-    }
-    if (token) {
-      setStoredToken(token);
-    }
+    const email = sessionStorage.getItem('email') || '';
+    const token = sessionStorage.getItem('emailtoken') || '';
+
+    setStoredEmail(email);
+    setStoredToken(token);
   }, []);
 
   const formik = useFormik({
@@ -55,6 +47,13 @@ const ResetPasswordPage: FC = () => {
     },
   });
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Box sx={{ width: '50vw', textAlign: 'center' }}>
@@ -69,16 +68,34 @@ const ResetPasswordPage: FC = () => {
               fullWidth
               name="newPassword"
               label="New Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               margin="normal"
+              icon={
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleShowPassword}
+                  size="small"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              }
             />
             <Typography variant="h5">Confim Password</Typography>
             <FormikTextField
               fullWidth
               name="confirmPassword"
               label="Confirm New Password"
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               margin="normal"
+              icon={
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleShowConfirmPassword}
+                  size="small"
+                >
+                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              }
             />
 
             <Box sx={{ mt: 2 }}>
@@ -91,7 +108,7 @@ const ResetPasswordPage: FC = () => {
                 variant="contained"
                 color="secondary"
               >
-                {formik.isSubmitting ? 'Loading...' : 'Send'}
+                {formik.isSubmitting ? 'Loading...' : 'Submit'}
               </Button>
             </Box>
             {message && (
@@ -111,4 +128,4 @@ const ResetPasswordPage: FC = () => {
   );
 };
 
-export default ResetPasswordPage;
+export default ResetPasswordLayout;

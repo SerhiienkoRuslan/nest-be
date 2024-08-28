@@ -168,7 +168,7 @@ const LoginForm: FC = () => {
                 label="Remember me"
               />
 
-              <Link href="/auth/forgot-password">
+              <Link href="/auth/forgot-password/forgot">
                 <Typography
                   variant="subtitle1"
                   color="secondary"

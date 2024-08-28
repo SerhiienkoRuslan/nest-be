@@ -11,7 +11,7 @@ import { FormikTextField } from '@/components/FormikComponents/FormikTextField';
 import { forgotPassword } from '@/lib/Auth/forgotPassword';
 import { emailValidation } from '@/utils/validation/emailValidaton';
 
-const ForgotPasswordPage: FC = () => {
+const ForgotPasswordLayout: FC = () => {
   const router = useRouter();
 
   const formik = useFormik({
@@ -24,7 +24,7 @@ const ForgotPasswordPage: FC = () => {
       try {
         await forgotPassword(values.email);
         sessionStorage.setItem('email', values.email);
-        router.push('/auth/forgot-password/confirmation-password');
+        router.push('/auth/forgot-password/confirmation');
         resetForm();
       } catch (error) {
         setErrors({ email: error.message });
@@ -68,7 +68,7 @@ const ForgotPasswordPage: FC = () => {
                 variant="contained"
                 color="secondary"
               >
-                {formik.isSubmitting ? 'Loading...' : 'Send'}
+                {formik.isSubmitting ? 'Loading...' : 'Submit'}
               </Button>
             </Box>
           </Form>
@@ -78,4 +78,4 @@ const ForgotPasswordPage: FC = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ForgotPasswordLayout;

@@ -7,7 +7,7 @@ import { Box, Button, Typography } from '@mui/material';
 
 import { MuiOtpInput } from '@/components/MuiOtpInput/MuiOtpInput';
 
-const ConfirmationPasswordPage: FC = () => {
+const ConfirmationPasswordLayout: FC = () => {
   const router = useRouter();
   const [token, setToken] = useState<string>('');
 
@@ -17,7 +17,7 @@ const ConfirmationPasswordPage: FC = () => {
 
   const onSubmit = () => {
     sessionStorage.setItem('emailtoken', token);
-    router.push('/auth/forgot-password/reset-password');
+    router.push('/auth/forgot-password/reset');
   };
 
   return (
@@ -67,4 +67,4 @@ const ConfirmationPasswordPage: FC = () => {
   );
 };
 
-export default ConfirmationPasswordPage;
+export default ConfirmationPasswordLayout;

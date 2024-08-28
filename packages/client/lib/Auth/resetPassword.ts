@@ -8,7 +8,7 @@ export const resetPassword = async (
   currentPassword: string,
 ) => {
   try {
-    const response = await API.post(`/reset-password/`, {
+    const response = await API.post('/reset-password', {
       email,
       newPassword,
       newPasswordToken,
