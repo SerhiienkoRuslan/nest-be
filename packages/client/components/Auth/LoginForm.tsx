@@ -1,6 +1,7 @@
 'use client';
 
 import { Formik } from 'formik';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FC, useContext, useState } from 'react';
 import { useMutation } from 'react-query';
@@ -105,6 +106,7 @@ const LoginForm: FC = () => {
                 onChange={handleChange}
                 label="Email Address"
                 inputProps={{}}
+                color="secondary"
               />
 
               {touched.email && errors.email && (
@@ -127,6 +129,7 @@ const LoginForm: FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={values.password}
                 name="password"
+                color="secondary"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 endAdornment={
@@ -165,13 +168,15 @@ const LoginForm: FC = () => {
                 label="Remember me"
               />
 
-              <Typography
-                variant="subtitle1"
-                color="secondary"
-                sx={{ textDecoration: 'none', cursor: 'pointer' }}
-              >
-                Forgot Password?
-              </Typography>
+              <Link href="/auth/forgot-password/forgot">
+                <Typography
+                  variant="subtitle1"
+                  color="secondary"
+                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                >
+                  Forgot Password?
+                </Typography>
+              </Link>
             </Stack>
 
             {/* Submit button */}

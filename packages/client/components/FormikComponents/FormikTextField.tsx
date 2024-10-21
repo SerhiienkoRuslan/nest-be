@@ -1,14 +1,15 @@
 import { useField } from 'formik';
 import { FC } from 'react';
 
-import { TextField, TextFieldProps } from '@mui/material';
+import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
 
-type TFormicTextFieldProps = {
+type TFormikTextFieldProps = {
   name: string;
+  icon?: JSX.Element;
 } & TextFieldProps;
 
-export const FormicTextField: FC<TFormicTextFieldProps> = (props) => {
-  const { name, type, sx, placeholder, multiline, rows, ...rest } = props;
+export const FormikTextField: FC<TFormikTextFieldProps> = (props) => {
+  const { name, type, sx, placeholder, multiline, rows, icon, ...rest } = props;
 
   const [{ value, onChange, onBlur }, { error, touched }] = useField(name);
   const helperText = touched && error ? error : '';
@@ -28,6 +29,9 @@ export const FormicTextField: FC<TFormicTextFieldProps> = (props) => {
       rows={rows}
       fullWidth
       color="secondary"
+      InputProps={{
+        endAdornment: icon ? <InputAdornment position="end">{icon}</InputAdornment> : undefined,
+      }}
       {...rest}
       sx={sx}
     />

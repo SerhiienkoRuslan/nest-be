@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 
-export const passwordValidation = Yup.object().shape({
-  currentPassword: Yup.string().required('Current password is required'),
+export const resetPasswordValidation = Yup.object().shape({
   newPassword: Yup.string()
     .notOneOf([Yup.ref('currentPassword')], 'New password must be different from current password')
     .min(6, 'New password must be at least 6 characters long')
