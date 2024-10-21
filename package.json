@@ -10,7 +10,7 @@
     "start": "node dist/packages/api/main.js",
     "start:prod": "node dist/main",
     "build": "npx nx run-many --target=build --projects=client,api --parallel=true",
-    "dev": "npx nx run-many --parallel --target=serve --projects=client,api",
+    "dev": "NODE_OPTIONS='--max-old-space-size=4096' npx nx run-many --parallel --target=serve --projects=client,api",
     "dev:api": "npx nx run-many --parallel --target=serve --projects=api",
     "dev:client": "npx nx run-many --parallel --target=serve --projects=client",
     "test": "nx test",
